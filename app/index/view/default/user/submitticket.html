@@ -1,0 +1,75 @@
+{include file="default/user/header" title="提交工单" /}
+                      <main id="main-container">
+                <div class="content">
+                    <div class="block">
+                        <div class="block-header">
+                            <h3 class="block-title">提交工单</h3>
+                        </div>
+                        <div class="block-content block-content-full">
+                            <form>
+                                <div class="row items-push">
+                                    <div class="col-lg-12">
+                                        <div class="form-group row">
+                                            <label class="col-12">标题</label>
+                                            <div class="col-12">
+                                                <input name="title" class="form-control text-primary font-size-sm">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-12">内容</label>
+                                            <div class="col-12">
+                                             	<textarea class="form-control" name="content" rows="10" placeholder="请输入问题"></textarea>
+                                            </div>
+                                        </div>
+ 
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-primary btn-block">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            {include file="default/user/footer" /}
+
+<script>
+    $("form").submit(function (){
+        var load = layer.msg('提交中，请稍后...',{icon:16,time:false});
+
+        var title = $("input[name='title']").val();
+        var content = $("textarea[name='content']").val();
+
+
+        if( title.length < 1 || content.length < 1 ){
+            layer.alert('提交的信息不可为空',{icon:2});
+            return false;
+        }
+
+        $.ajax({
+            type:'POST',
+            url:'',
+            data:{
+                title:title,
+                content:content,
+            },
+            dataType:'json',
+            success:function (data){
+                layer.close(load);
+                if(data.code == "1"){
+setTimeout(function (){
+               location.href = '/user/supportticket/'+data.id
+},1000);
+                    layer.alert(data.msg,{icon:1});
+                }else{
+                    layer.alert(data.msg,{icon:2});
+                }
+            }
+        });
+        return false;
+    });
+</script>

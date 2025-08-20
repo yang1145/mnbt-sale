@@ -1,0 +1,265 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>{$webname} - 注册</title>
+ 	<meta name="description" content="{$description}">
+		<meta name="keywords" content="{$keywords}">
+<link rel="shortcut icon"type="image/x-icon"href="{$favicon}"/>
+
+        <link rel="stylesheet" id="css-main" href="/static/assets/css/oneui.min.css">
+     <link rel="stylesheet" href="/static/assets/css/themes/city.min.css">
+<!--
+ <style>
+.bg-image{background-position:0 0%;background-size:cover}
+</style>
+-->
+    </head>  
+    <body class="bg-image" style="background-image: url('{$templateset['网站背景']}');">
+        <div id="page-container">
+
+            <main id="main-container">
+
+                <!-- Page Content -->
+                <div class="hero-static">
+                    <div class="content">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8 col-lg-6 col-xl-4">
+                                <!-- Sign Up Block -->
+                                <div class="block block-themed block-fx-shadow mb-0">
+                                    <div class="block-header bg-success" style="border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                        <h3 class="block-title">用户注册</h3>
+                                        <div class="block-options">
+                                            <a class="btn-block-option" href="/login" data-toggle="tooltip" data-placement="left" title="用户登录">
+                                                <i class="fa fa-sign-in-alt"></i>
+用户登录
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="block-content">
+                                        <div class="p-sm-3 px-lg-4 py-lg-5">
+                                            <h1 class="mb-2">{$webname} - 注册</h1>
+                                            <p>欢迎您的加入！</p>
+                                            <form>
+                                                <div class="py-3">
+
+                                                    <div class="form-group">
+                                                        <input type="text" name="userName" class="form-control form-control-lg form-control-alt font-size-sm" placeholder="请输入昵称">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" name="userUser" class="form-control form-control-lg form-control-alt font-size-sm" placeholder="请输入账号">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="password" name="userPwd" class="form-control form-control-lg form-control-alt font-size-sm" placeholder="请输入密码">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <input type="password" name="userRepwd" class="form-control form-control-lg form-control-alt font-size-sm" placeholder="再次输入密码">
+                                                    </div>
+       <div class="form-group">
+                                                        <input type="text" name="userQq" class="form-control form-control-lg form-control-alt font-size-sm" placeholder="请输入QQ">
+</div>
+     {if $zcyxyz=="1"}                                               
+
+                                                    <div class="form-group">
+                                                        <input type="email" name="userMail" class="form-control form-control-lg form-control-alt font-size-sm" placeholder="请输入邮箱">
+                                                    </div>
+                                                    {/if}
+                                                    
+                                                    
+                                                    
+                                                                  
+								
+								
+								
+                                                    
+
+     <div class="form-group row">
+                                                    <div class="col-6">
+                                                        <input type="text" class="form-control form-control-alt form-control-lg font-size-sm" name="captcha" placeholder="验证码">
+</div>
+
+                                                    <div class="col-6">
+ <img width="100%" height="50px" id="randimg" src="{:captcha_src()}" onclick="this.src='{:captcha_src()}?'+Math.random();"/>
+</div>
+                                                    </div>
+                                                    
+     {if $zcyxyz=="1"}                                               
+    <div class="form-group">
+									<div class="input-group">
+										<input type="text" class="form-control form-control-alt form-control-lg font-size-sm" id="code" name="code" placeholder="请输入邮箱验证码">
+										
+										<div class="input-group-append">
+											<button class="btn btn-success" type="button" style="line-height:33px;" onclick="validate()">获取邮箱验证码</button>
+										</div>
+									</div>
+								</div>
+	                                                {/if}
+                                      
+								
+								
+								
+													                                                </div>
+												                                                <div class="form-group row">
+                                                    <div class="col-md-12 col-xl-12">
+                                                        <button type="submit" class="btn btn-block btn-success">
+                                                            <i class="fa fa-fw fa-plus mr-1"></i> 注册
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content content-full font-size-sm text-muted text-center">
+                        <strong> <a class="font-w600" href="/" target="_blank">{$webname}</a></strong>&copy; <span data-toggle="year-copy">2024</span><br/><a href="//beian.miit.gov.cn/">{$templateset['网站备案号']}</a>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+        <script src="/static/assets/js/oneui.core.min.js"></script>
+        <script src="/static/assets/js/oneui.app.min.js"></script>
+        <script src="/static/assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+    </body>
+</html>
+<script>
+     {if $zcyxyz=="1"}                  
+function validate() {
+        var userMail = $("input[name='userMail']").val();
+        var userCaptcha = $("input[name='captcha']").val();
+
+        if(userMail.length < 1 || userCaptcha.length < 1){
+            One.helpers('notify', {type: 'danger', message: '请确保邮箱和验证码不为空', delay:2000});
+            return false;
+        }
+
+        One.helpers('notify', {type: 'warning', message: '正在获取验证码，请稍后...', delay:2000});
+
+        $.ajax({
+            type:'POST',
+            url:'',
+            data:{
+                mail:userMail,
+                act:"yxvalidate",
+                captcha:userCaptcha,
+            },
+            dataType:'json',           
+            success:function (data){
+                if(data.code == 1){
+                    One.helpers('notify', {type: 'success', message: data.msg, delay:2000});
+                }else{
+                    document.getElementById("randimg").src='{:captcha_src()}?'+Math.random();
+                    One.helpers('notify', {type: 'danger', message: data.msg, delay:2000});
+}
+            }
+        });
+        return false;
+  }
+  {/if}
+  
+     {if $zcyxyz=="1"}                  
+         $("form").submit(function (){
+		var login = $("button[type='submit']");
+        var userName = $("input[name='userName']").val(); 
+        var userUser = $("input[name='userUser']").val();
+        var userPwd = $("input[name='userPwd']").val();
+        var userRepwd = $("input[name='userRepwd']").val();
+        var userMail = $("input[name='userMail']").val();
+        var userQq = $("input[name='userQq']").val();
+        var userCode = $("input[name='code']").val();
+
+        if(userName.length < 1 || userUser.length < 1 || userPwd.length < 1 || userRepwd.length < 1 || userMail.length < 1 || userQq.length < 1 || userCode.length < 1){
+            One.helpers('notify', {type: 'danger', message: '请确保必填项不为空', delay:2000});
+            return false;
+        }
+
+		login.attr('disabled', 'true');
+        One.helpers('notify', {type: 'warning', message: '正在注册，请稍后...', delay:2000});
+
+        $.ajax({
+            type:'POST',
+            url:'',
+            data:{
+                name:userName,
+                user:userUser,
+                password:userPwd,
+                repassword:userRepwd,
+                mail:userMail,
+                qq:userQq,
+                code:userCode,
+                act:"yxzc",
+            },
+            dataType:'json',
+            success:function (data){
+                if(data.code == 1){
+                    setTimeout(function (){
+                        location.href = '/login'
+                    },1000);
+                    One.helpers('notify', {type: 'success', message: data.msg, delay:2000});
+                }else{
+                    document.getElementById("randimg").src='{:captcha_src()}?'+Math.random();
+					login.removeAttr('disabled');
+                    One.helpers('notify', {type: 'danger', message: data.msg, delay:2000});
+                }
+            }
+        });
+        return false;
+    });
+                   
+    {else}              
+    $("form").submit(function (){
+		var login = $("button[type='submit']");
+        var userName = $("input[name='userName']").val(); 
+        var userUser = $("input[name='userUser']").val();
+        var userPwd = $("input[name='userPwd']").val();
+        var userRepwd = $("input[name='userRepwd']").val();
+        var userQq = $("input[name='userQq']").val();
+        var userCaptcha = $("input[name='captcha']").val();
+
+        if(userName.length < 1 || userUser.length < 1 || userPwd.length < 1 || userRepwd.length < 1 || userQq.length < 1 || userCaptcha.length < 1){
+            One.helpers('notify', {type: 'danger', message: '请确保必填项不为空', delay:2000});
+            return false;
+        }
+
+		login.attr('disabled', 'true');
+        One.helpers('notify', {type: 'warning', message: '正在注册，请稍后...', delay:2000});
+
+        $.ajax({
+            type:'POST',
+            url:'',
+            data:{
+                name:userName,
+                user:userUser,
+                password:userPwd,
+                repassword:userRepwd,
+                qq:userQq,
+                captcha:userCaptcha,
+                act:"ptzc",
+            },
+            dataType:'json',
+            success:function (data){
+                if(data.code == 1){
+                    setTimeout(function (){
+                        location.href = '/login'
+                    },1000);
+                    One.helpers('notify', {type: 'success', message: data.msg, delay:2000});
+                }else{
+                    document.getElementById("randimg").src='{:captcha_src()}?'+Math.random();
+					login.removeAttr('disabled');
+                    One.helpers('notify', {type: 'danger', message: data.msg, delay:2000});
+                }
+            }
+        });
+        return false;
+    });
+    {/if}
+</script>
+        <script>
+$('.block').addClass('animated rotateInDownLeft');
+</script>
+
+

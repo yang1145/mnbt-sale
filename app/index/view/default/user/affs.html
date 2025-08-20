@@ -1,0 +1,382 @@
+{include file="default/user/header" title="推广中心" /}
+ <style>
+.pagination {
+	display:inline-block;
+	padding-left:0;
+	margin:20px 0;
+	border-radius:4px
+}
+.pagination>li {
+	display:inline
+}
+.pagination>li>a,.pagination>li>span {
+	position:relative;
+	float:left;
+	padding:6px 12px;
+	margin-left:-1px;
+	line-height:1.42857143;
+	color:#ff6b6b;
+	text-decoration:none;
+	background-color:#fff;
+	border:1px solid #ddd
+}
+.pagination>li:first-child>a,.pagination>li:first-child>span {
+	margin-left:0;
+	border-top-left-radius:4px;
+	border-bottom-left-radius:4px
+}
+.pagination>li:last-child>a,.pagination>li:last-child>span {
+	border-top-right-radius:4px;
+	border-bottom-right-radius:4px
+}
+.pagination>li>a:focus,.pagination>li>a:hover,.pagination>li>span:focus,.pagination>li>span:hover {
+	z-index:2;
+	color:#ff6b6b;
+	background-color:#eee;
+	border-color:#ddd
+}
+.pagination>.active>a,.pagination>.active>a:focus,.pagination>.active>a:hover,.pagination>.active>span,.pagination>.active>span:focus,.pagination>.active>span:hover {
+	z-index:3;
+	color:#fff;
+	cursor:default;
+	background-color:#ff6b6b;
+	border-color:#ff6b6b
+}
+.pagination>.disabled>a,.pagination>.disabled>a:focus,.pagination>.disabled>a:hover,.pagination>.disabled>span,.pagination>.disabled>span:focus,.pagination>.disabled>span:hover {
+	color:#777;
+	cursor:not-allowed;
+	background-color:#fff;
+		border-color:#ddd
+}
+.pagination-lg>li>a,.pagination-lg>li>span {
+	padding:10px 16px;
+	font-size:18px;
+	line-height:1.3333333
+}
+.pagination-lg>li:first-child>a,.pagination-lg>li:first-child>span {
+	border-top-left-radius:6px;
+	border-bottom-left-radius:6px
+}
+.pagination-lg>li:last-child>a,.pagination-lg>li:last-child>span {
+	border-top-right-radius:6px;
+	border-bottom-right-radius:6px
+}
+.pagination-sm>li>a,.pagination-sm>li>span {
+	padding:5px 10px;
+	font-size:12px;
+	line-height:1.5
+}
+.pagination-sm>li:first-child>a,.pagination-sm>li:first-child>span {
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px
+}
+.pagination-sm>li:last-child>a,.pagination-sm>li:last-child>span {
+	border-top-right-radius:3px;
+	border-bottom-right-radius:3px
+}
+</style>
+<main id="main-container">
+                <div class="content content-narrow">
+                    <div class="row">
+
+
+                        <div class="col-12 col-md-6 col-lg-6 col-xl-6">               
+                     <div class="block">
+                        <div class="block-header">
+                            <h3 class="block-title">账户余额</h3>
+                        </div>
+                        <div class="block-content">
+<h2>可提现金额：<span style="color:#ff6b6b">{$user.affmoney}</span></h2>
+
+最小提现金额:<span style="color:red">{$affwithdrawal}</span><br/><br/>
+                                     <div class="form-group row">
+                                            <div class="col-6">
+                                                <button onclick="txye()" class="btn btn-primary btn-block">提现到余额</button>
+                                            </div>
+<div class="col-6">
+                                                <button onclick="txzfb()" class="btn btn-primary btn-block">提现到支付宝</button>
+                                            </div>
+                                        </div>
+</div>
+</div>
+</div>
+
+
+                        <div class="col-12 col-md-6 col-lg-6 col-xl-6">               
+                     <div class="block">
+                        <div class="block-header">
+                            <h3 class="block-title">推广链接</h3>
+                        </div>
+                        <div class="block-content">
+
+推广提成:<span style="color:red">{$affdiscount}%</span><br/><br/>
+<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text bg-white fw-500">推广链接</span>
+					</div>
+
+					<input class="form-control col-sm-7" id="referralLink" type="text" value="{$affurl}" readonly />
+
+					<div class="input-group-append">
+						<button class="btn-copy btn btn-primary" id="copyBtn">
+							<i class="fas fa-copy"></i>
+						</button>
+					</div>
+
+				</div>
+<br/>
+<p>用户通过你的链接注册的账户购买产品或续费产品,你就可以<span style="color:red">永久</span>获取收益！</p>
+<br/>
+
+</div>
+</div>
+</div>
+
+
+
+                        <div class="col-12">               
+                     <div class="block">
+                        <div class="block-header">
+                            <h3 class="block-title">记录</h3>
+                        </div>
+                        <div class="block-content">
+
+
+<ul class="affs-nav nav nav-pills nav-tabs-custom nav-justified" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#affbuyrecord" role="tab" aria-selected="true">
+							收益记录						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#withdrawrecord" role="tab" aria-selected="false">
+							提现记录						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#useraffilist" role="tab" aria-selected="false">
+							注册用户						</a>
+					</li>
+				</ul>
+				<div class="tab-content p-3 text-muted">
+					<div id="affbuyrecord" class="tab-pane active" role="tabpanel">
+
+
+
+
+
+
+
+
+
+
+
+
+
+     <div class="table-responsive">
+                                <table class="table table-bordered table-vcenter table-hover table-sm">
+                                    <thead>
+<tr>
+                                            <th>ID</th>
+                                            <th>信息</th>
+                                            <th>金额</th>
+                                            <th>时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+{foreach $affsymoney as $sy}
+<tr>
+                                        <td>{$sy.id}</td>
+                                        <td>{$sy.information}</td>
+                                        <td>{$sy.money}</td>
+                                        <td>{$sy.time|date="Y-m-d H:i:s",###}</td>
+                                    </tr>        
+                    {/foreach}
+                                   </tbody>
+                                </table>
+                            </div>
+
+<div style="text-align:center">{$affsymoney->render()}</div>
+
+
+
+
+
+
+
+
+
+
+
+					</div>
+					<div id="withdrawrecord" class="tab-pane" role="tabpanel">
+
+
+
+
+
+
+
+<div class="table-responsive">
+                                <table class="table table-bordered table-vcenter table-hover table-sm">
+                                    <thead>
+<tr>
+                                            <th>ID</th>
+                                            <th>信息</th>
+                                            <th>金额</th>          
+                                            <th>时间</th>
+                                            <th>状态</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+{foreach $afftxjl as $tx}
+<tr>
+                                        <td>{$tx.id}</td>
+                                        <td>{$tx.information}</td>
+                                        <td>{$tx.money}</td>
+                                        <td>{$tx.time|date="Y-m-d H:i:s",###}</td>
+                                        <td>{if $tx.state=="1"}<span style="color:green">已打款</span>{else}<span style="color:orange">等待打款</span>{/if}</td>
+                                    </tr>        
+                    {/foreach}
+                                   </tbody>
+                                </table>
+                            </div>
+
+<div style="text-align:center">{$afftxjl->render()}</div>
+
+
+
+					</div>
+					<div id="useraffilist" class="tab-pane" role="tabpanel">
+
+
+
+
+
+     <div class="table-responsive">
+                                <table class="table table-bordered table-vcenter table-hover table-sm">
+                                    <thead>
+<tr>
+                                            <th>ID</th>
+                                            <th>昵称</th>
+                                            <th>注册时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+{foreach $affus as $u}
+<tr>
+                                        <td>{$u.id}</td>
+                                        <td>{$u.name}</td>
+                                        <td>{$u.time|date="Y-m-d H:i:s",###}</td>
+                                    </tr>        
+                    {/foreach}
+                                   </tbody>
+                                </table>
+                            </div>
+
+<div style="text-align:center">{$affus->render()}</div>
+
+
+					</div>
+				</div>
+
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+</div>
+</main>
+{include file="default/user/footer" /}
+
+<script>
+	$(document).ready(function () {
+		$('#copyBtn').on('click', function () {
+			$('#referralLink').select();
+			document.execCommand("Copy");
+			layer.alert("复制成功！",{icon:1});
+		});
+	});
+</script>
+<script>
+
+     function txye(){
+        layer.confirm('确定要全部提现到账户余额吗！',{icon:3},  function (){
+           txye1()
+        });
+    }
+
+
+
+    function txye1(){
+        var load = layer.load('1',{time:false});
+
+        $.ajax({
+            type:'POST',
+            url:'',
+            data:{
+                act:'txye',
+            },
+            dataType:'json',
+            success:function (data){
+                layer.close(load);
+                if(data.code == 1){
+                    setTimeout(function (){
+                        location.href = ''
+                    },1000);
+                    layer.alert(data.msg,{icon:1});
+                }else{
+                    layer.alert(data.msg,{icon:2});
+                }
+            }
+        });
+    }
+
+
+
+
+
+function txzfb() {
+    layer.open({
+        type: 1,
+        closeBtn: false,
+        shift: 7,
+        shadeClose: true,
+        title:"提现到支付宝",
+        content: '<form><div class="block-content block-content-full"><div class="form form-group row"><label class="col-12">支付宝姓名</label><div class="col-12"><input type="text" name="zfbxm" id="zfbxm" value="" placeholder="请输入姓名" class="form-control text-primary font-size-sm"></div></div><div class="form-group row"><label class="col-12">支付宝账号</label><div class="col-12"><input type="text" name="zfbzh" id="zfbzh" value="" placeholder="请输入账号" class="form-control text-primary font-size-sm"></div></div><div class="form-group row"><div class="col-12"><button type="button" onclick="txzfb1()" class="btn btn-primary btn-block">提交</button></div></div></div></form>'
+    });
+}
+ 
+
+
+
+
+    function txzfb1(){
+             var load = layer.msg('提交中，请稍后...',{icon:16,time:false});
+var zfbzh=$("#zfbzh").val();
+var zfbxm=$("#zfbxm").val();
+        $.ajax({
+            type:'POST',
+            url:'',
+            data:{
+                act:'txzfb',
+                zfbzh:zfbzh,
+                zfbxm:zfbxm,
+            },
+            dataType:'json',
+            success:function (data){
+                layer.close(load)
+                if(data.code == 1){
+                    setTimeout(function (){
+                        location.href = ''
+                    },1000);
+                    layer.alert(data.msg,{icon:1});
+                }else{
+                    layer.msg(data.msg,{icon:2});
+                }
+            }
+        });
+    }
+
+</script>

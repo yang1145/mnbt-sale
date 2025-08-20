@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>{$webname} - 首页</title>
+ 	<meta name="description" content="{$description}">
+		<meta name="keywords" content="{$keywords}">
+<link rel="shortcut icon"type="image/x-icon"href="{$favicon}"/>
+        <link rel="stylesheet" id="css-main" href="/static/assets/css/oneui.min.css">
+     <link rel="stylesheet" href="/static/assets/css/themes/city.min.css">
+    </head>
+    <body>
+             <style>
+.pagination {
+	display:inline-block;
+	padding-left:0;
+	margin:20px 0;
+	border-radius:4px
+}
+.pagination>li {
+	display:inline
+}
+.pagination>li>a,.pagination>li>span {
+	position:relative;
+	float:left;
+	padding:6px 12px;
+	margin-left:-1px;
+	line-height:1.42857143;
+	color:#ff6b6b;
+	text-decoration:none;
+	background-color:#fff;
+	border:1px solid #ddd
+}
+.pagination>li:first-child>a,.pagination>li:first-child>span {
+	margin-left:0;
+	border-top-left-radius:4px;
+	border-bottom-left-radius:4px
+}
+.pagination>li:last-child>a,.pagination>li:last-child>span {
+	border-top-right-radius:4px;
+	border-bottom-right-radius:4px
+}
+.pagination>li>a:focus,.pagination>li>a:hover,.pagination>li>span:focus,.pagination>li>span:hover {
+	z-index:2;
+	color:#23527c;
+	background-color:#eee;
+	border-color:#ddd
+}
+.pagination>.active>a,.pagination>.active>a:focus,.pagination>.active>a:hover,.pagination>.active>span,.pagination>.active>span:focus,.pagination>.active>span:hover {
+	z-index:3;
+	color:#fff;
+	cursor:default;
+	background-color:#ff6b6b;
+	border-color:#ff6b6b
+}
+.pagination>.disabled>a,.pagination>.disabled>a:focus,.pagination>.disabled>a:hover,.pagination>.disabled>span,.pagination>.disabled>span:focus,.pagination>.disabled>span:hover {
+	color:#777;
+	cursor:not-allowed;
+	background-color:#fff;
+	border-color:#ddd
+}
+.pagination-lg>li>a,.pagination-lg>li>span {
+	padding:10px 16px;
+	font-size:18px;
+	line-height:1.3333333
+}
+.pagination-lg>li:first-child>a,.pagination-lg>li:first-child>span {
+	border-top-left-radius:6px;
+	border-bottom-left-radius:6px
+}
+.pagination-lg>li:last-child>a,.pagination-lg>li:last-child>span {
+	border-top-right-radius:6px;
+	border-bottom-right-radius:6px
+}
+.pagination-sm>li>a,.pagination-sm>li>span {
+	padding:5px 10px;
+	font-size:12px;
+	line-height:1.5
+}
+.pagination-sm>li:first-child>a,.pagination-sm>li:first-child>span {
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px
+}
+.pagination-sm>li:last-child>a,.pagination-sm>li:last-child>span {
+	border-top-right-radius:3px;
+	border-bottom-right-radius:3px
+}
+</style>
+        <div id="page-container" class="main-content-boxed">
+
+            <!-- Main Container -->
+            <main id="main-container">
+
+                <!-- Hero -->
+                <div class="bg-image" style="background-image: url('{$templateset['网站背景']}')">
+                    <div class="hero  bg-black-25 overflow-hidden">
+                        <div class="hero-inner">
+                            <div class="content content-full text-center">
+                                <div class="mb-5 invisible" data-toggle="appear" data-class="animated fadeInDown">
+                                    <i class="fa fa-circle-notch fa-3x text-primary"></i>
+                                </div>
+                                <h1 class="display-4 font-w600 mb-3 text-white invisible" data-toggle="appear" data-class="animated fadeInDown">
+                                    {$webname}                                </h1>
+                                <h5 class="h5 font-w400 text-white-50 mb-5 invisible" data-toggle="appear" data-class="animated fadeInDown" data-timeout="300">
+{$templateset["网站标题"]}
+                                </h5>
+
+                                <span class="m-2 d-inline-block invisible" data-toggle="appear" data-class="animated fadeInUp" data-timeout="600">
+                                    <a class="btn btn-success px-4 py-2" data-toggle="click-ripple" href="/cart">
+                                        <i class="fa fa-shopping-cart mr-1"></i>订购产品
+                                    </a>
+                                </span>
+{if $userstate=="1"}
+<span class="m-2 d-inline-block invisible" data-toggle="appear" data-class="animated fadeInUp" data-timeout="600">
+                                    <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple" href="/user/index">
+                                        <i class="fa fa-user mr-1"></i> 用户中心
+                                    </a>
+                                </span>
+{else}
+                                <span class="m-2 d-inline-block invisible" data-toggle="appear" data-class="animated fadeInUp" data-timeout="600">
+                                    <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple" href="/login">
+                                        <i class="fa fa-sign-in-alt mr-1"></i> 用户登录
+                                    </a>
+                                </span>
+{/if}
+                            </div>
+                        </div>
+
+                        <div class="hero-meta">
+                            <div class="js-appear-enabled animated fadeIn" data-toggle="appear" data-timeout="450">
+                                <span class="d-inline-block animated slideInDown infinite">
+                                    <i class="fa fa-angle-down text-white-50 fa-2x"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Hero -->
+
+
+                <!-- Versions -->
+                <div id="one-versions" class="bg-light">
+                    <div class="content content-full">
+                        <div class="py-5 text-center">
+
+                            <h2 class="h1 mb-5">
+                           {$webname}
+                            </h2>
+     
+                           
+                                                        
+
+
+
+
+
+                        <div class="row">
+                           
+                                <div class="col-lg-4 invisible" data-toggle="appear">
+                                    <!-- HTML Version -->
+                                    <div class="block block-rounded block-fx-pop">
+                                        <div class="block-content block-content-full">
+                                            <div class="my-4">
+                                                <i class="si fa-5x si-graph text-modern"></i>
+                                            </div>
+                                            <h4 class="mb-2">自主开发的平台</h4>
+                                            <p class="font-size-sm text-muted text-left">
+                                                自主开发的虚拟主机销售系统,简单的控制面板
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- END HTML Version -->
+                                </div>
+                                <div class="col-lg-4 invisible" data-toggle="appear">
+                                    <!-- PHP Version -->
+                                    <div class="block block-rounded block-fx-pop">
+                                        <div class="block-content block-content-full">
+                                            <div class="my-4">
+                                                <i class="si fa-5x si-paper-plane text-amethyst"></i>
+                                            </div>
+                                            <h4 class="mb-2">简易上手的体验</h4>
+                                            <p class="font-size-sm text-muted text-left">
+                                          通过简单的配置即可开始你的网站之旅
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- END PHP Version -->
+                                </div>
+                                <div class="col-lg-4 invisible" data-toggle="appear">
+                                    <!-- Laravel Starter Kit -->
+                                    <div class="block block-rounded block-fx-pop">
+                                        <div class="block-content block-content-full">
+                                            <div class="my-4">
+                                                <i class="si fa-5x si-lock text-city"></i>
+                                            </div>
+                                            <h4 class="mb-2">安全的控制面板</h4>
+                                            <p class="font-size-sm text-muted text-left">采用专业的控制面板,安全,稳定,快速
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Versions -->
+
+                <!-- Remastered -->
+                <div id="one-remastered" class="bg-white">
+                    <div class="content content-full">
+                        <div class="py-5 text-center">
+                            <h2 class="h1 mb-5">
+                                数据统计
+                            </h2>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4 col-xl-3 invisible" data-toggle="appear">
+                                    <!-- Bootstrap 4 -->
+                                    <div class="block block-rounded block-fx-pop">
+                                        <div class="block-content block-content-full">
+                                            <div class="item item-rounded bg-modern-lighter mx-auto my-4">
+                                                <i class="fas fa-2x fa-dollar-sign text-modern"></i>
+                                            </div>
+                                            <h4 class="mb-2">成交金额</h4>
+                                            <p class="h3 text-muted text-center">
+                                                {$sumpay}                                  
+                                        </p>
+                                        </div>
+                                    </div>
+                                    <!-- END Bootstrap 4 -->
+                                </div>
+                                <div class="col-sm-6 col-md-4 col-xl-3 invisible" data-toggle="appear">
+                                    <!-- Sass -->
+                                    <div class="block block-rounded block-fx-pop">
+                                        <div class="block-content block-content-full">
+                                            <div class="item item-rounded bg-success-light mx-auto my-4">
+                                                <i class="fab fa-2x fa-mixcloud text-success"></i>
+                                            </div>
+                                            <h4 class="mb-2">服务器</h4>
+                                            <p class="h3 text-muted text-center">
+                                               {$countserver}       
+                                       </p>
+                                        </div>
+                                    </div>
+                                    <!-- END Sass -->
+                                </div>
+                                <div class="col-sm-6 col-md-4 col-xl-3 invisible" data-toggle="appear">
+                                    <!-- ES6 -->
+                                    <div class="block block-rounded block-fx-pop">
+                                        <div class="block-content block-content-full">
+                                            <div class="item item-rounded bg-warning-light mx-auto my-4">
+                                                <i class="si fa-2x si-cursor text-warning"></i>
+                                            </div>
+                                            <h4 class="mb-2">开通主机</h4>
+                                            <p class="h3 text-muted text-center">
+                                                {$countorder}                         </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-6 col-md-4 col-xl-3 invisible" data-toggle="appear">
+                                    <!-- ES6 -->
+                                    <div class="block block-rounded block-fx-pop">
+                                        <div class="block-content block-content-full">
+                                            <div class="item item-rounded bg-amethyst-light mx-auto my-4">
+                                                <i class="si fa-2x si-users text-amethyst"></i>
+                                            </div>
+                                            <h4 class="mb-2">注册用户</h4>
+                                            <p class="h3 text-muted text-center">
+                                               {$countuser}                     </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                            </div>
+                            
+                            
+                            
+                            
+   <div class="block block-rounded block-fx-pop">
+                            <div class="block">
+                        <div class="block-header">
+                            <h3 class="block-title">网站公告</h3>
+                        </div>
+                        <div class="block-content">
+                            <div class="table-responsive">
+                                <table class="table table-bordered  table-vcenter table-hover table-sm">
+                                    <thead>
+<tr>
+                                            <th>标题</th>
+                                            <th>时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+{foreach $announcement as $a}
+<tr>
+                                        <td>{$a.name}</td>
+                                        <td>{$a.time|date="Y-m-d H:i:s",###}</td>
+                                        <td>
+                      <a class="badge badge-primary" href="/announcement/{$a.id}">查看</a>                                                 </td>
+
+</tr>
+{/foreach}
+
+                                    </thead>
+
+</table>
+
+</div>
+<div style="text-align:center">{$announcement->render()}</div>
+
+</div>
+
+<br/>
+</div>
+</div>
+
+
+                        </div>
+                    </div>
+      
+                
+                
+                
+                
+
+
+
+             
+
+
+                <div id="one-reviews" class="bg-image" style="background-image: url('{$templateset['网站背景']}');">
+                    <div class="bg-black-25">
+                        <div class="content content-full">
+                            <div class="py-5">
+                                <h4 class="h4 text-white mb-2 text-center">
+                                   提供优质的虚拟主机服务！
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer id="page-footer" class="bg-white">
+                    <div class="content py-5">
+                        <div class="row font-size-sm">
+                            <div class="col-sm-4 order-sm-2 py-1 text-center text-sm-right">
+                                版权所有 <i class="fa fa-heart text-danger"></i>  <a class="font-w600" href="/" target="_blank">{$webname}</a>
+                            </div>
+
+                            <div class="col-sm-4 order-sm-1 py-1 text-center text-sm-left">
+                                <a class="font-w600" href="/">{$webname}</a> &copy; <span data-toggle="year-copy">2024</span>
+                                &nbsp;
+								                            </div>
+                            <div class="col-sm-4 order-sm-1 py-1 text-center text-sm-left">
+<a href="//beian.miit.gov.cn/">{$templateset['网站备案号']}</a>
+</div>
+
+      
+
+                        </div>
+                    </div>
+                </footer>
+
+
+      
+            </main>
+        </div>
+      <script src="/static/assets/js/oneui.core.min.js"></script>
+        <script src="/static/assets/js/oneui.app.min.js"></script>
+        <script src="/static/assets/vendor/layer/layer.js"></script>
+{if $templateset["公告开关"]=="开"}
+<style>
+.layui-layer-btn .layui-layer-btn0 {
+    border-color: #ff6b6b;
+    background-color: #ff6b6b;
+    color: #fff !important;
+}
+.layui-layer-btn a {
+    height: 28px;
+    line-height: 28px;
+    margin: 5px 5px 0;
+    padding: 0 15px;
+    border: 1px solid #dedede;
+    background-color: #fff;
+    color: #333 !important;
+    border-radius: 2px;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: none;
+    font-size:14px;
+}
+</style>
+<script>
+layer.alert('{$templateset["网站公告"]}',{title:"网站公告"});
+</script>
+{/if}
+
+<script>
+$('.block').addClass('animated rotateInDownLeft');
+</script>
+
+        
+
+
+ 
+    </body>
+</html>

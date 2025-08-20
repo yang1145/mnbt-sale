@@ -1,0 +1,289 @@
+ {include file="default/header" title="网站设置"/}
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+	
+      <div class="container-fluid">
+
+        <div class="row">
+
+          <div class="col-lg-12">
+            <div class="card">
+              <header class="card-header"><div class="card-title">网站设置</div></header>
+              <div class="card-body">
+
+                <ul class="nav nav-tabs">
+                  <li class="nav-item">
+                    <button class="nav-link active" id="basic-config" data-bs-toggle="tab" data-bs-target="#config" type="button" >基本</button>
+                  </li>
+                  <li class="nav-item">
+                    <button class="nav-link" id="basic-upload" data-bs-toggle="tab" data-bs-target="#upload" type="button">邮箱</button>
+                  </li>
+
+                  <li class="nav-item">
+                    <button class="nav-link" id="basic-aff" data-bs-toggle="tab" data-bs-target="#aff" type="button">推广中心</button>
+                  </li>
+              
+                  <li class="nav-item">
+                    <button class="nav-link" id="basic-cron" data-bs-toggle="tab" data-bs-target="#cron" type="button">计划任务</button>
+                  </li>
+                  
+                  
+                  <li class="nav-item">
+                    <button class="nav-link" id="basic-yx" data-bs-toggle="tab" data-bs-target="#yx" type="button">邮箱验证设置</button>
+                  </li>
+                </ul>
+
+                <form action="" method="post" name="edit-form" class="edit-form">
+                  <div class="tab-content">
+
+
+
+                    <div class="tab-pane fade show active" id="config" aria-labelledby="basic-config">
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">网站名称</label>
+                        <input class="form-control" type="text" name="name" value="{$web.name}" placeholder="">      
+                      </div>
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">网站描述</label>
+                        <input class="form-control" type="text" name="description" value="{$web.description}" placeholder="">      
+                      </div>
+
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">网站关键词</label>
+                        <input class="form-control" type="text" name="keywords" value="{$web.keywords}" placeholder="">      
+                      </div>
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">网站头像</label>
+                        <input class="form-control" type="text" name="favicon" value="{$web.favicon}" placeholder="">      
+                      </div>
+
+
+<div class="mb-3">
+                    <label for="type" class="form-label">前台模板</label>
+                    <div class="form-controls">
+                      <select name="template" class="form-select" id="type">
+{volist name="template" id="t"}
+                        <option value="{$t}" {if $web.template==$t}selected{/if}>{$t}</option>
+{/volist}
+                      </select>
+                    </div>
+                  </div>
+
+<div class="mb-3">
+                    <label for="type" class="form-label">后台模板</label>
+                    <div class="form-controls">
+                      <select name="admintemplate" class="form-select" id="type">
+{volist name="admintemplate" id="ad"}
+                        <option value="{$ad}" {if $web.template==$ad}selected{/if}>{$ad}</option>
+{/volist}
+                      </select>
+                    </div>
+                  </div>
+     <div class="mb-3">
+                    <label for="type" class="form-label">维护模式</label>
+                    <div class="form-controls">
+                      <select name="wh" class="form-select" id="type">
+                        <option value="1" {if $web.wh=="1"}selected{/if}>开启</option>
+                        <option value="0" {if $web.wh=="0"}selected{/if}>关闭</option>
+                      </select>
+</div></div>
+
+<div class="mb-3">
+                        <label for="web_site_title" class="form-label">维护信息</label>
+                        <textarea style="height:200px" class="form-control" type="text" name="whxx">{$web.whxx}</textarea>
+                      </div>
+
+</div>
+
+
+
+                   
+                    <div class="tab-pane fade" id="upload" aria-labelledby="basic-upload">
+     <div class="mb-3">
+
+                    <label for="type" class="form-label">是否开启邮箱通知</label>
+                    <div class="form-controls">
+                      <select name="email" class="form-select" id="type">
+                        <option value="1" {if $web.email=="1"}selected{/if}>开启</option>
+                        <option value="0" {if $web.email=="0"}selected{/if}>关闭</option>
+                      </select>
+                    </div>
+                  </div>
+                         <div class="mb-3">
+                        <label for="web_site_title" class="form-label">邮件编码</label>
+                        <input class="form-control" type="text" name="emailchar" value="{$web.emailchar}" placeholder="">      
+                      </div>
+
+ <div class="mb-3">
+                        <label for="web_site_title" class="form-label">SMTP协议</label>
+                        <input class="form-control" type="text" name="emailsecure" value="{$web.emailsecure}" placeholder="">      
+                      </div>
+
+
+ <div class="mb-3">
+                        <label for="web_site_title" class="form-label">服务器端口</label>
+                        <input class="form-control" type="text" name="emailport" value="{$web.emailport}" placeholder="">      
+                      </div>
+
+
+
+ <div class="mb-3">
+                        <label for="web_site_title" class="form-label">SMTP服务器</label>
+                        <input class="form-control" type="text" name="emailhost" value="{$web.emailhost}" placeholder="">      
+                      </div>
+
+
+
+     <div class="mb-3">
+                    <label for="type" class="form-label">是否开启邮箱认证</label>
+                    <div class="form-controls">
+                      <select name="emailauth" class="form-select" id="type">
+                        <option value="true" {if $web.emailauth=="true"}selected{/if}>开启</option>
+                        <option value="false" {if $web.emailauth=="false"}selected{/if}>关闭</option>
+                      </select>
+</div></div>
+
+     <div class="mb-3">
+                        <label for="web_site_title" class="form-label">邮箱账号</label>
+                        <input class="form-control" type="email" name="emailname" value="{$web.emailname}" placeholder="">      
+                      </div>
+
+     <div class="mb-3">
+                        <label for="web_site_title" class="form-label">邮箱密码</label>
+                        <input class="form-control" type="password" name="emailpass" value="{$web.emailpass}" placeholder="">      
+                      </div>
+
+
+                    </div>
+
+
+
+
+
+                    <div class="tab-pane fade" id="aff" aria-labelledby="basic-aff">
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">提成</label>
+                        <input class="form-control" type="text" name="affdiscount" value="{$web.affdiscount}" placeholder="">      
+                      </div>
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">最小提现金额</label>
+                        <input class="form-control" type="text" name="affwithdrawal" value="{$web.affwithdrawal}" placeholder="">      
+                      </div>
+</div>
+
+
+              <div class="tab-pane fade" id="cron" aria-labelledby="basic-cron">
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">计划任务地址</label>
+                        <input class="form-control" type="text" value="{$cronurl}" placeholder="" readonly/>      
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">产品到期多少天后终止</label>
+                        <input class="form-control" type="text" name="cronzz" value="{$web.cronzz}" placeholder="">      
+                      </div>
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">产品终止后多少天删除</label>
+                        <input class="form-control" type="text" name="cronsc" value="{$web.cronsc}" placeholder="">      
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">删除多少分钟未支付的订单</label>
+                        <input class="form-control" type="text" name="paycron" value="{$web.paycron}" placeholder="">      
+                      </div>
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">删除多少天未回复的工单</label>
+                        <input class="form-control" type="text" name="tickcron" value="{$web.tickcron}" placeholder="">      
+                      </div>
+</div>
+
+
+
+              <div class="tab-pane fade" id="zc" aria-labelledby="basic-zc">
+
+     <div class="mb-3">
+                    <label for="type" class="form-label">是否开启注册邮箱验证</label>
+                    <div class="form-controls">
+                      <select name="zcyxyz" class="form-select" id="type">
+                        <option value="1" {if $web.zcyxyz=="1"}selected{/if}>开启</option>
+                        <option value="0" {if $web.zcyxyz=="0"}selected{/if}>关闭</option>
+                      </select>
+</div></div>
+
+</div>
+
+              <div class="tab-pane fade" id="yx" aria-labelledby="basic-yx">
+
+     <div class="mb-3">
+                    <label for="type" class="form-label">是否开启注册邮箱验证</label>
+                    <div class="form-controls">
+                      <select name="zcyxyz" class="form-select" id="type">
+                        <option value="1" {if $web.zcyxyz=="1"}selected{/if}>开启</option>
+                        <option value="0" {if $web.zcyxyz=="0"}selected{/if}>关闭</option>
+                      </select>
+</div></div>
+     <div class="mb-3">
+                    <label for="type" class="form-label">是否开启邮箱登录</label>
+                    <div class="form-controls">
+                      <select name="yxdl" class="form-select" id="type">
+                        <option value="1" {if $web.yxdl=="1"}selected{/if}>开启</option>
+                        <option value="0" {if $web.yxdl=="0"}selected{/if}>关闭</option>
+                      </select>
+</div></div>
+</div>
+
+                  </div>
+
+                       <button type="submit" class="btn btn-primary me-1">确 定</button>
+ 
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>    
+	
+	</main>
+    <!--End 页面主要内容-->
+
+ {include file="default/footer" /}
+<script>
+    $("form").submit(function (){
+        var load = layer.msg('修改中，请稍后...',{icon:16,shade:0.8,time:false});
+
+var form = $('form').serializeArray();
+
+        $.ajax({
+            type:'POST',
+            url:'',
+            data:form,
+            dataType:'json',
+            success:function (data){
+                layer.close(load);
+                if(data.code == 1){
+            setTimeout(function () {
+                location.href = '';
+            }, 1000);
+                    layer.alert(data.msg,{icon:1,shade:0.8});
+                }else{
+                    layer.alert(data.msg,{icon:2,shade:0.8});
+                }
+            }
+        });
+        return false;
+    });
+</script>

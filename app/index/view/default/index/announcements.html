@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>{$webname} - 公告:{$announcement.name}</title>
+	 	<meta name="description" content="{$description}">
+		<meta name="keywords" content="{$keywords}">
+<link rel="shortcut icon"type="image/x-icon"href="{$favicon}"/>
+
+  <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+
+ <link rel="stylesheet" id="css-main" href="/static/assets/css/oneui.min.css">
+ 
+      <link rel="stylesheet" href="/static/assets/css/themes/city.min.css">
+<!--
+ <style>
+.bg-image{background-position:0 0%;background-size:cover}
+</style>
+-->
+    </head>
+    <body class="bg-image" style="background-image: url('{$templateset['网站背景']}');">
+
+<main id="main-container">
+
+                <div class="content">
+
+
+
+                    <div class="block">
+                     
+
+                        <div class="block-content">
+                            <h2 class="text-primary">{$announcement.name}</h2>
+                      <hr/>
+
+
+<p>{$announcement.information}</p>
+<br/>
+<p>发布时间:{$announcement.time|date="Y-m-d H:i:s",###}</p>
+<p style="color:red;text-align: right">{$webname}~</p>
+<div class="form-group row">
+                                            
+                                            <div class="col-4">
+                                             <center>
+                                                <a href="/announcement" class="btn btn-primary btn-sm">
+                                                
+                                            <i class="fas fa-undo mr-1"></i>返回上页</a> </center>
+                                            </div>
+                                            
+                                            <div class="col-4"> <center>
+                                                <a href="/cart" class="btn btn-primary btn-sm">
+                                                
+                                            <i class="fas fa-cart-plus mr-1"></i>购买产品</a> </center>
+                                            </div>
+<div class="col-4">
+
+{if $userstate=="1"}
+ <center>
+      <a href="/user" class="btn btn-primary btn-sm"><i class="fa fa-user mr-1"></i>用户中心</a>
+{else}
+      <a href="/login" class="btn btn-primary btn-sm"><i class="fa fa-sign-in-alt mr-1"></i>用户登录</a>
+                                                {/if}
+                                                 </center>
+                                            </div>
+                                        </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+</main>
+</div>
+        <script src="/static/assets/js/oneui.core.min.js"></script>
+        <script src="/static/assets/js/oneui.app.min.js"></script>
+        <script src="/static/assets/vendor/layer/layer.js"></script>
+        <script>
+$('.block').addClass('animated rotateInDownLeft');
+</script>
+
+    </body>
+</html>

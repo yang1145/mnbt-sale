@@ -1,0 +1,218 @@
+ {include file="default/header" title="用户信息"/}
+
+<!--页面主要内容-->
+    <main class="lyear-layout-content">
+	
+      <div class="container-fluid">
+
+        <div class="row">
+
+          <div class="col-lg-12">
+            <div class="card">
+              <header class="card-header"><div class="card-title">用户信息</div></header>
+              <div class="card-body">
+
+                <ul class="nav nav-tabs">
+                  <li class="nav-item">
+                    <button class="nav-link active" id="basic-config" data-bs-toggle="tab" data-bs-target="#config" type="button" >信息</button>
+                  </li>
+                  <li class="nav-item">
+                    <button class="nav-link" id="basic-sys" data-bs-toggle="tab" data-bs-target="#sys" type="button">产品</button>
+                  </li>
+                </ul>
+
+                <form action="" method="post" name="edit-form" class="edit-form">
+                  <div class="tab-content">
+
+
+
+
+                    <div class="tab-pane fade show active" id="config" aria-labelledby="basic-config">
+
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">名称</label>
+                        <input class="form-control" type="text" name="name" value="{$userinfo.name}" placeholder="">      
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">账号</label>
+                        <input class="form-control" type="text" name="user" value="{$userinfo.user}" placeholder="">      
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">余额</label>
+                        <input class="form-control" type="text" name="money" value="{$userinfo.money}" placeholder="">      
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">QQ</label>
+                        <input class="form-control" type="text" name="qq" value="{$userinfo.qq}" placeholder="">      
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">邮箱</label>
+                        <input class="form-control" type="text" name="mail" value="{$userinfo.mail}" placeholder="">      
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">地址</label>
+                        <input class="form-control" type="text" name="address" value="{$userinfo.address}" placeholder="">      
+                      </div>
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">aff</label>
+                        <input class="form-control" type="text" name="aff" value="{$userinfo.aff}" placeholder="">      
+                      </div>
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">aff余额</label>
+                        <input class="form-control" type="text" name="affmoney" value="{$userinfo.affmoney}" placeholder="">      
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">上级ID</label>
+                        <input class="form-control" type="text" name="upperid" value="{$userinfo.upperid}" placeholder="">      
+                      </div>
+
+
+
+                      <div class="mb-3">
+                        <label for="web_site_title" class="form-label">密码</label>
+                        <input class="form-control" type="text" name="password" placeholder="不修改请留空" value="" placeholder="">      
+                      </div>
+
+<div class="mb-3">
+                    <label for="type" class="form-label">账号状态</label>
+                    <div class="form-controls">
+                      <select name="state" class="form-select" id="type">
+                        <option value="1" {if $userinfo.state=="1"}selected{/if}>开启</option>
+                        <option value="0" {if $userinfo.state=="0"}selected{/if}>冻结</option>
+                      </select>
+                    </div>
+                  </div>
+  
+                     <button type="submit" class="btn btn-primary me-1">修改</button>
+                    </div>
+
+
+                    <div class="tab-pane fade" id="sys" aria-labelledby="basic-sys">
+
+
+<div class="table-responsive-sm">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">名称</th>
+                <th scope="col">账号</th>
+                <th scope="col">开通时间</th>
+                <th scope="col">到期时间</th>
+                <th scope="col">状态</th>
+                <th scope="col">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+{foreach $userorder as $u}
+
+              <tr>
+                <th scope="row">{$u.id}</th>
+                <td>{$u.cartid}</td>
+                <td>{$u.user}</td>
+                <td>{$u.atime|date="Y-m-d H:i:s",###}</td>
+                <td>{$u.ztime|date="Y-m-d H:i:s",###}</td>
+                <td>
+{if $u.state=="1"}
+<span class="badge bg-success">正常</span>
+{/if}
+{if $u.state=="2"}
+<span class="badge bg-warning">暂停</span>
+{/if}
+{if $u.state=="3"}
+<span class="badge bg-danger">终止</span>
+{/if}
+</td>
+<td>
+<a href="/admin/user/{$userid}/{$u.id}" class="btn btn-success btn-sm me-1"><i class="mdi mdi-pencil"></i>查看信息</a>
+</td>
+              </tr>
+{/foreach}
+            </tbody>
+          </table>
+</div>
+
+
+
+
+                    </div>
+
+
+                   
+
+
+                  </div>
+
+ 
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>    
+	
+	</main>
+    <!--End 页面主要内容-->
+
+
+ {include file="default/footer" /}
+<script>
+    $("form").submit(function (){
+        var load = layer.msg('修改中，请稍后...',{icon:16,shade:0.8,time:false});
+
+        var name = $("input[name='name']").val();
+        var user = $("input[name='user']").val();
+        var money = $("input[name='money']").val();
+        var qq = $("input[name='qq']").val();
+        var mail = $("input[name='mail']").val();
+        var address = $("input[name='address']").val();
+        var password = $("input[name='password']").val();       
+        var aff = $("input[name='aff']").val();       
+        var affmoney = $("input[name='affmoney']").val();       
+        var upperid = $("input[name='upperid']").val();       
+        var state = $("select[name='state']").val();       
+        
+           $.ajax({
+            type:'POST',
+            url:'',
+            data:{
+                name:name,
+                user:user,
+                money:money,
+                qq:qq,
+                mail:mail,
+                address:address,
+                password:password,
+                aff:aff,
+                affmoney:affmoney,
+                upperid:upperid,
+                state:state,
+            },
+            dataType:'json',
+            success:function (data){
+                layer.close(load);
+                if(data.code == 1){
+                    layer.alert(data.msg,{icon:1,shade:0.8});
+                }else{
+                    layer.alert(data.msg,{icon:2,shade:0.8});
+                }
+            }
+        });
+        return false;
+    });
+</script>

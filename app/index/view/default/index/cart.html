@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>{$webname} - 购买产品</title>
+	 	<meta name="description" content="{$description}">
+		<meta name="keywords" content="{$keywords}">
+<link rel="shortcut icon"type="image/x-icon"href="{$favicon}"/>
+
+        <link rel="stylesheet" id="css-main" href="/static/assets/css/oneui.min.css">
+     <link rel="stylesheet" href="/static/assets/css/themes/city.min.css">
+<!--
+ <style>
+.bg-image{background-position:0 0%;background-size:cover}
+</style>
+-->
+    </head>
+    <body class="bg-image" style="background-image: url('{$templateset['网站背景']}');">
+   
+        <div id="page-container" class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed">
+        
+<main id="main-container">
+                <!-- Page Content -->
+                <div class="content">
+                    <!-- Modern Design -->
+<h1 class="text-primary">{if $class}{$class.name}{/if}</h1>
+                    <h2 class="content-heading" style="color:#ffffff">{if $class}{$class.introduce}{/if}</h2>
+
+
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+   产品分类
+    <span class="caret"></span>
+  </button>
+  <div class="dropdown-menu fs-sm" aria-labelledby="dropdownMenu1" style="border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+  {if $product}
+{foreach $product as $p}
+    <a class="dropdown-item" href="/cart/{$p.id}"{if $productid==$p.id} style="color:#ff6b6b"{/if}>{$p.name}</a>
+{/foreach}
+{/if}
+  </div>
+</div>
+
+
+
+  <br/> 
+  <br/> 
+                 <div class="row">
+{if $cart}
+{foreach $cart as $c}
+
+                                                <div class="col-md-6 col-xl-3" >
+                            <div class="block block-link-shadow block-themed block-fx-shadow text-center" >
+                                <div class="block-header" style="border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                        {$c.name}
+<span>{if $c.inventory<"1"}已售完{else}库存:{$c.inventory}{/if}</span>
+                                </div>
+                                <div class="block-content bg-body-light">
+                                    <div class="py-2">
+                                        <p class="h1 font-w700 mb-2">￥{if $c.money=="0"}免费{else}{$c.money}{/if}/
+{if $c.cycle=="day"}日{/if}
+{if $c.cycle=="month"}月{/if}
+{if $c.cycle=="season"}季{/if}
+{if $c.cycle=="year"}年{/if}
+{if $c.cycle=="unrestricted"}一次性{/if}
+</p>
+{if $c.firstmo=="1"}<span class="text-primary">首{if $c.cycle=="day"}日{/if}
+{if $c.cycle=="month"}月{/if}
+{if $c.cycle=="season"}季{/if}
+{if $c.cycle=="year"}年{/if}免费</span>{/if}
+                                    </div>
+                                </div>
+                                <div class="block-content">
+                                <p>
+      {$c.content}   
+      </p>
+                                </div>
+                                <div class="block-content block-content-full bg-body-light" style="border-radius: 8px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                    
+                                    {if $c.inventory<"1"}
+<span class="btn btn-primary px-4">
+<i class="fas fa-times-circle"></i> 已售完
+</span>
+{else}
+<a {if $c.inventory!="0"}href="/product/{$c.id}"{/if}>
+<span class="btn btn-primary px-4">                            
+<i class="fas fa-cart-plus"></i> 购买
+</span>
+</a>
+{/if}
+
+                                </div>
+                            </div>
+                        </div>
+{/foreach}
+{else}
+
+                                                <div class="col-12">
+<h1 style="color:#ff6b6b">该分类下没有产品！</h1>
+</duv>
+{/if}
+
+
+                                            </div>
+                </div>
+            </main>
+</div>
+<style type="text/css">
+  .wrap {
+      display: block;
+      bottom: 0px;      
+right: 1px !important;
+      right: 18px;
+      width: 150px;
+      height:120px;
+      line-height: 30px;
+      position: fixed;
+      text-align: center;
+  }
+</style>
+<div class="wrap">
+<center>
+{if $userstate!="1"}
+<a href="/login" style="color:#fff">
+  <div class="btn-primary" style="height:80px;width:80px;border-radius:80%;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+  <i style="margin-top:15px;" class="fa fa-sign-in-alt fa-rocket mr-1"></i><br/>用户登录
+</div>
+</a>
+{else}
+<a href="/user/index" style="color:#fff">
+  <div class="btn-primary" style="height:80px;width:80px;border-radius:80%;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+<i style="margin-top:15px;" class="fa fa-user fa-rocket mr-1"></i><br/>用户中心
+</div>
+</a>
+{/if}
+</center>
+</div>
+        <script src="/static/assets/js/oneui.core.min.js"></script>
+        <script src="/static/assets/js/oneui.app.min.js"></script>
+        <script src="/static/assets/vendor/layer/layer.js"></script>
+                
+<script>
+$('.block').addClass('animated rotateInDownLeft');
+</script>
+
+
+    </body>
+</html>

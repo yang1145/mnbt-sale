@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{$webname} - 购买产品</title>
+    <meta name="description" content="{$description}">
+    <meta name="keywords" content="{$keywords}">
+    <link rel="shortcut icon" type="image/x-icon" href="{$favicon}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" id="css-main" href="/static/assets/css/oneui.min.css">
+    <link rel="stylesheet" href="/static/assets/css/themes/city.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f1623 0%, #1c2331 100%);
+            color: #f4f6fc;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 22, 35, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #4cc9f0;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: #4361ee;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #f4f6fc;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #4361ee;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-login {
+            background: transparent;
+            color: #f4f6fc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: black;
+        }
+        
+        .btn-register {
+            background: #4361ee;
+            color: white;
+            border: 1px solid #4361ee;
+        }
+        
+        .btn-register:hover {
+            background: #3250d4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            color: black;
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            padding: 120px 0 60px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #b0b7cb;
+        }
+        
+        /* 分类选择 */
+        .category-selector {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .dropdown {
+            display: inline-block;
+        }
+        
+        .btn-category {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f4f6fc;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-category:hover {
+            background: rgba(67, 97, 238, 0.2);
+            border-color: rgba(67, 97, 238, 0.3);
+        }
+        
+        .dropdown-menu {
+            background: rgba(15, 22, 35, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            margin-top: 10px;
+            min-width: 200px;
+        }
+        
+        .dropdown-item {
+            padding: 10px 20px;
+            color: #b0b7cb;
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-item:hover, .dropdown-item.active {
+            background: rgba(67, 97, 238, 0.2);
+            color: #4cc9f0;
+        }
+        
+        /* 产品列表 */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        .product-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .product-stock {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(67, 97, 238, 0.2);
+        }
+        
+        .product-stock.sold-out {
+            background: rgba(255, 107, 107, 0.2);
+        }
+        
+        .product-body {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 15px 0;
+            color: #4cc9f0;
+        }
+        
+        .product-cycle {
+            font-size: 0.9rem;
+            color: #b0b7cb;
+        }
+        
+        .product-free {
+            display: inline-block;
+            background: rgba(67, 97, 238, 0.2);
+            color: #4361ee;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        .product-content {
+            color: #b0b7cb;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .product-footer {
+            padding: 20px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .btn-buy {
+            display: inline-block;
+            background: linear-gradient(90deg, #4361ee, #4cc9f0);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn-buy:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-buy.sold-out {
+            background: rgba(255, 107, 107, 0.3);
+            cursor: not-allowed;
+        }
+        
+        .btn-buy.sold-out:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .no-products {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            grid-column: 1 / -1;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .no-products h2 {
+            color: #ff6b6b;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        /* 版权信息 */
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #8a91a8;
+            font-size: 0.9rem;
+        }
+        
+        /* 用户入口按钮 */
+        /*
+        .user-access {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 999;
+        }
+        
+        .user-access-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: #4361ee;
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .user-access-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+            background: #3250d4;
+        }
+        
+        .user-access-btn i {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+        
+        .user-access-btn span {
+            font-size: 0.7rem;
+        }
+        
+        @media (max-width: 768px) {
+            .user-access {
+                bottom: 20px;
+                left: 20px;
+            }
+            
+            .user-access-btn {
+                width: 45px;
+                height: 45px;
+            }
+        }
+        */
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 100px 0 60px;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-access {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .user-access-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* 移动菜单按钮 */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #0f1623;
+                padding: 20px;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-server"></i>
+                    <span>{$webname}</span>
+                </div>
+                
+                <div class="nav-links" id="navLinks">
+                    <a href="/">首页</a>
+                    <a href="/cart" class="active">产品</a>
+                    <a href="#">数据中心</a>
+                    <a href="#">关于我们</a>
+                    <a href="#">技术支持</a>
+                    <a href="#">联系我们</a>
+                </div>
+                
+                <div class="auth-buttons">
+                    {if $userstate=="1"}
+                    <a href="/user/index" class="btn btn-login">用户中心</a>
+                    {else}
+                    <a href="/login" class="btn btn-login">登录</a>
+                    <a href="/register" class="btn btn-register">注册</a>
+                    {/if}
+                </div>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <section class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>{if $class}{$class.name}{/if}</h1>
+                <p>{if $class}{$class.introduce}{/if}</p>
+            </div>
+            
+            <div class="category-selector">
+                <div class="dropdown">
+                    <button class="btn-category dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <i class="fas fa-list"></i> 产品分类
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        {if $product}
+                        {foreach $product as $p}
+                            <a class="dropdown-item{if $productid==$p.id} active{/if}" href="/cart/{$p.id}">{$p.name}</a>
+                        {/foreach}
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="products-grid">
+                {if $cart}
+                {foreach $cart as $c}
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">{$c.name}</div>
+                        <div class="product-stock{if $c.inventory<'1'} sold-out{/if}">{if $c.inventory<'1'}已售完{else}库存:{$c.inventory}{/if}</div>
+                    </div>
+                    <div class="product-body">
+                        <div class="product-price">￥{if $c.money=='0'}免费{else}{$c.money}{/if}</div>
+                        <div class="product-cycle">
+                            {if $c.cycle=='day'}日{elseif $c.cycle=='month'}月{elseif $c.cycle=='season'}季{elseif $c.cycle=='year'}年{elseif $c.cycle=='unrestricted'}一次性{/if}
+                        </div>
+                        {if $c.firstmo=='1'}
+                        <div class="product-free">
+                            首{if $c.cycle=='day'}日{elseif $c.cycle=='month'}月{elseif $c.cycle=='season'}季{elseif $c.cycle=='year'}年{/if}免费
+                        </div>
+                        {/if}
+                        <div class="product-content">
+                            {$c.content}
+                        </div>
+                    </div>
+                    <div class="product-footer">
+                        {if $c.inventory<'1'}
+                        <button class="btn-buy sold-out" disabled>
+                            <i class="fas fa-times-circle"></i> 已售完
+                        </button>
+                        {else}
+                        <a {if $c.inventory!='0'}href="/product/{$c.id}"{/if} class="btn-buy">
+                            <i class="fas fa-cart-plus"></i> 立即购买
+                        </a>
+                        {/if}
+                    </div>
+                </div>
+                {/foreach}
+                {else}
+                <div class="no-products">
+                    <h2><i class="fas fa-exclamation-circle"></i> 该分类下没有产品！</h2>
+                    <p>请尝试选择其他产品分类</p>
+                </div>
+                {/if}
+            </div>
+        </div>
+    </section>
+
+    <!-- 用户入口 -->
+    <!--
+    <div class="user-access">
+        {if $userstate!='1'}
+        <a href="/login" class="user-access-btn">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>登录</span>
+        </a>
+        {else}
+        <a href="/user/index" class="user-access-btn">
+            <i class="fas fa-user"></i>
+            <span>中心</span>
+        </a>
+        {/if}
+    </div>
+    -->
+
+    <script src="/static/assets/js/oneui.core.min.js"></script>
+    <script src="/static/assets/js/oneui.app.min.js"></script>
+    <script src="/static/assets/vendor/layer/layer.js"></script>
+    
+    <script>
+        // 移动菜单切换
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('nav-active');
+        });
+        
+        // 滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(15, 22, 35, 0.95)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(15, 22, 35, 0.9)';
+                header.style.boxShadow = 'none';
+            }
+        });
+        
+        {if $templateset['公告开关']=='开'}
+        layer.alert('{$templateset["网站公告"]}', {title: '网站公告'});
+        {/if}
+    </script>
+</body>
+</html>

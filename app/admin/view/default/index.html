@@ -1,0 +1,124 @@
+{include file="default/header" title="控制台"/}
+<!--页面主要内容-->
+<main class="lyear-layout-content">
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+
+
+      <div class="col-md-6 col-xl-6">
+        <div class="card bg-primary text-white">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <span class="avatar-md rounded-circle bg-white bg-opacity-25 avatar-box">
+                <i class="mdi mdi-currency-cny fs-4"></i>
+              </span>
+              <span class="fs-4">{$paymoney}</span>
+            </div>
+            <div class="text-end">总收入</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-6">
+        <div class="card bg-success text-white">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <span class="avatar-md rounded-circle bg-white bg-opacity-25 avatar-box">
+                <i class="mdi mdi-currency-cny fs-4"></i>
+              </span>
+              <span class="fs-4">{$paymoney1}</span>
+            </div>
+            <div class="text-end">今日收入</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-6">
+        <div class="card bg-danger text-white">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <span class="avatar-md rounded-circle bg-white bg-opacity-25 avatar-box">
+                <i class="mdi mdi-account fs-4"></i>
+              </span>
+              <span class="fs-4">{$usercount}</span>
+            </div>
+            <div class="text-end">用户总数</div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="col-md-6 col-xl-6">
+        <div class="card bg-purple text-white">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <span class="avatar-md rounded-circle bg-white bg-opacity-25 avatar-box">
+                <i class="mdi mdi-comment-outline fs-4"></i>
+              </span>
+              <span class="fs-4">{$ticketcount}</span>
+            </div>
+            <div class="text-end">待处理工单</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-lg-12">
+        <div class="card">
+          <header class="card-header">
+            <div class="card-title">介绍/教程</div>
+          </header>
+          <div class="card-body">
+
+
+
+            <div class="lyear-timeline-item-content">
+              <div class="card bg-success">
+                <div class="card-body text-white">
+                  <h2>欢迎使用全新的虚拟主机销售系统<br />推荐对接服务器<a href="http://sib.cc/cart">思博云sib.cc</a></h2>
+                  <h2>香港服务器2h2g3m服务器9.9元续费同价，助力微小企业<a href="https://yun.0330.top/cart?fid=2">购买地址sib.cc</a></h2>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="lyear-timeline-item-content">
+              <div class="card bg-success">
+                <div class="card-body text-white">
+                  <h2>梦奈宝塔对接教程</h2>
+                 <p>主机填--梦奈宝塔的地址</p>
+                 <p>安全码填--梦奈宝塔系统api</p>
+
+                 <p>账号填--梦奈宝塔 宝塔编号(梦奈宝塔里面的服务器的宝塔编号)</p>
+                 <p>密码填--调用密钥 (梦奈宝塔里面的服务器的调用秘钥)</p>
+                 <p>如果地址不是80端口就填一下端口--如果地址是https就开启ssl</p>
+                </div>
+              </div>
+            </div>
+
+
+
+
+            </ul>
+
+          </div>
+        </div>
+      </div>
+      
+
+
+
+    </div>
+
+  </div>
+
+</main>
+<!--End 页面主要内容-->
+{include file="default/footer" /}

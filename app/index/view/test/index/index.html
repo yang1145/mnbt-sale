@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{$webname} - 首页</title>
+    <meta name="description" content="{$description}">
+    <meta name="keywords" content="{$keywords}">
+    <link rel="shortcut icon" type="image/x-icon" href="{$favicon}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" id="css-main" href="/static/assets/css/oneui.min.css">
+    <link rel="stylesheet" href="/static/assets/css/themes/city.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f1623 0%, #1c2331 100%);
+            color: #f4f6fc;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 22, 35, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #4cc9f0;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: #4361ee;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #f4f6fc;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #4361ee;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-login {
+            background: transparent;
+            color: #f4f6fc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: black;
+        }
+        
+        .btn-register {
+            background: #4361ee;
+            color: white;
+            border: 1px solid #4361ee;
+        }
+        
+        .btn-register:hover {
+            background: #3250d4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            color: black;
+        }
+        
+        /* 英雄区域样式 */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(67, 97, 238, 0.1) 0%, transparent 60%);
+            z-index: -1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: #b0b7cb;
+            animation: fadeInUp 1s ease 0.2s;
+            animation-fill-mode: both;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #4361ee, #4cc9f0);
+            color: white;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            border: none;
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.4);
+            animation: fadeInUp 1s ease 0.4s;
+            animation-fill-mode: both;
+            border-radius: 50px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.5);
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* 特性部分样式 */
+        .features {
+            padding: 100px 0;
+            background: rgba(10, 15, 25, 0.5);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 2.2rem;
+            color: #f4f6fc;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #4361ee;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .feature-card p {
+            color: #b0b7cb;
+        }
+        
+        /* 统计数据样式 */
+        .stats {
+            padding: 100px 0;
+            background: rgba(15, 22, 35, 0.7);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #4cc9f0;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .stat-label {
+            color: #b0b7cb;
+            font-size: 1.1rem;
+        }
+        
+        /* 公告部分样式 */
+        .announcements {
+            padding: 100px 0;
+            background: rgba(10, 15, 25, 0.5);
+        }
+        
+        .announcement-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .announcement-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .announcement-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .announcement-date {
+            color: #b0b7cb;
+            font-size: 0.9rem;
+        }
+        
+        .announcement-link {
+            color: #4cc9f0;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(76, 201, 240, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .announcement-link:hover {
+            background: rgba(76, 201, 240, 0.2);
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background: #0a0f19;
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #4cc9f0;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: #b0b7cb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: #4361ee;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #8a91a8;
+            font-size: 0.9rem;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .features-grid, .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .announcement-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+        
+        /* 移动菜单按钮 */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #0f1623;
+                padding: 20px;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-server"></i>
+                    <span>{$webname}</span>
+                </div>
+                
+                <div class="nav-links" id="navLinks">
+                    <a href="#">首页</a>
+                    <a href="#">产品</a>
+                    <a href="#">数据中心</a>
+                    <a href="#">关于我们</a>
+                    <a href="#">技术支持</a>
+                    <a href="#">联系我们</a>
+                </div>
+                
+                <div class="auth-buttons">
+                    {if $userstate=="1"}
+                    <a href="/user/index" class="btn btn-login">用户中心</a>
+                    {else}
+                    <a href="/login" class="btn btn-login">登录</a>
+                    <a href="/register" class="btn btn-register">注册</a>
+                    {/if}
+                </div>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <h1>{$webname}</h1>
+            <p>{$templateset["网站标题"]}</p>
+            <a href="/cart" class="btn btn-primary">立即购买</a>
+        </div>
+    </section>
+
+    <!-- 特性部分 -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">为什么选择我们</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>自主开发的平台</h3>
+                    <p>自主开发的虚拟主机销售系统,简单的控制面板</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <h3>简易上手的体验</h3>
+                    <p>通过简单的配置即可开始你的网站之旅</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>安全的控制面板</h3>
+                    <p>采用专业的控制面板,安全,稳定,快速</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计数据 -->
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title">数据统计</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-value">{$sumpay}</div>
+                    <div class="stat-label">成交金额</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="stat-value">{$countserver}</div>
+                    <div class="stat-label">服务器</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <div class="stat-value">{$countorder}</div>
+                    <div class="stat-label">开通主机</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value">{$countuser}</div>
+                    <div class="stat-label">注册用户</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公告部分 -->
+    <section class="announcements">
+        <div class="container">
+            <h2 class="section-title">网站公告</h2>
+            <div class="announcement-list">
+                {foreach $announcement as $a}
+                <div class="announcement-item">
+                    <div class="announcement-title">{$a.name}</div>
+                    <div class="announcement-date">{$a.time|date="Y-m-d H:i:s",###}</div>
+                    <a href="/announcement/{$a.id}" class="announcement-link">查看</a>
+                </div>
+                {/foreach}
+            </div>
+            <div style="text-align:center">{$announcement->render()}</div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>产品服务</h3>
+                    <ul>
+                        <li><a href="/cart">虚拟主机</a></li>
+                        <li><a href="/cart">云服务器</a></li>
+                        <li><a href="/cart">企业邮箱</a></li>
+                        <li><a href="/cart">域名注册</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>技术支持</h3>
+                    <ul>
+                        <li><a href="#">文档中心</a></li>
+                        <li><a href="#">API参考</a></li>
+                        <li><a href="#">社区支持</a></li>
+                        <li><a href="/user/submitticket">工单系统</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>关于我们</h3>
+                    <ul>
+                        <li><a href="#">公司简介</a></li>
+                        <li><a href="#">新闻动态</a></li>
+                        <li><a href="#">加入我们</a></li>
+                        <li><a href="#">合作伙伴</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><a href="#">销售咨询:</a></li>
+                        <li><a href="#">技术支持:</a></li>
+                        <li><a href="#">电子邮件:</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© <span data-toggle="year-copy">2024</span> {$webname}。保留所有权利。 <a href="//beian.miit.gov.cn/">{$templateset['网站备案号']}</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/assets/js/oneui.core.min.js"></script>
+    <script src="/static/assets/js/oneui.app.min.js"></script>
+    <script src="/static/assets/vendor/layer/layer.js"></script>
+    
+    <script>
+        // 移动菜单切换
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('nav-active');
+        });
+        
+        // 滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(15, 22, 35, 0.95)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(15, 22, 35, 0.9)';
+                header.style.boxShadow = 'none';
+            }
+        });
+        
+        // 添加动画类
+        document.querySelectorAll('.block').forEach(block => {
+            block.classList.add('animated', 'rotateInDownLeft');
+        });
+        
+        {if $templateset["公告开关"]=="开"}
+        layer.alert('{$templateset["网站公告"]}',{title:"网站公告"});
+        {/if}
+    </script>
+</body>
+</html>

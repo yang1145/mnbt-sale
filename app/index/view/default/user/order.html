@@ -1,0 +1,57 @@
+{include file="default/user/header" title="产品管理" /}
+<main id="main-container">
+
+                <div class="content">
+
+
+
+                    <div class="block">
+                        <div class="block-header">
+                            <h3 class="block-title">产品管理</h3>
+                        </div>
+                        <div class="block-content">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-vcenter table-hover table-sm">
+                                    <thead>
+<tr>
+                                            <th>ID</th>
+                                            <th>名称</th>
+                                            <th>账号</th>
+                                            <th>开通时间</th>
+                                            <th>到期时间</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+{foreach $order as $o}
+<tr>
+                                        <td>{$o.id}</td>
+                                        <td>{$o.cartid}</td>
+                                        <td>{$o.user}</td>
+                                        <td>{$o.atime|date="Y-m-d",###}</td>
+                                        <td><span class="text-primary">{$o.ztime|date="Y-m-d",###}</span></td>
+                                        <td>
+{if $o.state=="1"}
+                                            <button class="btn badge badge-success">正常</button>                                 
+{/if}
+{if $o.state=="2"}
+                                            <button class="btn badge badge-warning">暂停</button>                                 
+{/if}
+{if $o.state=="3"}
+                                            <button class="btn badge badge-danger">终止</button>                                 
+{/if}
+       </td>
+                                        <td>
+                                            <a class="badge badge-primary" href="/user/order/{$o.id}">查看</a>                                                                                  </td>
+                                    </tr>        
+                    {/foreach}
+                                   </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </main>
+            {include file="default/user/footer" /}
