@@ -16,15 +16,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `zj_cc`
---
 
--- --------------------------------------------------------
-
---
--- 表的结构 `dd_admin`
---
 
 CREATE TABLE IF NOT EXISTS `dd_admin` (
   `id` int(11) NOT NULL,
