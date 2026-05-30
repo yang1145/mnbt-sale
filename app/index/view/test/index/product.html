@@ -1,130 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{$webname} - 产品配置</title>
-    <meta name="description" content="{$description}">
-    <meta name="keywords" content="{$keywords}">
-    <link rel="shortcut icon" type="image/x-icon" href="{$favicon}"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" id="css-main" href="/static/assets/css/oneui.min.css">
-    <link rel="stylesheet" href="/static/assets/css/themes/city.min.css">
+    <title>{$webname} - 产品详情</title>
+    {include file="default/index/header" /}
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #0f1623 0%, #1c2331 100%);
-            color: #f4f6fc;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* 导航栏样式 */
-        header {
-            padding: 20px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(15, 22, 35, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: #4cc9f0;
-        }
-        
-        .logo i {
-            margin-right: 10px;
-            color: #4361ee;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            color: #f4f6fc;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: #4361ee;
-        }
-        
-        .nav-links a.active {
-            color: #4361ee;
-        }
-        
-        .auth-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .btn-login {
-            background: transparent;
-            color: #f4f6fc;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .btn-login:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: black;
-        }
-        
-        .btn-register {
-            background: #4361ee;
-            color: white;
-            border: 1px solid #4361ee;
-        }
-        
-        .btn-register:hover {
-            background: #3250d4;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-            color: black;
-        }
-        
-        /* 主要内容区域 */
         .main-content {
-            padding: 120px 0 60px;
+            padding: 80px 0 60px;
         }
         
         .page-header {
@@ -133,26 +14,21 @@
             align-items: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid #dfe1e6;
         }
         
         .page-header h1 {
-            font-size: 2rem;
-            background: linear-gradient(90deg, #4cc9f0, #4361ee);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 20px;
+            color: #172b4d;
+            font-weight: 600;
         }
         
         .btn-back {
-            background: rgba(255, 255, 255, 0.05);
-            color: #f4f6fc;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: #ffffff;
+            color: #5e6c84;
+            border: 1px solid #dfe1e6;
+            padding: 8px 16px;
+            font-size: 13px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -160,92 +36,91 @@
         }
         
         .btn-back:hover {
-            background: rgba(67, 97, 238, 0.2);
-            border-color: rgba(67, 97, 238, 0.3);
+            border-color: #0052cc;
+            color: #0052cc;
         }
         
-        /* 产品详情区域 */
         .product-details {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            background: #ffffff;
             padding: 30px;
             margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #dfe1e6;
         }
         
         .product-title {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #4cc9f0;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #0052cc;
+            font-weight: 600;
         }
         
         .product-description {
-            color: #b0b7cb;
+            color: #5e6c84;
             line-height: 1.8;
             margin-bottom: 30px;
+            font-size: 14px;
         }
         
-        /* 配置表单区域 */
         .config-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            background: #ffffff;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #dfe1e6;
         }
         
         .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
+            font-size: 16px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: #f4f6fc;
+            border-bottom: 1px solid #dfe1e6;
+            color: #172b4d;
+            font-weight: 600;
         }
         
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 10px;
-            font-weight: 500;
-            color: #f4f6fc;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #172b4d;
         }
         
         .input-group {
             display: flex;
-            gap: 10px;
+            gap: 0;
         }
         
         .input-group-prepend {
-            flex: 0 0 120px;
-            display: flex;
-            align-items: center;
+            flex: 0 0 100px;
         }
         
         .input-group-text {
-            background: rgba(67, 97, 238, 0.2);
-            color: #4cc9f0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 15px;
-            border-radius: 8px 0 0 8px;
+            background: #f4f5f7;
+            color: #0052cc;
+            border: 1px solid #dfe1e6;
+            padding: 10px 12px;
             height: 100%;
-            font-weight: 500;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .form-control {
             flex: 1;
-            background: rgba(15, 22, 35, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #f4f6fc;
-            padding: 12px 15px;
-            border-radius: 0 8px 8px 0;
+            background: #ffffff;
+            border: 1px solid #dfe1e6;
+            color: #172b4d;
+            padding: 10px 12px;
+            font-size: 14px;
         }
         
         .form-control:focus {
             outline: none;
-            border-color: rgba(67, 97, 238, 0.5);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            border-color: #0052cc;
+            box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.2);
         }
         
         .input-group-append {
@@ -254,169 +129,60 @@
         }
         
         .input-group-append .btn-price {
-            background: rgba(67, 97, 238, 0.2);
-            color: #4cc9f0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 15px;
-            border-radius: 0 8px 8px 0;
-            height: 100%;
-            font-weight: 500;
-            min-width: 150px;
+            background: #f4f5f7;
+            color: #0052cc;
+            border: 1px solid #dfe1e6;
+            padding: 10px 15px;
+            font-size: 13px;
+            min-width: 120px;
             text-align: center;
         }
         
         .total-price {
-            background: rgba(15, 22, 35, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #4cc9f0;
-            padding: 12px 15px;
-            border-radius: 0 8px 8px 0;
-            height: 100%;
+            background: #f4f5f7;
+            border: 1px solid #dfe1e6;
+            color: #0052cc;
+            padding: 10px 15px;
+            font-size: 14px;
             font-weight: 600;
-            min-width: 150px;
+            min-width: 120px;
+            text-align: center;
         }
         
         .btn-submit {
             display: block;
             width: 100%;
-            background: linear-gradient(90deg, #4361ee, #4cc9f0);
+            background: #0052cc;
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.2s;
             margin-top: 20px;
         }
         
         .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+            background: #0747a6;
         }
         
         .btn-submit:disabled {
-            background: rgba(255, 255, 255, 0.1);
+            background: #dfe1e6;
+            color: #5e6c84;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        /* 固定用户入口 */
-        .user-access {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 100;
-        }
-        
-        .user-access-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #4361ee, #4cc9f0);
-            color: white;
-            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.4);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-        
-        .user-access-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.6);
-        }
-        
-        .user-access-btn span {
-            display: block;
-            font-size: 0.7rem;
-            margin-top: 2px;
-        }
-        
-        /* 版权信息 */
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: #8a91a8;
-            font-size: 0.9rem;
-        }
-        
-        /* 用户入口按钮 */
-        /*
-        .user-access {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            z-index: 999;
-        }
-        
-        .user-access-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: #4361ee;
-            color: white;
-            border-radius: 50%;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .user-access-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
-            background: #3250d4;
-        }
-        
-        .user-access-btn i {
-            font-size: 1.2rem;
-            margin-bottom: 2px;
-        }
-        
-        .user-access-btn span {
-            font-size: 0.7rem;
         }
         
         @media (max-width: 768px) {
-            .user-access {
-                bottom: 20px;
-                left: 20px;
-            }
-            
-            .user-access-btn {
-                width: 45px;
-                height: 45px;
-            }
-        }
-        */
-        
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .main-content {
-                padding: 100px 0 60px;
-            }
-            
             .page-header {
                 flex-direction: column;
-                gap: 20px;
+                gap: 15px;
                 text-align: center;
             }
             
             .input-group {
                 flex-direction: column;
+                gap: 10px;
             }
             
             .input-group-prepend,
@@ -428,291 +194,84 @@
             .form-control,
             .input-group-append .btn-price,
             .total-price {
-                border-radius: 8px;
                 text-align: center;
-            }
-            
-            .user-access {
-                bottom: 20px;
-                right: 20px;
-            }
-            
-            .user-access-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 1rem;
-            }
-        }
-        
-        /* 移动菜单按钮 */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-            
-            .nav-active {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: #0f1623;
-                padding: 20px;
-                gap: 15px;
             }
         }
     </style>
-</head>
-<body>
-    <!-- 导航栏 -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <i class="fas fa-server"></i>
-                    <span>{$webname}</span>
-                </div>
-                
-                <div class="nav-links" id="navLinks">
-                    <a href="/">首页</a>
-                    <a href="/cart" class="active">产品</a>
-                    <a href="#">数据中心</a>
-                    <a href="#">关于我们</a>
-                    <a href="#">技术支持</a>
-                    <a href="#">联系我们</a>
-                </div>
-                
-                <div class="auth-buttons">
-                    {if $userstate=="1"}
-                    <a href="/user/index" class="btn btn-login">用户中心</a>
-                    {else}
-                    <a href="/login" class="btn btn-login">登录</a>
-                    <a href="/register" class="btn btn-register">注册</a>
-                    {/if}
-                </div>
-                
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </nav>
-        </div>
-    </header>
 
-    <!-- 主要内容 -->
     <section class="main-content">
         <div class="container">
             <div class="page-header">
-                <h1>产品配置</h1>
+                <h1>{$product.name}</h1>
                 <a href="/cart" class="btn-back">
-                    <i class="fas fa-undo"></i> 返回产品列表
+                    <i class="fas fa-arrow-left"></i> 返回列表
                 </a>
             </div>
             
             <div class="product-details">
-                <h2 class="product-title">{$cart.name}</h2>
+                <div class="product-title">产品介绍</div>
                 <div class="product-description">
-                    {$cart.content}
+                    {$product.content}
                 </div>
             </div>
             
             <div class="config-section">
-                <h3 class="section-title">产品配置</h3>
-                
-                <form id="productForm">
+                <div class="section-title">购买配置</div>
+                <form id="buyForm">
                     <div class="form-group">
-                        <label for="timeInput">购买时间</label>
+                        <label>购买价格</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">购买时间</span>
+                                <span class="input-group-text">价格</span>
                             </div>
-                            <input class="form-control" type="number" name="time" placeholder="请输入时长" value="1" id="timeInput" min="1">
+                            <input type="text" class="form-control" value="{$product.money} 元" readonly>
                             <div class="input-group-append">
                                 <span class="btn-price">
-                                    {if $cart.money=="0"}免费{else}{$cart.money}元{/if}/
-                                    {if $cart.cycle=="day"}日{elseif $cart.cycle=="month"}月{elseif $cart.cycle=="season"}季{elseif $cart.cycle=="year"}年{elseif $cart.cycle=="unrestricted"}一次性{/if}
+                                    {if $product.cycle=='day'}日付{elseif $product.cycle=='month'}月付{elseif $product.cycle=='season'}季付{elseif $product.cycle=='year'}年付{elseif $product.cycle=='unrestricted'}一次性{/if}
                                 </span>
                             </div>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label>主机账号</label>
+                        <label>购买数量</label>
                         <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">主机账号</span>
-                            </div>
-                            <input class="form-control" name="user" type="text" value="{:userrandom()}" readonly>
+                            <input type="number" class="form-control" name="quantity" value="1" min="1" max="{$product.inventory}" id="quantity">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label>主机密码</label>
+                        <label>应付金额</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">主机密码</span>
+                                <span class="input-group-text">总计</span>
                             </div>
-                            <input class="form-control" name="password" type="text" value="{:random()}" readonly>
+                            <div class="total-price" id="totalPrice">¥{$product.money}</div>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label>结算费用</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">结算费用</span>
-                            </div>
-                            <div class="total-price">
-                                <span id="totalPrice">
-                                    {if $cart.money=="0"}免费{else}{$cart.money}元{/if}/1
-                                    {if $cart.cycle=="day"}日{elseif $cart.cycle=="month"}月{elseif $cart.cycle=="season"}季{elseif $cart.cycle=="year"}年{elseif $cart.cycle=="unrestricted"}一次性{/if}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn-submit">
-                        <i class="fas fa-check-circle"></i> 立即开通
-                    </button>
+                    {if $product.inventory<'1'}
+                    <button type="submit" class="btn-submit" disabled>已售完</button>
+                    {else}
+                    <button type="submit" class="btn-submit">立即购买</button>
+                    {/if}
                 </form>
             </div>
         </div>
     </section>
 
-    <script src="/static/assets/js/oneui.core.min.js"></script>
-    <script src="/static/assets/js/oneui.app.min.js"></script>
-    <script src="/static/assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+    {include file="default/index/footer" /}
     
     <script>
-        // 移动菜单切换
-        document.getElementById('menuToggle').addEventListener('click', function() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('nav-active');
+        var price = {$product.money};
+        document.getElementById('quantity').addEventListener('input', function() {
+            var qty = parseInt(this.value) || 1;
+            document.getElementById('totalPrice').textContent = '¥' + (price * qty);
         });
         
-        // 滚动效果
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(15, 22, 35, 0.95)';
-                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(15, 22, 35, 0.9)';
-                header.style.boxShadow = 'none';
-            }
-        });
-        
-        // 计算总价
-        document.addEventListener('DOMContentLoaded', function() {
-            const timeInput = document.querySelector('#timeInput');
-            const totalPriceDisplay = document.querySelector('#totalPrice');
-
-            function calculateTotal() {
-                const timeValue = parseInt(timeInput.value) || 0;
-                const money = parseFloat('{$cart.money}') || 0;
-                const totalPrice = money * timeValue;
-
-                const cycle = '{if $cart.cycle=="day"}日{elseif $cart.cycle=="month"}月{elseif $cart.cycle=="season"}季{elseif $cart.cycle=="year"}年{elseif $cart.cycle=="unrestricted"}一次性{/if}';
-                
-                if (timeValue <= 0) {
-                    totalPriceDisplay.textContent = '时长错误';
-                } else if (money == 0) {
-                    totalPriceDisplay.innerHTML = '免费';
-                } else {
-                    totalPriceDisplay.textContent = `${totalPrice} 元 / ${timeValue} ${cycle}`;
-                }
-            }
-
-            timeInput.addEventListener('input', calculateTotal);
-            
-            // 初始化计算
-            calculateTotal();
-        });
-        
-        // 表单提交处理
-        document.getElementById('productForm').addEventListener('submit', function(e) {
+        document.getElementById('buyForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const login = document.querySelector("button[type='submit']");
-            const userName = document.querySelector("input[name='user']").value;
-            const userPwd = document.querySelector("input[name='password']").value;
-            const userTime = document.querySelector("input[name='time']").value;
-            
-            if(userName.length < 1 || userPwd.length < 1 || userTime.length < 1) {
-                One.helpers('notify', {type: 'danger', message: '请确保必填项不为空', delay: 2000});
-                return false;
-            }
-            
-            login.disabled = true;
-            One.helpers('notify', {type: 'warning', message: '正在处理，请稍后...', delay: 2000});
-            
-            const formData = new FormData();
-            formData.append('user', userName);
-            formData.append('password', userPwd);
-            formData.append('time', userTime);
-            
-            fetch('', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.code == 1) {
-                    setTimeout(function (){
-                        location.href = '/user/order/'+data.id
-                    }, 1000);
-                    One.helpers('notify', {type: 'success', message: data.msg, delay: 2000});
-                } else {
-                    login.disabled = false;
-                    One.helpers('notify', {type: 'danger', message: data.msg, delay: 2000});
-                }
-            })
-            .catch(error => {
-                login.disabled = false;
-                One.helpers('notify', {type: 'danger', message: '请求失败，请重试', delay: 2000});
-            });
-            
-            return false;
+            var qty = document.getElementById('quantity').value;
+            window.location.href = '/order/{$product.id}?qty=' + qty;
         });
-
-        // 用户入口
-        /*
-        document.addEventListener('DOMContentLoaded', function() {
-            const userAccess = document.querySelector('.user-access');
-            if (userAccess) {
-                userAccess.remove();
-            }
-        });
-        */
-        
-        {if $templateset['公告开关']=='开'}
-        layer.alert('{$templateset["网站公告"]}', {title: '网站公告'});
-        {/if}
     </script>
-    
-    <!-- 用户入口 -->
-    <!--
-    <div class="user-access">
-        {if $userstate!='1'}
-        <a href="/login" class="user-access-btn">
-            <i class="fas fa-sign-in-alt"></i>
-            <span>登录</span>
-        </a>
-        {else}
-        <a href="/user/index" class="user-access-btn">
-            <i class="fas fa-user"></i>
-            <span>中心</span>
-        </a>
-        {/if}
-    </div>
-</body>
-</html>

@@ -1,24 +1,15 @@
 {include file="default/user/header" title="用户中心" /}
 <main id="main-container">
     <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        }
-        
         .user-dashboard {
-            padding: 2rem 0;
+            padding: 1.5rem 0;
         }
         
         .welcome-card {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             border: none;
-            background: var(--primary-gradient);
+            background: #0052cc;
             color: white;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         
         .user-info-container {
@@ -30,14 +21,8 @@
         .user-image {
             width: 120px;
             height: 120px;
-            border-radius: 50%;
             margin-right: 2rem;
             border: 3px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .user-image:hover {
-            transform: scale(1.05);
         }
         
         .user-details {
@@ -56,17 +41,9 @@
         }
         
         .stat-card {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: none;
-            margin-bottom: 2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid #dfe1e6;
+            margin-bottom: 1.5rem;
+            background: #ffffff;
         }
         
         .stat-icon {
@@ -75,9 +52,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
             font-size: 1.8rem;
             margin: 0 auto 1rem;
+            background: #f4f5f7;
+            color: #0052cc;
         }
         
         .quick-actions {
@@ -93,18 +71,16 @@
             align-items: center;
             justify-content: center;
             padding: 1.5rem 1rem;
-            border-radius: 15px;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            border: 1px solid #dfe1e6;
             text-decoration: none;
-            color: #495057;
-            transition: all 0.3s ease;
+            color: #172b4d;
+            transition: border-color 0.2s, color 0.2s;
         }
         
         .action-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-            color: #667eea;
+            border-color: #0052cc;
+            color: #0052cc;
         }
         
         .action-btn i {
@@ -113,11 +89,9 @@
         }
         
         .product-card {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: none;
-            margin-bottom: 2rem;
+            border: 1px solid #dfe1e6;
+            margin-bottom: 1.5rem;
+            background: #ffffff;
         }
         
         .section-title {
@@ -133,13 +107,13 @@
             left: 0;
             width: 50px;
             height: 3px;
-            background: var(--primary-gradient);
-            border-radius: 3px;
+            background: #0052cc;
         }
         
         .balance-display {
             font-size: 2rem;
             font-weight: 700;
+            color: #0052cc;
         }
     </style>
 
