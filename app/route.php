@@ -13,6 +13,14 @@ use think\Route;
 Route::miss('index/index/null');
 
 return [
+//安装向导
+"/install"=>"install/index/index",
+"/install/index"=>"install/index/index",
+"/install/index/step2"=>"install/index/step2",
+"/install/index/step3"=>"install/index/step3",
+"/install/index/step4"=>"install/index/step4",
+"/install/index/done"=>"install/index/done",
+
 //前台
 "/"=>"index/index/index",
 "/index"=>"index/index/index",

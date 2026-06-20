@@ -9,6 +9,7 @@
 ├── app                 应用目录
 │   ├── admin           后台管理模块
 │   ├── index           前台展示模块
+│   ├── install         安装向导模块
 │   └── ...             其他配置文件
 ├── extend              扩展目录
 │   ├── PHPMailer       邮件发送组件
@@ -18,15 +19,15 @@
 ├── public              网站根目录（Web服务器应指向此目录）
 │   ├── static          静态资源目录
 │   └── index.php       入口文件
-├── runtime             运行时目录
-└── sjk.sql             数据库文件
+└── runtime             运行时目录
 ```
 
 ## 运行环境要求
 
-- PHP 7.2 或更高版本
-- MySQL 5.6 或更高版本
+- PHP 7.4 或更高版本
+- MySQL 5.7 或更高版本
 - Apache 或 Nginx 服务器
+- PHP 扩展：pdo_mysql、curl、gd、openssl
 
 ## 部署步骤
 
@@ -55,7 +56,7 @@ server {
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
-    
+
     location ~ \.php$ {
         # PHP-FPM 配置
     }
@@ -90,43 +91,22 @@ location / {
 }
 ```
 
-### 3. 导入数据库
+### 3. 运行安装向导
 
-1. 创建一个新的MySQL数据库
-2. 使用MySQL客户端或phpMyAdmin等工具导入 `sjk.sql` 文件：
-   ```bash
-   mysql -u your_username -p your_database_name < sjk.sql
-   ```
+首次访问系统时，如果未检测到安装锁文件（`install.lock`），系统会自动跳转到安装向导页面。按照向导提示完成以下步骤：
 
-### 4. 配置数据库连接
+1. **许可协议** - 阅读并同意许可协议
+2. **环境检测** - 系统自动检测服务器环境是否满足要求
+3. **数据库配置** - 填写MySQL数据库连接信息（如果数据库不存在将自动创建）
+4. **管理员设置** - 设置网站名称、管理员账号和密码
 
-编辑 [app/database.php](/app/database.php) 文件，修改以下配置项：
+安装完成后，系统会在根目录生成 `install.lock` 文件，防止重复安装。
 
-```php
-return [
-    // 数据库类型
-    'type'            => 'mysql',
-    // 服务器地址
-    'hostname'        => '127.0.0.1',        // 修改为你的数据库地址
-    // 数据库名
-    'database'        => 'host_sale',            // 修改为你的数据库名
-    // 用户名
-    'username'        => 'root',            // 修改为你的数据库用户名
-    // 密码
-    'password'        => '6WC4KSRz744bwrG5', // 修改为你的数据库密码
-    // 端口
-    'hostport'        => '3306',             // 修改为你的数据库端口
-    // 数据库编码默认采用utf8
-    'charset'         => 'utf8',
-    // 数据库表前缀
-    'prefix'          => 'dd_',              // 根据实际情况修改表前缀
-    // 其他配置...
-];
-```
+> 如果需要重新安装，请删除 `install.lock` 文件即可重新进入安装向导。
 
-### 5. 访问系统
+### 4. 访问系统
 
-完成以上配置后，通过浏览器访问您的域名：
+完成安装后，通过浏览器访问您的域名：
 
 - 前台地址：http://yourdomain.com
 - 后台地址：http://yourdomain.com/admin
@@ -147,20 +127,18 @@ return [
    - 确认MySQL服务是否正常运行
    - 检查数据库用户是否有足够的权限
 
-## 默认管理员账号
-
-- 用户名：`admin`
-- 密码：`admin123`
-
-> 部署后请尽快修改默认密码！
-
-## 声明
-
-本项目中部分代码来源于 sib.cc 思博系统（SIB-HOST），在此对原作者表示感谢。
+4. **安装向导无法访问**
+   - 确保已正确配置伪静态规则
+   - 检查 `app/database.php` 和 `runtime` 目录是否有写入权限
 
 ## 安全建议
 
 1. 部署完成后，建议将 [app/config.php](/app/config.php) 中的 `app_debug` 设置为 `false`
 2. 确保public目录外的其他文件无法通过Web访问
 3. 定期备份数据库和重要文件
-4. 首次登录后请立即修改默认管理员密码
+4. 安装完成后建议删除 `app/install` 目录，或确保 `install.lock` 文件存在
+5. 首次登录后请立即修改管理员密码
+
+## 声明
+
+本项目中部分代码来源于 sib.cc 思博系统（SIB-HOST），在此对原作者表示感谢。

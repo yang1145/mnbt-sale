@@ -31,7 +31,7 @@ class Index extends Controller
         // 检测环境
         $env = [];
         $env['php'] = PHP_VERSION;
-        $env['php_ok'] = version_compare(PHP_VERSION, '5.4.0', '>=');
+        $env['php_ok'] = version_compare(PHP_VERSION, '7.4.0', '>=');
         $env['pdo'] = extension_loaded('pdo_mysql');
         $env['mysqli'] = extension_loaded('mysqli');
         $env['curl'] = extension_loaded('curl');
@@ -176,7 +176,13 @@ PHP;
             }
 
             try {
-                $prefix = config('database.prefix');
+                // 重新加载数据库配置（step3已写入database.php）
+                $dbConfig = include PATH . 'app/database.php';
+                \think\Config::set('database', $dbConfig);
+                // 清除已有的数据库连接实例，确保使用新配置
+                \think\Db::clear();
+
+                $prefix = $dbConfig['prefix'];
 
                 // 更新管理员账号
                 Db::name('admin')->where('id', 1)->update([
@@ -220,7 +226,13 @@ PHP;
     {
         $sql = $this->getInstallSql($prefix);
         $pdo->exec("SET NAMES utf8");
-        $pdo->exec($sql);
+        // PDO::exec 一次只能执行一条SQL，需要逐条执行
+        $statements = array_filter(array_map('trim', explode(";\n", $sql)));
+        foreach ($statements as $stmt) {
+            if ($stmt !== '') {
+                $pdo->exec($stmt);
+            }
+        }
     }
 
     // 获取安装SQL
