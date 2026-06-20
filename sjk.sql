@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `dd_admin` (
 --
 
 INSERT INTO `dd_admin` (`id`, `name`, `qq`, `user`, `password`, `mail`) VALUES
-(1, '思博主机sib.cc', '34455788', 'admin', '$2y$10$H.Myu9u15Xmhmtkfe7uSY.1ZNoBFSu5tz6F4wf/rTfpIDoXm3OybG', '34455788@qq.com');
+(1, '管理员', '123456789', 'admin', '$2y$12$sX9Zboy/ut9ufYq8w/mVqeFTzU2PgQGHX/surKSB2l7AmNJtD0b9S', '123456789@qq.com');
 
 -- --------------------------------------------------------
 
