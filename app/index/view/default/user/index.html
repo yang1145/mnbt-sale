@@ -1,216 +1,291 @@
- {include file="default/user/header" title="用户中心" /}
-                     <main id="main-container">
-
-
-
+{include file="default/user/header" title="用户中心" /}
+<main id="main-container">
     <style>
+        .user-dashboard {
+            padding: 1.5rem 0;
+        }
+        
+        .welcome-card {
+            border: none;
+            background: #0052cc;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        
         .user-info-container {
             display: flex;
             align-items: center;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            flex-direction: row;
+            padding: 2rem;
         }
-
+        
         .user-image {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            margin-right: 20px;            
-            transform: rotate(0deg);
+            width: 120px;
+            height: 120px;
+            margin-right: 2rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
         }
-
+        
         .user-details {
+            flex: 1;
+        }
+        
+        .user-details h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-details p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .stat-card {
+            border: 1px solid #dfe1e6;
+            margin-bottom: 1.5rem;
+            background: #ffffff;
+        }
+        
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1rem;
+            background: #f4f5f7;
+            color: #0052cc;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .action-btn {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+            background: #ffffff;
+            border: 1px solid #dfe1e6;
+            text-decoration: none;
+            color: #172b4d;
+            transition: border-color 0.2s, color 0.2s;
         }
-
-        .user-details div {
-            margin-bottom: 5px;
+        
+        .action-btn:hover {
+            border-color: #0052cc;
+            color: #0052cc;
+        }
+        
+        .action-btn i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-card {
+            border: 1px solid #dfe1e6;
+            margin-bottom: 1.5rem;
+            background: #ffffff;
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #0052cc;
+        }
+        
+        .balance-display {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0052cc;
         }
     </style>
 
-
-
-
-                <div class="content content-narrow">
-                    <div class="row">
-
-
-
-                        <div class="col-12 col-md-6 col-lg-6 col-xl-6">
-                    <div class="block">
-                        <div class="block-header">
-                            <h3 class="block-title">用户信息</h3>
-                        </div><div class="block-content">
-                        
-                        
-                        
-                        
-                        
-                        
-                            <div class="user-info-container">
-        <img src="http://q1.qlogo.cn/g?b=qq&nk={$user.qq}&s=100" class="img-thumbnail user-image" id="user-image">
-        <div class="user-details">
-        <b>
-            <div>                        ID:<span class="text-primary">{$user.id}</span></div>
-            <div>                        名称:{$user.name}</div>
-            <div>                        余额:<span class="text-primary">{$user.money}</span></div>
-            </b>
-        </div>
-    </div>
-    
-
-<br/>
-                      
-                       
-                        
-                        
-                        
-                        
-                      
-                                                  <div class="row">                   <div class="col-4">
-                            <center>
-                              <a class="btn btn-outline-primary btn-sm" href="/cart"><i class="fas fa-shopping-bag"></i> 订购产品</a>
-                              </center>
-                              </div>
-                                                      <div class="col-4">
-                                                      <center>
-                              <a class="btn btn-outline-primary btn-sm" href="/user/pay"><i class="fas fa-wallet"></i> 余额充值</a>
-                              </center>
-                              </div>
-                                                      <div class="col-4">
-                                                     <center>
-                              <a class="btn btn-outline-primary btn-sm" href="/user/information"><i class="fas fa-user-circle"></i> 修改资料</a>
-                              </center>
-                             
-                               </div>
-                               </div>
-                        
-                      <br/>
+    <div class="content">
+        <div class="user-dashboard">
+            <!-- Welcome Card -->
+            <div class="welcome-card">
+                <div class="user-info-container">
+                    <img src="http://q1.qlogo.cn/g?b=qq&nk={$user.qq}&s=100" class="user-image" id="user-image">
+                    <div class="user-details">
+                        <h2>欢迎回来, {$user.name}!</h2>
+                        <p>祝您今天愉快！</p>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-3">用户ID: <strong>{$user.id}</strong></span>
+                            <span>账户余额: <span class="balance-display">{$user.money} 元</span></span>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="product-card">
+                        <div class="card-body">
+                            <h4 class="section-title">快捷操作</h4>
+                            <div class="quick-actions">
+                                <a href="/cart" class="action-btn">
+                                    <i class="fas fa-shopping-bag text-primary"></i>
+                                    <span>订购产品</span>
+                                </a>
+                                <a href="/user/pay" class="action-btn">
+                                    <i class="fas fa-wallet text-success"></i>
+                                    <span>余额充值</span>
+                                </a>
+                                <a href="/user/information" class="action-btn">
+                                    <i class="fas fa-user-circle text-info"></i>
+                                    <span>修改资料</span>
+                                </a>
+                                <a href="/user/order" class="action-btn">
+                                    <i class="fas fa-list-alt text-warning"></i>
+                                    <span>我的订单</span>
+                                </a>
+                                <a href="/user/supporttickets" class="action-btn">
+                                    <i class="fas fa-headset text-danger"></i>
+                                    <span>技术支持</span>
+                                </a>
+                                <a href="/user/transaction" class="action-btn">
+                                    <i class="fas fa-exchange-alt text-secondary"></i>
+                                    <span>交易记录</span>
+                                </a>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Stats -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-card bg-white">
+                        <div class="card-body text-center">
+                            <div class="stat-icon bg-primary text-white">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h4 class="card-title">订单总数</h4>
+                            <div class="balance-display text-primary">{$countorder}</div>
                         </div>
-
-                        <div class="col-12 col-md-6 col-lg-6 col-xl-6">
-                    <div class="block">
-                        <div class="block-header">
-                            <h3 class="block-title">管理产品(最近5条)</h3>
-                         
-      <a class="btn btn-outline-primary btn-sm" href="/user/order">查看更多 <i class="fas fa-chevron-right"></i></a>
-     
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="stat-card bg-white">
+                        <div class="card-body text-center">
+                            <div class="stat-icon bg-success text-white">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <h4 class="card-title">主机数量</h4>
+                            <div class="balance-display text-success">{$counthost}</div>
                         </div>
-                        <div class="block-content">
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="stat-card bg-white">
+                        <div class="card-body text-center">
+                            <div class="stat-icon bg-info text-white">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <h4 class="card-title">工单数量</h4>
+                            <div class="balance-display text-info">{$countticket}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Products -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="product-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="section-title mb-0">管理产品(最近5条)</h4>
+                                <a href="/user/order" class="btn btn-sm btn-outline-primary">查看全部</a>
+                            </div>
+                            
                             <div class="table-responsive">
-                                <table class="table table-bordered  table-vcenter table-hover table-sm">
+                                <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>名称</th>
-                                            <th>账号</th>
-                                            <th>开通时间</th>
+                                            <th>产品名称</th>
+                                            <th>购买时间</th>
                                             <th>到期时间</th>
                                             <th>状态</th>
                                             <th>操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-{foreach $order as $o}
-
+                                        {foreach $orders as $order}
                                         <tr>
-                                        <td>{$o.id}</td>
-                                        <td>{$o.cartid}</td>
-                                        <td>{$o.user}</td>
-                                        <td>{$o.atime|date="Y-m-d",###}</td>
-                                        <td><span class="text-primary">{$o.ztime|date="Y-m-d",###}</span></td>
-                                        <td>
-{if $o.state=="1"}
-                                            <button class="btn badge badge-success">正常</button>                                 
-{/if}
-{if $o.state=="2"}
-                                            <button class="btn badge badge-warning">暂停</button>                                 
-{/if}
-{if $o.state=="3"}
-                                            <button class="btn badge badge-danger">终止</button>                                 
-{/if}
-       </td>
-                                        <td>
-                                            <a class="badge badge-primary" href="/user/order/{$o.id}">查看</a>                                                                                  </td>
-                                    </tr>        
-                    {/foreach}
-
-    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-
-
-
-
-
-
-
-    <div class="col-12 col-md-6 col-lg-6 col-xl-6">
-                    <div class="block">
-                        <div class="block-header">
-                            <h3 class="block-title">网站公告(最近5条)</h3>
-                                                
-      <a class="btn btn-outline-primary btn-sm" href="/announcement">查看更多 <i class="fas fa-chevron-right"></i></a>
-     
-                        </div>
-                        <div class="block-content">
-
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-vcenter table-hover table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>标题</th>
-                                            <th>时间</th>
-                                            <th>操作</th>
+                                            <td>{$order.name}</td>
+                                            <td>{$order.buytime|date='Y-m-d H:i:s',###}</td>
+                                            <td>{$order.endtime|date='Y-m-d H:i:s',###}</td>
+                                            <td>
+                                                {if $order.status == 1}
+                                                <span class="badge badge-success">正常</span>
+                                                {else}
+                                                <span class="badge badge-danger">已过期</span>
+                                                {/if}
+                                            </td>
+                                            <td>
+                                                <a href="/user/order/{$order.id}" class="btn btn-sm btn-primary">管理</a>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-{foreach $announcement as $a}
-
-                                        <tr>
-                                        <td>{$a.name}</td>
-                                        <td>{$a.time|date="Y-m-d H:i:s",###}</td>
-             
-                                        <td>
-                                            <a class="badge badge-primary" href="/announcement/{$a.id}">查看</a>                                                                                  </td>
-                                    </tr>        
-                    {/foreach}
-
-    </tbody>
+                                        {/foreach}
+                                    </tbody>
                                 </table>
                             </div>
-
-
                         </div>
-
                     </div>
-                    </div>
-
-
-
-
-
-
-
-
-
-                    </div>
-
-
-
                 </div>
-            </main>
+            </div>
+        </div>
+    </div>
+</main>
 
-            {include file="default/user/footer" /}
-           
-                        
-                       
+<script>
+// 添加一些交互效果
+document.addEventListener('DOMContentLoaded', function() {
+    // 用户头像悬停效果
+    const userImage = document.getElementById('user-image');
+    if (userImage) {
+        userImage.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        
+        userImage.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    }
+    
+    // 快捷操作按钮悬停效果
+    const actionButtons = document.querySelectorAll('.action-btn');
+    actionButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>
+{include file="default/user/footer" /}
