@@ -185,12 +185,21 @@ $countserver=Db::name('server')->count();
 $countuser=Db::name('user')->count();
 $countorder=Db::name('order')->count();
 $sumpay=Db::name('pay')->where("state",1)->sum("money");
+// 获取首页展示的产品
+$class=Db::name('product')->where("hide","0")->order("sort","DESC")->find();
+if($class){
+	$cart=Db::name('cart')->where(["product"=>$class['id'],"hide"=>"0"])->order("sort","DESC")->select();
+}else{
+	$cart=[];
+}
 		return $this->fetch('/'.$this->web["template"].'/index/index',[
 				"announcement"=>$data,
 				"countserver"=>$countserver,
 				"countuser"=>$countuser,
 				"countorder"=>$countorder,
 				"sumpay"=>$sumpay,
+				"cart"=>$cart,
+				"class"=>$class,
 		]);
 	}
 

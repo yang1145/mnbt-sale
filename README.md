@@ -24,7 +24,7 @@
 
 ## 运行环境要求
 
-- PHP 7.4 或更高版本
+- PHP 7.2 或更高版本
 - MySQL 5.7 或更高版本
 - Apache 或 Nginx 服务器
 - PHP 扩展：pdo_mysql、curl、gd、openssl

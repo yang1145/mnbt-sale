@@ -31,7 +31,7 @@ class Index extends Controller
         // 检测环境
         $env = [];
         $env['php'] = PHP_VERSION;
-        $env['php_ok'] = version_compare(PHP_VERSION, '7.4.0', '>=');
+        $env['php_ok'] = version_compare(PHP_VERSION, '7.2.0', '>=');
         $env['pdo'] = extension_loaded('pdo_mysql');
         $env['mysqli'] = extension_loaded('mysqli');
         $env['curl'] = extension_loaded('curl');

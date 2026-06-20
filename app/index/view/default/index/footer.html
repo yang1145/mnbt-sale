@@ -35,7 +35,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>© {$smarty.now|date_format:"%Y"} {$webname} <a href="//beian.miit.gov.cn/">{$templateset['网站备案号']}</a></p>
+                <p>© {:date('Y')} {$webname} {if isset($templateset['网站备案号']) && $templateset['网站备案号']}<a href="//beian.miit.gov.cn/">{$templateset['网站备案号']}</a>{/if}</p>
             </div>
         </div>
     </footer>
@@ -49,8 +49,8 @@
             document.getElementById('navLinks').classList.toggle('nav-active');
         });
         
-        {if $templateset["公告开关"]=="开"}
-        layer.alert('{$templateset["网站公告"]}', {title: "网站公告"});
+        {if isset($templateset['公告开关']) && $templateset['公告开关']=="开"}
+        layer.alert('{if isset($templateset["网站公告"])}{$templateset["网站公告"]}{/if}', {title: "网站公告"});
         {/if}
     </script>
 </body>

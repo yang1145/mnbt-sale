@@ -202,10 +202,10 @@
                 </a>
                 
                 <div class="nav-links" id="navLinks">
-                    <a href="/" {if $active=='index'}class="active"{/if}>首页</a>
-                    <a href="/cart" {if $active=='cart'}class="active"{/if}>产品</a>
-                    <a href="/announcements" {if $active=='announcements'}class="active"{/if}>公告</a>
-                    <a href="#" {if $active=='help'}class="active"{/if}>帮助</a>
+                    <a href="/" {if isset($active) && $active=='index'}class="active"{/if}>首页</a>
+                    <a href="/cart" {if isset($active) && $active=='cart'}class="active"{/if}>产品</a>
+                    <a href="/announcements" {if isset($active) && $active=='announcements'}class="active"{/if}>公告</a>
+                    <a href="#" {if isset($active) && $active=='help'}class="active"{/if}>帮助</a>
                 </div>
                 
                 <div class="auth-buttons">
