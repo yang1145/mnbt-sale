@@ -19,6 +19,15 @@
             background-color: #f4f5f7;
             color: #172b4d;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        body > section,
+        body > div[class*="wrapper"],
+        body > div[class*="content"] {
+            flex-shrink: 0;
         }
         
         .container {
@@ -143,52 +152,138 @@
         
         footer {
             background: #172b4d;
-            padding: 40px 0 20px;
+            padding: 60px 0 0;
             color: #b3bac5;
+            margin-top: auto;
         }
-        
-        .footer-grid {
+
+        .footer-main {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
+            grid-template-columns: 1.6fr repeat(3, 1fr);
+            gap: 50px;
+            margin-bottom: 45px;
         }
-        
+
+        .footer-brand .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand .logo i {
+            color: #4c9aff;
+        }
+
+        .footer-brand p {
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            max-width: 320px;
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .footer-contact-item i {
+            color: #4c9aff;
+            width: 16px;
+            text-align: center;
+        }
+
         .footer-col h4 {
             font-size: 14px;
             color: #fff;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             font-weight: 600;
         }
-        
+
         .footer-col ul {
             list-style: none;
         }
-        
+
         .footer-col ul li {
-            margin-bottom: 8px;
+            margin-bottom: 11px;
         }
-        
+
         .footer-col a {
             color: #b3bac5;
             text-decoration: none;
             font-size: 13px;
+            transition: color 0.2s, padding-left 0.2s;
+            display: inline-block;
         }
-        
+
         .footer-col a:hover {
             color: #fff;
+            padding-left: 4px;
         }
-        
+
         .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #36414d;
+            padding: 22px 0;
+            border-top: 1px solid #2c3a55;
             font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        
+
+        .footer-bottom p {
+            margin: 0;
+        }
+
         .footer-bottom a {
             color: #b3bac5;
             text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .footer-main {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 35px;
+            }
+
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -197,7 +292,6 @@
         <div class="container">
             <nav>
                 <a href="/" class="logo">
-                    <i class="fas fa-server"></i>
                     <span>{$webname}</span>
                 </a>
                 

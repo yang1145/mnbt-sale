@@ -5,305 +5,515 @@
     {include file="default/index/header" /}
     <style>
         .hero {
-            padding: 100px 0 60px;
-            background: #ffffff;
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #ffffff 0%, #f4f8ff 100%);
             border-bottom: 1px solid #dfe1e6;
+            flex-shrink: 0;
         }
-        
+
         .hero-content {
             display: flex;
             align-items: center;
-            gap: 60px;
+            gap: 70px;
         }
-        
+
         .hero-text {
             flex: 1;
         }
-        
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(0, 82, 204, 0.08);
+            color: #0052cc;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
         .hero-text h1 {
-            font-size: 28px;
-            margin-bottom: 15px;
+            font-size: 34px;
+            margin-bottom: 18px;
             color: #172b4d;
-            font-weight: 600;
+            font-weight: 700;
+            line-height: 1.3;
         }
-        
+
         .hero-text p {
-            font-size: 15px;
+            font-size: 16px;
             color: #5e6c84;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
             line-height: 1.8;
+            max-width: 540px;
         }
-        
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-actions .btn {
+            padding: 12px 24px;
+            font-size: 15px;
+        }
+
+        .hero-actions .btn-login {
+            background: #ffffff;
+            color: #0052cc;
+            border: 1px solid #0052cc;
+        }
+
+        .hero-actions .btn-login:hover {
+            background: #f4f8ff;
+        }
+
         .hero-stats {
             display: flex;
-            gap: 30px;
-            margin-top: 30px;
+            gap: 40px;
+            margin-top: 45px;
+            padding-top: 25px;
+            border-top: 1px solid #e6edf7;
         }
-        
+
         .hero-stat {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        
-        .hero-stat-value {
-            font-size: 24px;
-            font-weight: 700;
+
+        .hero-stat-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 82, 204, 0.08);
             color: #0052cc;
+            border-radius: 10px;
+            font-size: 16px;
         }
-        
+
+        .hero-stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #172b4d;
+            line-height: 1.2;
+        }
+
         .hero-stat-label {
             font-size: 12px;
             color: #5e6c84;
-            margin-top: 5px;
+            margin-top: 2px;
         }
-        
+
         .hero-features {
-            flex: 1;
-            background: #f4f5f7;
-            padding: 25px;
+            flex: 0 0 420px;
+            background: #ffffff;
+            padding: 32px;
             border: 1px solid #dfe1e6;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(23, 43, 77, 0.06);
         }
-        
+
         .hero-features h3 {
-            font-size: 14px;
+            font-size: 16px;
             color: #172b4d;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
-        
+
         .feature-list {
             list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 20px;
         }
-        
+
         .feature-list li {
-            padding: 8px 0;
             font-size: 13px;
             color: #5e6c84;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .feature-list li i {
             color: #36b37e;
             font-size: 12px;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(54, 179, 126, 0.1);
+            border-radius: 50%;
+            flex-shrink: 0;
         }
-        
+
         .products {
-            padding: 60px 0;
+            padding: 70px 0;
             background: #f4f5f7;
         }
-        
+
         .section-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
         }
-        
+
         .section-header h2 {
-            font-size: 20px;
+            font-size: 24px;
             color: #172b4d;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 10px;
         }
-        
+
         .section-header p {
             font-size: 14px;
             color: #5e6c84;
         }
-        
+
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
         }
-        
+
         .product-card {
             background: #ffffff;
             border: 1px solid #dfe1e6;
-            padding: 25px;
+            border-radius: 12px;
+            padding: 28px;
+            transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
         }
-        
-        .product-card {
-            font-size: 16px;
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(23, 43, 77, 0.08);
+            border-color: #b3d4ff;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 17px;
             font-weight: 600;
             color: #172b4d;
-            margin-bottom: 5px;
         }
-        
+
+        .product-tag {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .product-tag.hot {
+            background: #fff0f3;
+            color: #de350b;
+        }
+
+        .product-tag.free {
+            background: #e3fcef;
+            color: #006644;
+        }
+
         .product-desc {
             font-size: 13px;
             color: #5e6c84;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            line-height: 1.6;
+            min-height: 42px;
         }
-        
+
         .product-price-box {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #dfe1e6;
         }
-        
+
         .price-value {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             color: #0052cc;
         }
-        
+
         .price-unit {
-            font-size: 13px;
+            font-size: 14px;
             color: #5e6c84;
         }
-        
+
         .product-specs {
             list-style: none;
-            margin-bottom: 20px;
-            border-top: 1px solid #dfe1e6;
-            padding-top: 15px;
+            margin-bottom: 22px;
         }
-        
+
         .product-specs li {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
+            padding: 8px 0;
             font-size: 13px;
             color: #5e6c84;
+            border-bottom: 1px dashed #f0f1f4;
         }
-        
+
+        .product-specs li:last-child {
+            border-bottom: none;
+        }
+
         .product-specs li span {
             color: #172b4d;
+            font-weight: 500;
         }
-        
+
         .btn-buy {
             display: block;
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
             background: #0052cc;
             color: #fff;
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
+            border-radius: 6px;
             transition: background-color 0.2s;
         }
-        
+
         .btn-buy:hover {
             background: #0747a6;
         }
-        
+
+        .btn-buy:disabled,
+        .btn-buy.disabled {
+            background: #dfe1e6 !important;
+            color: #5e6c84 !important;
+            cursor: not-allowed;
+        }
+
         .features {
-            padding: 60px 0;
+            padding: 70px 0;
             background: #ffffff;
         }
-        
+
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
         }
-        
+
         .feature-item {
             text-align: center;
-            padding: 20px;
+            padding: 28px 22px;
+            border: 1px solid #f0f1f4;
+            border-radius: 12px;
+            transition: transform 0.25s, box-shadow 0.25s;
         }
-        
+
+        .feature-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 28px rgba(23, 43, 77, 0.06);
+        }
+
         .feature-item i {
-            font-size: 32px;
+            font-size: 34px;
             color: #0052cc;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
-        
+
         .feature-item h3 {
             font-size: 15px;
             color: #172b4d;
             margin-bottom: 10px;
             font-weight: 600;
         }
-        
+
         .feature-item p {
             font-size: 13px;
             color: #5e6c84;
-            line-height: 1.6;
+            line-height: 1.7;
         }
-        
+
         .datacenters {
-            padding: 60px 0;
+            padding: 70px 0;
             background: #f4f5f7;
         }
-        
+
         .dc-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
         }
-        
+
         .dc-item {
             background: #ffffff;
             border: 1px solid #dfe1e6;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 22px;
             text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
+        .dc-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(23, 43, 77, 0.06);
+        }
+
         .dc-item h4 {
-            font-size: 14px;
+            font-size: 15px;
             color: #172b4d;
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-        
+
         .dc-item p {
             font-size: 12px;
             color: #5e6c84;
+            margin-bottom: 10px;
         }
-        
+
+        .dc-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: #36b37e;
+            background: rgba(54, 179, 126, 0.1);
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        .dc-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #36b37e;
+            border-radius: 50%;
+        }
+
         .announcements {
-            padding: 60px 0;
+            padding: 70px 0;
             background: #ffffff;
         }
-        
+
         .announcement-list {
-            max-width: 800px;
+            max-width: 820px;
             margin: 0 auto;
+            border: 1px solid #dfe1e6;
+            border-radius: 10px;
+            overflow: hidden;
         }
-        
+
         .announcement-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #dfe1e6;
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f1f4;
+            transition: background-color 0.2s;
         }
-        
+
         .announcement-item:last-child {
             border-bottom: none;
         }
-        
+
+        .announcement-item:hover {
+            background: #fafbfc;
+        }
+
         .announcement-title {
             font-size: 14px;
             color: #172b4d;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 20px;
         }
-        
+
+        .announcement-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
         .announcement-date {
             font-size: 12px;
             color: #5e6c84;
-            margin-right: 15px;
         }
-        
+
         .announcement-link {
             font-size: 13px;
             color: #0052cc;
             text-decoration: none;
+            font-weight: 500;
         }
-        
+
         .announcement-link:hover {
             text-decoration: underline;
         }
-        
-        @media (max-width: 768px) {
+
+        .announcement-empty {
+            text-align: center;
+            padding: 40px;
+            color: #5e6c84;
+            font-size: 14px;
+        }
+
+        @media (max-width: 992px) {
             .hero-content {
                 flex-direction: column;
+                gap: 40px;
             }
-            
+
+            .hero-features {
+                flex: 1;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 100px 0 50px;
+            }
+
+            .hero-text h1 {
+                font-size: 26px;
+            }
+
             .hero-stats {
-                justify-content: center;
+                gap: 20px;
             }
-            
+
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+
             .products-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .announcement-item {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .announcement-title {
+                width: 100%;
+                margin-right: 0;
+                white-space: normal;
             }
         }
     </style>
@@ -312,37 +522,52 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1>稳定可靠的虚拟主机服务</h1>
-                    <p>提供高性能PHP虚拟主机，支持MySQL数据库，适合个人博客、企业官网、小型应用部署。自主开发控制面板，操作简单，即开即用。</p>
-                    <a href="/cart" class="btn btn-register">查看产品套餐</a>
-                    
+                    <div class="hero-badge">
+                        <i class="fas fa-bolt"></i> 即开即用，分钟级部署
+                    </div>
+                    <h1>稳定、安全、易用的<br>虚拟主机服务平台</h1>
+                    <p>基于自主控制面板，提供 PHP 多版本、MySQL 数据库、在线文件管理与 SSL 部署能力。无论是个人博客、企业官网还是小型应用，都能获得高性能、低延迟的托管体验。</p>
+                    <div class="hero-actions">
+                        <a href="/cart" class="btn btn-register">浏览产品套餐</a>
+                        <a href="/register" class="btn btn-login">免费注册</a>
+                    </div>
+
                     <div class="hero-stats">
                         <div class="hero-stat">
-                            <div class="hero-stat-value">{$countuser}</div>
-                            <div class="hero-stat-label">注册用户</div>
+                            <div class="hero-stat-icon"><i class="fas fa-users"></i></div>
+                            <div>
+                                <div class="hero-stat-value">{$countuser}</div>
+                                <div class="hero-stat-label">注册用户</div>
+                            </div>
                         </div>
                         <div class="hero-stat">
-                            <div class="hero-stat-value">{$countorder}</div>
-                            <div class="hero-stat-label">运行主机</div>
+                            <div class="hero-stat-icon"><i class="fas fa-server"></i></div>
+                            <div>
+                                <div class="hero-stat-value">{$countorder}</div>
+                                <div class="hero-stat-label">运行主机</div>
+                            </div>
                         </div>
                         <div class="hero-stat">
-                            <div class="hero-stat-value">{$countserver}</div>
-                            <div class="hero-stat-label">服务器节点</div>
+                            <div class="hero-stat-icon"><i class="fas fa-globe"></i></div>
+                            <div>
+                                <div class="hero-stat-value">{$countserver}</div>
+                                <div class="hero-stat-label">服务器节点</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="hero-features">
-                    <h3>服务特点</h3>
+                    <h3>为什么选择我们</h3>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> PHP 7.4 / 8.0 / 8.1 多版本支持</li>
-                        <li><i class="fas fa-check"></i> MySQL 5.7 数据库</li>
+                        <li><i class="fas fa-check"></i> PHP 7.4 / 8.0 / 8.1 自由切换</li>
+                        <li><i class="fas fa-check"></i> MySQL 5.7 数据库支持</li>
                         <li><i class="fas fa-check"></i> 自主开发控制面板</li>
                         <li><i class="fas fa-check"></i> 在线文件管理器</li>
-                        <li><i class="fas fa-check"></i> 一键安装常用程序</li>
+                        <li><i class="fas fa-check"></i> 一键安装 WordPress</li>
                         <li><i class="fas fa-check"></i> 自定义伪静态规则</li>
-                        <li><i class="fas fa-check"></i> SSL证书部署</li>
-                        <li><i class="fas fa-check"></i> 7×24 技术支持</li>
+                        <li><i class="fas fa-check"></i> 免费 SSL 证书部署</li>
+                        <li><i class="fas fa-check"></i> 7×24 小时技术支持</li>
                     </ul>
                 </div>
             </div>
@@ -352,38 +577,46 @@
     <section class="products">
         <div class="container">
             <div class="section-header">
-                <h2>产品套餐</h2>
-                <p>选择适合您的虚拟主机方案</p>
+                <h2>热门产品套餐</h2>
+                <p>灵活配置，按需选择，满足不同阶段的业务需求</p>
             </div>
-            
+
             <div class="products-grid">
                 {if $cart}
                 {foreach $cart as $c}
                 <div class="product-card">
-                    <div class="product-name">{$c.name}</div>
+                    <div class="product-header">
+                        <div class="product-name">{$c.name}</div>
+                        {if $c.money=='0'}
+                        <span class="product-tag free">免费</span>
+                        {elseif isset($c.hot) && $c.hot=='1'}
+                        <span class="product-tag hot">热销</span>
+                        {/if}
+                    </div>
                     <div class="product-desc">{$c.content}</div>
                     <div class="product-price-box">
                         <span class="price-value">{if $c.money=='0'}免费{else}¥{$c.money}{/if}</span>
                         <span class="price-unit">/{if $c.cycle=='day'}日{elseif $c.cycle=='month'}月{elseif $c.cycle=='season'}季{elseif $c.cycle=='year'}年{elseif $c.cycle=='unrestricted'}一次性{/if}</span>
                     </div>
                     <ul class="product-specs">
-                        <li>库存 <span>{$c.inventory}</span></li>
+                        <li>当前库存 <span>{$c.inventory}</span></li>
                         {if $c.firstmo=='1'}
-                        <li>优惠 <span style="color:#36b37e;">首{if $c.cycle=='day'}日{elseif $c.cycle=='month'}月{elseif $c.cycle=='season'}季{elseif $c.cycle=='year'}年{/if}免费</span></li>
+                        <li>限时优惠 <span style="color:#36b37e;">首{if $c.cycle=='day'}日{elseif $c.cycle=='month'}月{elseif $c.cycle=='season'}季{elseif $c.cycle=='year'}年{/if}免费</span></li>
                         {/if}
                     </ul>
                     {if $c.inventory<'1'}
-                    <button class="btn-buy" disabled style="background:#dfe1e6;color:#5e6c84;cursor:not-allowed;">已售完</button>
+                    <button class="btn-buy" disabled>已售完</button>
                     {else}
                     <a href="/product/{$c.id}" class="btn-buy">立即购买</a>
                     {/if}
                 </div>
                 {/foreach}
                 {else}
-                <div class="product-card">
-                    <div style="text-align:center;padding:40px;color:#5e6c84;">
-                        <p>暂无产品，请先在后台添加产品</p>
-                        <a href="/cart" class="btn-buy" style="margin-top:15px;">查看全部产品</a>
+                <div class="product-card" style="grid-column:1/-1;">
+                    <div style="text-align:center;padding:50px 20px;color:#5e6c84;">
+                        <i class="fas fa-box-open" style="font-size:36px;margin-bottom:15px;color:#b3bac5;"></i>
+                        <p>暂无产品展示，请先在后台添加产品套餐</p>
+                        <a href="/cart" class="btn-buy" style="margin-top:20px;max-width:200px;margin-left:auto;margin-right:auto;">查看全部产品</a>
                     </div>
                 </div>
                 {/if}
@@ -394,33 +627,33 @@
     <section class="features">
         <div class="container">
             <div class="section-header">
-                <h2>技术支持</h2>
-                <p>完善的售后服务体系</p>
+                <h2>全方位技术支持</h2>
+                <p>专业服务团队为您保驾护航</p>
             </div>
-            
+
             <div class="features-grid">
                 <div class="feature-item">
                     <i class="fas fa-headset"></i>
                     <h3>在线客服</h3>
-                    <p>工作日在线客服即时响应，快速解决您的问题</p>
+                    <p>工作日即时响应，快速定位并解答产品使用中的各类问题</p>
                 </div>
-                
+
                 <div class="feature-item">
                     <i class="fas fa-book"></i>
                     <h3>帮助文档</h3>
-                    <p>详细的操作文档和常见问题解答</p>
+                    <p>覆盖建站、域名解析、控制面板等场景的详细图文操作指南</p>
                 </div>
-                
+
                 <div class="feature-item">
                     <i class="fas fa-ticket-alt"></i>
                     <h3>工单系统</h3>
-                    <p>提交工单，技术人员会在24小时内处理</p>
+                    <p>技术问题随时提交工单，专业工程师会在 24 小时内跟进处理</p>
                 </div>
-                
+
                 <div class="feature-item">
                     <i class="fas fa-sync-alt"></i>
                     <h3>自动备份</h3>
-                    <p>每日自动备份，数据安全有保障</p>
+                    <p>数据每日自动备份，支持一键恢复，保障网站数据安全可靠</p>
                 </div>
             </div>
         </div>
@@ -429,26 +662,30 @@
     <section class="datacenters">
         <div class="container">
             <div class="section-header">
-                <h2>数据中心</h2>
-                <p>海外节点，高速稳定</p>
+                <h2>全球数据中心</h2>
+                <p>多地域节点部署，就近访问，低延迟高可用</p>
             </div>
-            
+
             <div class="dc-grid">
                 <div class="dc-item">
-                    <h4><i class="fas fa-map-marker-alt" style="color:#0052cc;margin-right:5px;"></i> 美国洛杉矶</h4>
+                    <h4><i class="fas fa-map-marker-alt" style="color:#0052cc;"></i> 美国洛杉矶</h4>
                     <p>US West / California</p>
+                    <span class="dc-status">运行正常</span>
                 </div>
                 <div class="dc-item">
-                    <h4><i class="fas fa-map-marker-alt" style="color:#0052cc;margin-right:5px;"></i> 美国圣何塞</h4>
+                    <h4><i class="fas fa-map-marker-alt" style="color:#0052cc;"></i> 美国圣何塞</h4>
                     <p>US West / Silicon Valley</p>
+                    <span class="dc-status">运行正常</span>
                 </div>
                 <div class="dc-item">
-                    <h4><i class="fas fa-map-marker-alt" style="color:#0052cc;margin-right:5px;"></i> 新加坡</h4>
+                    <h4><i class="fas fa-map-marker-alt" style="color:#0052cc;"></i> 新加坡</h4>
                     <p>Singapore / Asia Pacific</p>
+                    <span class="dc-status">运行正常</span>
                 </div>
                 <div class="dc-item">
-                    <h4><i class="fas fa-map-marker-alt" style="color:#0052cc;margin-right:5px;"></i> 日本东京</h4>
+                    <h4><i class="fas fa-map-marker-alt" style="color:#0052cc;"></i> 日本东京</h4>
                     <p>Japan / Tokyo</p>
+                    <span class="dc-status">运行正常</span>
                 </div>
             </div>
         </div>
@@ -458,16 +695,25 @@
         <div class="container">
             <div class="section-header">
                 <h2>网站公告</h2>
+                <p>及时了解平台最新动态与维护通知</p>
             </div>
-            
+
             <div class="announcement-list">
+                {if $announcement}
                 {foreach $announcement as $a}
                 <div class="announcement-item">
                     <span class="announcement-title">{$a.name}</span>
-                    <span class="announcement-date">{$a.time|date="m-d",###}</span>
-                    <a href="/announcement/{$a.id}" class="announcement-link">查看</a>
+                    <div class="announcement-meta">
+                        <span class="announcement-date">{$a.time|date="m-d",###}</span>
+                        <a href="/announcement/{$a.id}" class="announcement-link">查看详情</a>
+                    </div>
                 </div>
                 {/foreach}
+                {else}
+                <div class="announcement-empty">
+                    <i class="fas fa-bullhorn" style="margin-right:6px;"></i> 暂无公告
+                </div>
+                {/if}
             </div>
         </div>
     </section>

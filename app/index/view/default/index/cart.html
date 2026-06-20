@@ -33,8 +33,9 @@
         .dropdown {
             display: inline-block;
             position: relative;
+            padding-bottom: 5px;
         }
-        
+
         .btn-category {
             background: #ffffff;
             color: #172b4d;
@@ -47,7 +48,7 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -56,11 +57,12 @@
             background: #ffffff;
             border: 1px solid #dfe1e6;
             padding: 10px 0;
-            margin-top: 5px;
             min-width: 200px;
             z-index: 100;
+            box-shadow: 0 8px 20px rgba(23, 43, 77, 0.08);
+            border-radius: 6px;
         }
-        
+
         .dropdown:hover .dropdown-menu {
             display: block;
         }

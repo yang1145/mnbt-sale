@@ -38,6 +38,7 @@ return [
 "/user/return/:id"=>"index/user/return",
 "/index/notify/:id"=>"index/index/notify",
 "/announcement/[:id]"=>"index/index/announcement",
+"/announcements"=>"index/index/announcement",
 "/user/payrecord"=>"index/user/payrecord",
 "/cron"=>"index/index/cron",
 "/pwreset"=>"index/index/pwreset",

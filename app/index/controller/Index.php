@@ -601,42 +601,47 @@ $array["msg"]="未开启邮箱通知!";
 
 
 
-	public function cart($id=null) {
-		$data=Db::name('product')->where("hide","0")->order("sort","DESC")->select();
-		if($id) {
-			$data3=Db::name('product')->where("id",$id)->find();
-if(!$data3){
-$this->redirect('/cart');
-}
-		$data1=Db::name('cart')->where([
-"product"=>$id,
-"hide"=>"0",
-])->order("sort","DESC")->select();
-$productid=$id;
+	public function cart($id = null) {
+		// 获取所有可见分类
+		$data = Db::name('product')->where("hide", "0")->order("sort", "DESC")->select();
+
+		if ($id) {
+			$data3 = Db::name('product')->where("id", $id)->find();
+			if (!$data3) {
+				return $this->redirect('/cart');
+			}
+			$productid = $id;
 		} else {
-			$data2=Db::name('product')->where("hide","0")->order("sort","DESC")->find();
-					if($data2){
-			$data1=Db::name('cart')->where([
-"product"=>$data2['id'],
-"hide"=>"0",
-])->order("sort","DESC")->select();
-			$data3=Db::name('product')->where("id",$data2['id'])->find();
-$productid=$data2["id"];
-		}else{
-$data="";
-$data1=Db::name('cart')->where([
-"product"=>"",
-"hide"=>"0",
-])->order("sort","DESC")->select();
-$data3="";
-$productid="";
-}
+			// 优先选择有可见产品的分类作为默认展示
+			$productid = "";
+			$data3 = null;
+			foreach ($data as $p) {
+				$hasCart = Db::name('cart')->where(["product" => $p['id'], "hide" => "0"])->find();
+				if ($hasCart) {
+					$data3 = $p;
+					$productid = $p['id'];
+					break;
+				}
+			}
+			// 若没有分类下存在产品，则回退到排序第一个分类
+			if (!$data3 && count($data) > 0) {
+				$data3 = $data[0];
+				$productid = $data3['id'];
+			}
 		}
-		return $this->fetch('/'.$this->web["template"].'/index/cart',[
-		"product"=>$data,
-		"cart"=>$data1,
-		"class"=>$data3,
-"productid"=>$productid,
+
+		// 查询当前分类下的可见产品
+		if ($productid !== "") {
+			$data1 = Db::name('cart')->where(["product" => $productid, "hide" => "0"])->order("sort", "DESC")->select();
+		} else {
+			$data1 = [];
+		}
+
+		return $this->fetch('/' . $this->web["template"] . '/index/cart', [
+			"product" => $data,
+			"cart" => $data1,
+			"class" => $data3,
+			"productid" => $productid,
 		]);
 	}
 
@@ -805,7 +810,7 @@ return $array;
 if($id){
 $data=Db::name('announcement')->where("id",$id)->find();
 if($data){
-return $this->fetch('/'.$this->web["template"].'/index/announcements',[
+return $this->fetch('/'.$this->web["template"].'/index/announcement',[
 		"announcement"=>$data,
 		]);
 }else{
@@ -813,7 +818,7 @@ return $this->fetch('/'.$this->web["template"].'/index/announcements',[
 }
 }else{
 $data=Db::name('announcement')->order('id desc')->paginate(10);
-		return $this->fetch('/'.$this->web["template"].'/index/announcement',[
+		return $this->fetch('/'.$this->web["template"].'/index/announcements',[
 		"announcement"=>$data,
 		]);
 
