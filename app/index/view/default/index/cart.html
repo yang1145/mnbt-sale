@@ -26,58 +26,46 @@
         }
         
         .category-selector {
-            text-align: center;
             margin-bottom: 40px;
         }
-        
-        .dropdown {
-            display: inline-block;
-            position: relative;
-            padding-bottom: 5px;
+
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-        .btn-category {
-            background: #ffffff;
-            color: #172b4d;
-            border: 1px solid #dfe1e6;
-            padding: 10px 20px;
-            font-weight: 500;
-            font-size: 14px;
-            cursor: pointer;
+        .category-item {
+            flex: 0 0 auto;
+        }
+
+        .category-link {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: #ffffff;
-            border: 1px solid #dfe1e6;
-            padding: 10px 0;
-            min-width: 200px;
-            z-index: 100;
-            box-shadow: 0 8px 20px rgba(23, 43, 77, 0.08);
-            border-radius: 6px;
-        }
-
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-        
-        .dropdown-item {
+            gap: 8px;
             padding: 10px 20px;
+            background: #ffffff;
             color: #5e6c84;
-            text-decoration: none;
-            display: block;
+            border: 1px solid #dfe1e6;
             font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
         }
-        
-        .dropdown-item:hover, .dropdown-item.active {
-            background: #f4f5f7;
+
+        .category-link:hover {
+            border-color: #0052cc;
             color: #0052cc;
+        }
+
+        .category-link.active {
+            background: #0052cc;
+            color: #ffffff;
+            border-color: #0052cc;
         }
         
         .products-grid {
@@ -197,6 +185,15 @@
         }
         
         @media (max-width: 768px) {
+            .category-list {
+                gap: 8px;
+            }
+
+            .category-link {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
             .products-grid {
                 grid-template-columns: 1fr;
             }
@@ -211,19 +208,15 @@
             </div>
             
             <div class="category-selector">
-                <div class="dropdown">
-                    <button class="btn-category" type="button">
-                        <i class="fas fa-list"></i> 产品分类
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-menu">
-                        {if $product}
-                        {foreach $product as $p}
-                            <a class="dropdown-item{if $productid==$p.id} active{/if}" href="/cart/{$p.id}">{$p.name}</a>
-                        {/foreach}
-                        {/if}
-                    </div>
-                </div>
+                <ul class="category-list">
+                    {if $product}
+                    {foreach $product as $p}
+                    <li class="category-item">
+                        <a class="category-link{if $productid==$p.id} active{/if}" href="/cart/{$p.id}">{$p.name}</a>
+                    </li>
+                    {/foreach}
+                    {/if}
+                </ul>
             </div>
             
             <div class="products-grid">
