@@ -5,59 +5,57 @@
     {include file="default/index/header" /}
     <style>
         .hero {
-            padding: 120px 0 80px;
+            padding: 140px 0 90px;
             background: linear-gradient(135deg, #ffffff 0%, #f4f8ff 100%);
             border-bottom: 1px solid #dfe1e6;
             flex-shrink: 0;
         }
 
         .hero-content {
-            display: flex;
-            align-items: center;
-            gap: 70px;
-        }
-
-        .hero-text {
-            flex: 1;
+            max-width: 820px;
+            margin: 0 auto;
+            text-align: center;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 6px 14px;
+            padding: 8px 16px;
             background: rgba(0, 82, 204, 0.08);
             color: #0052cc;
             font-size: 13px;
             font-weight: 500;
             border-radius: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
-        .hero-text h1 {
-            font-size: 34px;
-            margin-bottom: 18px;
+        .hero-content h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
             color: #172b4d;
             font-weight: 700;
-            line-height: 1.3;
+            line-height: 1.25;
         }
 
-        .hero-text p {
+        .hero-content > p {
             font-size: 16px;
             color: #5e6c84;
-            margin-bottom: 28px;
+            margin: 0 auto 32px;
             line-height: 1.8;
-            max-width: 540px;
+            max-width: 640px;
         }
 
         .hero-actions {
             display: flex;
+            justify-content: center;
             gap: 12px;
             flex-wrap: wrap;
+            margin-bottom: 50px;
         }
 
         .hero-actions .btn {
-            padding: 12px 24px;
+            padding: 12px 28px;
             font-size: 15px;
         }
 
@@ -71,87 +69,77 @@
             background: #f4f8ff;
         }
 
-        .hero-stats {
-            display: flex;
-            gap: 40px;
-            margin-top: 45px;
-            padding-top: 25px;
-            border-top: 1px solid #e6edf7;
+        .hero-highlights {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 50px;
         }
 
-        .hero-stat {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .highlight-card {
+            background: #ffffff;
+            border: 1px solid #dfe1e6;
+            border-radius: 12px;
+            padding: 24px 16px;
+            box-shadow: 0 4px 16px rgba(23, 43, 77, 0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .hero-stat-icon {
-            width: 42px;
-            height: 42px;
+        .highlight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(23, 43, 77, 0.08);
+        }
+
+        .highlight-icon {
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: rgba(0, 82, 204, 0.08);
             color: #0052cc;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 18px;
+            margin: 0 auto 14px;
+        }
+
+        .highlight-card h3 {
+            font-size: 14px;
+            color: #172b4d;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .highlight-card p {
+            font-size: 12px;
+            color: #5e6c84;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e6edf7;
+        }
+
+        .hero-stat {
+            text-align: center;
         }
 
         .hero-stat-value {
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 700;
-            color: #172b4d;
+            color: #0052cc;
             line-height: 1.2;
         }
 
         .hero-stat-label {
-            font-size: 12px;
-            color: #5e6c84;
-            margin-top: 2px;
-        }
-
-        .hero-features {
-            flex: 0 0 420px;
-            background: #ffffff;
-            padding: 32px;
-            border: 1px solid #dfe1e6;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(23, 43, 77, 0.06);
-        }
-
-        .hero-features h3 {
-            font-size: 16px;
-            color: #172b4d;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .feature-list {
-            list-style: none;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px 20px;
-        }
-
-        .feature-list li {
             font-size: 13px;
             color: #5e6c84;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .feature-list li i {
-            color: #36b37e;
-            font-size: 12px;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(54, 179, 126, 0.1);
-            border-radius: 50%;
-            flex-shrink: 0;
+            margin-top: 4px;
         }
 
         .products {
@@ -473,32 +461,29 @@
         }
 
         @media (max-width: 992px) {
-            .hero-content {
-                flex-direction: column;
-                gap: 40px;
-            }
-
-            .hero-features {
-                flex: 1;
-                width: 100%;
+            .hero-highlights {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
             .hero {
-                padding: 100px 0 50px;
+                padding: 110px 0 60px;
             }
 
-            .hero-text h1 {
-                font-size: 26px;
+            .hero-content h1 {
+                font-size: 28px;
+            }
+
+            .hero-highlights {
+                grid-template-columns: 1fr;
+                max-width: 320px;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .hero-stats {
-                gap: 20px;
-            }
-
-            .feature-list {
-                grid-template-columns: 1fr;
+                gap: 30px;
             }
 
             .products-grid {
@@ -521,54 +506,52 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <div class="hero-text">
-                    <div class="hero-badge">
-                        <i class="fas fa-bolt"></i> 即开即用，分钟级部署
-                    </div>
-                    <h1>稳定、安全、易用的<br>虚拟主机服务平台</h1>
-                    <p>基于自主控制面板，提供 PHP 多版本、MySQL 数据库、在线文件管理与 SSL 部署能力。无论是个人博客、企业官网还是小型应用，都能获得高性能、低延迟的托管体验。</p>
-                    <div class="hero-actions">
-                        <a href="/cart" class="btn btn-register">浏览产品套餐</a>
-                        <a href="/register" class="btn btn-login">免费注册</a>
-                    </div>
+                <div class="hero-badge">
+                    <i class="fas fa-bolt"></i> 即开即用，分钟级部署
+                </div>
+                <h1>稳定、安全、易用的虚拟主机服务平台</h1>
+                <p>基于自主控制面板，提供 PHP 多版本、MySQL 数据库、在线文件管理与 SSL 部署能力。无论是个人博客、企业官网还是小型应用，都能获得高性能、低延迟的托管体验。</p>
+                <div class="hero-actions">
+                    <a href="/cart" class="btn btn-register">浏览产品套餐</a>
+                    <a href="/register" class="btn btn-login">免费注册</a>
+                </div>
 
-                    <div class="hero-stats">
-                        <div class="hero-stat">
-                            <div class="hero-stat-icon"><i class="fas fa-users"></i></div>
-                            <div>
-                                <div class="hero-stat-value">{$countuser}</div>
-                                <div class="hero-stat-label">注册用户</div>
-                            </div>
-                        </div>
-                        <div class="hero-stat">
-                            <div class="hero-stat-icon"><i class="fas fa-server"></i></div>
-                            <div>
-                                <div class="hero-stat-value">{$countorder}</div>
-                                <div class="hero-stat-label">运行主机</div>
-                            </div>
-                        </div>
-                        <div class="hero-stat">
-                            <div class="hero-stat-icon"><i class="fas fa-globe"></i></div>
-                            <div>
-                                <div class="hero-stat-value">{$countserver}</div>
-                                <div class="hero-stat-label">服务器节点</div>
-                            </div>
-                        </div>
+                <div class="hero-highlights">
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-rocket"></i></div>
+                        <h3>分钟级开通</h3>
+                        <p>支付完成后自动开通，无需等待人工审核</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>稳定可靠</h3>
+                        <p>多地域数据中心，99.9% 在线率保障</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-cogs"></i></div>
+                        <h3>自主控制</h3>
+                        <p>自研面板，域名、文件、数据库一键管理</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-headset"></i></div>
+                        <h3>专属支持</h3>
+                        <p>7×24 小时技术客服，快速响应解决问题</p>
                     </div>
                 </div>
 
-                <div class="hero-features">
-                    <h3>为什么选择我们</h3>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check"></i> PHP 7.4 / 8.0 / 8.1 自由切换</li>
-                        <li><i class="fas fa-check"></i> MySQL 5.7 数据库支持</li>
-                        <li><i class="fas fa-check"></i> 自主开发控制面板</li>
-                        <li><i class="fas fa-check"></i> 在线文件管理器</li>
-                        <li><i class="fas fa-check"></i> 一键安装 WordPress</li>
-                        <li><i class="fas fa-check"></i> 自定义伪静态规则</li>
-                        <li><i class="fas fa-check"></i> 免费 SSL 证书部署</li>
-                        <li><i class="fas fa-check"></i> 7×24 小时技术支持</li>
-                    </ul>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">{$countuser}</div>
+                        <div class="hero-stat-label">注册用户</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">{$countorder}</div>
+                        <div class="hero-stat-label">运行主机</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">{$countserver}</div>
+                        <div class="hero-stat-label">服务器节点</div>
+                    </div>
                 </div>
             </div>
         </div>
