@@ -1,139 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>运行目录配置提示</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #f4f5f7;
-            color: #172b4d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 560px;
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid #dfe1e6;
-            border-radius: 12px;
-            padding: 48px 40px;
-            box-shadow: 0 8px 24px rgba(23, 43, 77, 0.06);
-            text-align: center;
-        }
-
-        .icon {
-            width: 64px;
-            height: 64px;
-            background: rgba(0, 82, 204, 0.08);
-            color: #0052cc;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin: 0 auto 24px;
-        }
-
-        h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #172b4d;
-        }
-
-        p {
-            font-size: 15px;
-            color: #5e6c84;
-            margin-bottom: 24px;
-        }
-
-        .tip-box {
-            background: #f4f8ff;
-            border: 1px solid #e6edf7;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: left;
-            margin-bottom: 24px;
-        }
-
-        .tip-box h3 {
-            font-size: 14px;
-            color: #172b4d;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .tip-box ul {
-            list-style: none;
-            font-size: 14px;
-            color: #5e6c84;
-        }
-
-        .tip-box li {
-            padding: 6px 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-        .tip-box li::before {
-            content: "•";
-            color: #0052cc;
-            font-weight: 700;
-        }
-
-        code {
-            display: block;
-            background: #172b4d;
-            color: #ffffff;
-            padding: 14px 18px;
-            border-radius: 8px;
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 14px;
-            word-break: break-all;
-            text-align: left;
-        }
-
-        .footer {
-            margin-top: 24px;
-            font-size: 13px;
-            color: #5e6c84;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<title>请设置运行目录为 /public</title>
+<style>body{font-family:sans-serif;max-width:600px;margin:40px auto;padding:0 20px;line-height:1.5;color:#333}code{background:#f4f4f4;padding:1px 4px;color:#c00}h1{font-size:1.3em;margin-bottom:10px}ul{padding-left:20px;margin:10px 0}</style>
 </head>
 <body>
-    <div class="container">
-        <div class="icon">⚙️</div>
-        <h1>请设置网站运行目录</h1>
-        <p>当前站点未正确配置运行目录，请将 Web 服务器的根目录指向项目的 <strong>/public</strong> 文件夹。</p>
-
-        <div class="tip-box">
-            <h3>常见配置方式</h3>
-            <ul>
-                <li>cPanel / 宝塔面板：修改站点目录为程序根目录下的 <strong>public</strong></li>
-                <li>Nginx：将 <strong>root</strong> 指向 <strong>/path/to/site/public</strong></li>
-                <li>Apache：将 <strong>DocumentRoot</strong> 指向 <strong>/path/to/site/public</strong></li>
-            </ul>
-        </div>
-
-        <code>DocumentRoot "/www/wwwroot/your-site/public"</code>
-
-        <div class="footer">
-            配置完成后刷新页面即可正常访问网站。
-        </div>
-    </div>
+<h1>运行目录配置错误</h1>
+<p>请将网站运行目录（Web 根目录）设置为 <code>/public</code>。</p>
+<p>当前访问的是项目根目录，暴露 ThinkPHP 核心代码会导致严重安全风险。</p>
+<h2>修改指南</h2>
+<ul>
+<li><b>宝塔面板</b>：网站设置 -> 网站目录 -> 运行目录，选择 <code>/public</code> 并保存。</li>
+<li><b>其他环境</b>：将 Web 服务器（Nginx/Apache等）的根目录指向项目的 <code>public</code> 文件夹。</li>
+</ul>
+<p style="color:#999;font-size:12px">修改后请刷新页面。若仍显示此页，请检查伪静态规则。</p>
 </body>
 </html>
