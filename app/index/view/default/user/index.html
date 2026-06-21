@@ -4,142 +4,211 @@
         .user-dashboard {
             padding: 1.5rem 0;
         }
-        
+
         .welcome-card {
-            border: none;
-            background: #0052cc;
-            color: white;
+            border: 1px solid #dfe1e6;
+            background: #ffffff;
+            color: #172b4d;
             margin-bottom: 1.5rem;
         }
-        
+
         .user-info-container {
             display: flex;
             align-items: center;
-            padding: 2rem;
+            padding: 1.5rem;
         }
-        
+
         .user-image {
-            width: 120px;
-            height: 120px;
-            margin-right: 2rem;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            width: 80px;
+            height: 80px;
+            margin-right: 1.25rem;
+            border: 3px solid #dfe1e6;
+            flex-shrink: 0;
         }
-        
+
         .user-details {
             flex: 1;
+            min-width: 0;
         }
-        
+
         .user-details h2 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
-        
+
         .user-details p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
+            margin-bottom: 0.75rem;
         }
-        
+
+        .user-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.95rem;
+        }
+
         .stat-card {
             border: 1px solid #dfe1e6;
-            margin-bottom: 1.5rem;
             background: #ffffff;
+            height: 100%;
         }
-        
+
+        .stat-card .card-body {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+        }
+
         .stat-icon {
-            width: 70px;
-            height: 70px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            margin: 0 auto 1rem;
-            background: #f4f5f7;
+            font-size: 1.25rem;
             color: #0052cc;
+            margin-right: 1rem;
+            flex-shrink: 0;
         }
-        
+
+        .stat-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stat-info h4 {
+            font-size: 0.95rem;
+            color: #5e6c84;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .stat-info .balance-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
         .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .action-btn {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+        }
+
+        .action-btn {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 1.5rem 1rem;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
             background: #ffffff;
             border: 1px solid #dfe1e6;
+            border-radius: 6px;
             text-decoration: none;
             color: #172b4d;
-            transition: border-color 0.2s, color 0.2s;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
-        
+
         .action-btn:hover {
             border-color: #0052cc;
             color: #0052cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 82, 204, 0.08);
+            text-decoration: none;
         }
-        
+
         .action-btn i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 1rem;
         }
-        
+
         .product-card {
             border: 1px solid #dfe1e6;
             margin-bottom: 1.5rem;
             background: #ffffff;
         }
-        
+
         .section-title {
             position: relative;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+            padding-bottom: 12px;
+            margin-bottom: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
-        
+
         .section-title::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 50px;
+            width: 40px;
             height: 3px;
             background: #0052cc;
         }
-        
+
         .balance-display {
-            font-size: 2rem;
-            font-weight: 700;
             color: #0052cc;
+        }
+
+        .table th {
+            border-top: none;
+            color: #5e6c84;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #dfe1e6;
+            padding: 0.75rem;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 0.75rem;
+            color: #172b4d;
+            border-bottom: 1px solid #f0f1f4;
+        }
+
+        .table-hover tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: #5e6c84;
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            color: #b3bac5;
+        }
+
+        .empty-state p {
+            margin-bottom: 0;
         }
     </style>
 
     <div class="content">
         <div class="user-dashboard">
-            <!-- Welcome Card -->
-            <div class="welcome-card">
-                <div class="user-info-container">
-                    <img src="http://q1.qlogo.cn/g?b=qq&nk={$user.qq}&s=100" class="user-image" id="user-image">
-                    <div class="user-details">
-                        <h2>欢迎回来, {$user.name}!</h2>
-                        <p>祝您今天愉快！</p>
-                        <div class="d-flex align-items-center">
-                            <span class="mr-3">用户ID: <strong>{$user.id}</strong></span>
-                            <span>账户余额: <span class="balance-display">{$user.money} 元</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Quick Actions -->
+            <!-- Top Row: Welcome + Stats -->
             <div class="row">
-                <div class="col-12">
-                    <div class="product-card">
-                        <div class="card-body">
-                            <h4 class="section-title">快捷操作</h4>
+                <div class="col-lg-8">
+                    <div class="welcome-card">
+                        <div class="user-info-container">
+                            <img src="http://q1.qlogo.cn/g?b=qq&nk={$user.qq}&s=100" class="user-image" id="user-image" alt="avatar">
+                            <div class="user-details">
+                                <h2>欢迎回来, {$user.name}!</h2>
+                                <p>祝您今天愉快，如有问题请随时联系客服。</p>
+                                <div class="user-meta">
+                                    <span>用户ID: <strong>{$user.id}</strong></span>
+                                    <span>账户余额: <strong class="balance-display">{$user.money} 元</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body border-top bg-light">
                             <div class="quick-actions">
                                 <a href="/cart" class="action-btn">
                                     <i class="fas fa-shopping-bag text-primary"></i>
@@ -169,57 +238,64 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-sm-4 col-lg-12 mb-3">
+                            <div class="stat-card bg-white">
+                                <div class="card-body">
+                                    <div class="stat-icon text-primary">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h4>订单总数</h4>
+                                        <div class="balance-display text-primary">{$countorder}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-lg-12 mb-3">
+                            <div class="stat-card bg-white">
+                                <div class="card-body">
+                                    <div class="stat-icon text-success">
+                                        <i class="fas fa-server"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h4>主机数量</h4>
+                                        <div class="balance-display text-success">{$counthost}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-lg-12 mb-3">
+                            <div class="stat-card bg-white">
+                                <div class="card-body">
+                                    <div class="stat-icon text-info">
+                                        <i class="fas fa-ticket-alt"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h4>工单数量</h4>
+                                        <div class="balance-display text-info">{$countticket}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <!-- User Stats -->
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="stat-card bg-white">
-                        <div class="card-body text-center">
-                            <div class="stat-icon bg-primary text-white">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                            <h4 class="card-title">订单总数</h4>
-                            <div class="balance-display text-primary">{$countorder}</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="stat-card bg-white">
-                        <div class="card-body text-center">
-                            <div class="stat-icon bg-success text-white">
-                                <i class="fas fa-server"></i>
-                            </div>
-                            <h4 class="card-title">主机数量</h4>
-                            <div class="balance-display text-success">{$counthost}</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="stat-card bg-white">
-                        <div class="card-body text-center">
-                            <div class="stat-icon bg-info text-white">
-                                <i class="fas fa-ticket-alt"></i>
-                            </div>
-                            <h4 class="card-title">工单数量</h4>
-                            <div class="balance-display text-info">{$countticket}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+
             <!-- Recent Products -->
             <div class="row">
                 <div class="col-12">
                     <div class="product-card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h4 class="section-title mb-0">管理产品(最近5条)</h4>
+                                <h4 class="section-title">管理产品（最近5条）</h4>
                                 <a href="/user/order" class="btn btn-sm btn-outline-primary">查看全部</a>
                             </div>
-                            
+
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
@@ -232,23 +308,34 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {foreach $orders as $order}
+                                        {if $order}
+                                        {foreach $order as $o}
                                         <tr>
-                                            <td>{$order.name}</td>
-                                            <td>{$order.buytime|date='Y-m-d H:i:s',###}</td>
-                                            <td>{$order.endtime|date='Y-m-d H:i:s',###}</td>
+                                            <td>{$o.name}</td>
+                                            <td>{$o.buytime|date='Y-m-d H:i:s',###}</td>
+                                            <td>{$o.endtime|date='Y-m-d H:i:s',###}</td>
                                             <td>
-                                                {if $order.status == 1}
+                                                {if $o.status == 1}
                                                 <span class="badge badge-success">正常</span>
                                                 {else}
                                                 <span class="badge badge-danger">已过期</span>
                                                 {/if}
                                             </td>
                                             <td>
-                                                <a href="/user/order/{$order.id}" class="btn btn-sm btn-primary">管理</a>
+                                                <a href="/user/order/{$o.id}" class="btn btn-sm btn-primary">管理</a>
                                             </td>
                                         </tr>
                                         {/foreach}
+                                        {else}
+                                        <tr>
+                                            <td colspan="5">
+                                                <div class="empty-state">
+                                                    <i class="fas fa-box-open"></i>
+                                                    <p>暂无产品，快去订购一个吧</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {/if}
                                     </tbody>
                                 </table>
                             </div>
@@ -261,31 +348,16 @@
 </main>
 
 <script>
-// 添加一些交互效果
 document.addEventListener('DOMContentLoaded', function() {
-    // 用户头像悬停效果
     const userImage = document.getElementById('user-image');
     if (userImage) {
         userImage.addEventListener('mouseenter', function() {
             this.style.transform = 'scale(1.05)';
         });
-        
         userImage.addEventListener('mouseleave', function() {
             this.style.transform = 'scale(1)';
         });
     }
-    
-    // 快捷操作按钮悬停效果
-    const actionButtons = document.querySelectorAll('.action-btn');
-    actionButtons.forEach(button => {
-        button.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-        });
-        
-        button.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
 });
 </script>
 {include file="default/user/footer" /}

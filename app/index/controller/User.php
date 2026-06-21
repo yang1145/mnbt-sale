@@ -514,9 +514,15 @@ $b=Db::name('cart')->where('id',$data[$i]["cartid"])->find();
 $data[$i]["cartid"]=$b["name"];
 } 
 $data1=Db::name('announcement')->order('id desc')->limit(5)->select();
+$countorder=Db::name('order')->where("userid",session("userid"))->count();
+$counthost=Db::name('order')->where(["userid"=>session("userid"),"state"=>["<>","3"]])->count();
+$countticket=Db::name('ticket')->where("userid",session("userid"))->count();
 		return $this->fetch('/'.$this->web["template"].'/user/index',[
 "order"=>$data,
 "announcement"=>$data1,
+"countorder"=>$countorder,
+"counthost"=>$counthost,
+"countticket"=>$countticket,
 
 ]);
 	}
