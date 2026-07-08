@@ -2,6 +2,16 @@
 
 本项目是一个基于ThinkPHP框架开发的主机销售管理系统。为了正确运行该项目，请按照以下步骤进行配置。
 
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+  <img src="https://img.shields.io/badge/web_server-IIS-0078D4?logo=iis" alt="IIS">
+  <img src="https://img.shields.io/badge/web_server-Apache-D22128?logo=apache" alt="Apache">
+  <img src="https://img.shields.io/badge/web_server-Nginx-009639?logo=nginx" alt="Nginx">
+  <img src="https://img.shields.io/badge/web_server-LiteSpeed-00AEEF" alt="LiteSpeed">
+  <img src="https://img.shields.io/badge/php-7.2-777BB4?logo=php" alt="PHP">
+  <img src="https://img.shields.io/badge/mysql-5.6+-4479A1?logo=mysql" alt="MySQL">
+</p>
+
 ## 目录结构
 
 ```
