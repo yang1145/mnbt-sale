@@ -219,24 +219,38 @@
                 <div class="section-title">购买配置</div>
                 <form id="buyForm">
                     <div class="form-group">
-                        <label>购买价格</label>
+                        <label>购买时间</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">价格</span>
+                                <span class="input-group-text">时长</span>
                             </div>
-                            <input type="text" class="form-control" value="{$product.money} 元" readonly>
+                            <input type="number" class="form-control" name="time" value="1" min="1" id="timeInput">
                             <div class="input-group-append">
                                 <span class="btn-price">
-                                    {if $product.cycle=='day'}日付{elseif $product.cycle=='month'}月付{elseif $product.cycle=='season'}季付{elseif $product.cycle=='year'}年付{elseif $product.cycle=='unrestricted'}一次性{/if}
+                                    {if $product.money=="0"}免费{else}{$product.money}元{/if}/
+                                    {if $product.cycle=='day'}日{elseif $product.cycle=='month'}月{elseif $product.cycle=='season'}季{elseif $product.cycle=='year'}年{elseif $product.cycle=='unrestricted'}一次性{/if}
                                 </span>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
-                        <label>购买数量</label>
+                        <label>主机账号</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" name="quantity" value="1" min="1" max="{$product.inventory}" id="quantity">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">账号</span>
+                            </div>
+                            <input type="text" class="form-control" name="user" value="{:userrandom()}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>主机密码</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">密码</span>
+                            </div>
+                            <input type="text" class="form-control" name="password" value="{:random()}" readonly>
                         </div>
                     </div>
                     
@@ -246,14 +260,16 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">总计</span>
                             </div>
-                            <div class="total-price" id="totalPrice">¥{$product.money}</div>
+                            <div class="total-price" id="totalPrice">
+                                {if $product.money=="0"}免费{else}¥{$product.money}{/if}
+                            </div>
                         </div>
                     </div>
                     
                     {if $product.inventory<'1'}
                     <button type="submit" class="btn-submit" disabled>已售完</button>
                     {else}
-                    <button type="submit" class="btn-submit">立即购买</button>
+                    <button type="submit" class="btn-submit">立即开通</button>
                     {/if}
                 </form>
             </div>
@@ -261,17 +277,73 @@
     </section>
 
     {include file="default/index/footer" /}
-    
+    <script src="/static/assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
     <script>
-        var price = {$product.money};
-        document.getElementById('quantity').addEventListener('input', function() {
-            var qty = parseInt(this.value) || 1;
-            document.getElementById('totalPrice').textContent = '¥' + (price * qty);
-        });
-        
+        var price = parseFloat('{$product.money}') || 0;
+        var cycleText = '{if $product.cycle=="day"}日{elseif $product.cycle=="month"}月{elseif $product.cycle=="season"}季{elseif $product.cycle=="year"}年{elseif $product.cycle=="unrestricted"}一次性{/if}';
+        var timeInput = document.getElementById('timeInput');
+        var totalPriceEl = document.getElementById('totalPrice');
+
+        function updateTotal() {
+            var qty = parseInt(timeInput.value) || 0;
+            if (qty < 1) {
+                totalPriceEl.textContent = '时长错误';
+                return;
+            }
+            if (price === 0) {
+                totalPriceEl.textContent = '免费';
+                return;
+            }
+            totalPriceEl.textContent = '¥' + (price * qty) + ' / ' + qty + cycleText;
+        }
+
+        timeInput.addEventListener('input', updateTotal);
+        updateTotal();
+
         document.getElementById('buyForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            var qty = document.getElementById('quantity').value;
-            window.location.href = '/order/{$product.id}?qty=' + qty;
+            var btn = this.querySelector("button[type='submit']");
+            var user = this.querySelector("input[name='user']").value;
+            var password = this.querySelector("input[name='password']").value;
+            var time = this.querySelector("input[name='time']").value;
+
+            if (!user || !password || !time) {
+                One.helpers('notify', {type: 'danger', message: '请确保必填项不为空', delay: 2000});
+                return false;
+            }
+
+            btn.disabled = true;
+            One.helpers('notify', {type: 'warning', message: '正在处理，请稍后...', delay: 2000});
+
+            fetch('', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'user=' + encodeURIComponent(user) + '&password=' + encodeURIComponent(password) + '&time=' + encodeURIComponent(time)
+            })
+            .then(function(res) {
+                return res.text().then(function(text) {
+                    try {
+                        return JSON.parse(text);
+                    } catch (err) {
+                        throw new Error(res.status === 500 ? '服务器内部错误(500)' : ('响应异常: ' + res.status));
+                    }
+                });
+            })
+            .then(function(data) {
+                if (data.code == 1) {
+                    One.helpers('notify', {type: 'success', message: data.msg, delay: 2000});
+                    setTimeout(function() {
+                        location.href = '/user/order/' + data.id;
+                    }, 1000);
+                } else {
+                    btn.disabled = false;
+                    One.helpers('notify', {type: 'danger', message: data.msg || '购买失败', delay: 2000});
+                }
+            })
+            .catch(function(err) {
+                btn.disabled = false;
+                One.helpers('notify', {type: 'danger', message: (err && err.message) ? err.message : '请求失败，请重试', delay: 3000});
+            });
+            return false;
         });
     </script>

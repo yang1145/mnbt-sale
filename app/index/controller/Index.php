@@ -646,162 +646,170 @@ $array["msg"]="未开启邮箱通知!";
 	}
 
 	public function product($id=null) {
-		if($id) {
-$data=Db::name('cart')->where("id",$id)->find();
-if($data){
-//获取指定id产品信息
-if(Request::instance()->isPost()) {
-if(session("userid")){
-$data1=Db::name('order')->where([
-"cartid"=>$id,
-"userid"=>session("userid"),
-])->find();
-if($data["buy"]=="1"){
-	$array["code"]="-1";
-   $array["msg"]="该产品已设置禁止购买!";
-}else{
-if($data["inventory"] < 1){
-	$array["code"]="-1";
-   $array["msg"]="该产品已售完!";
-}else{
-if($data["limits"]=="1" && $data1){
-$array["code"]="-1";
-$array["msg"]="该产品只允许订购一次!";
-}else{
-$data2["user"]=input("user");
-$data2["password"]=input("password");
-$data2["time"]=input("time");
-if($data2["user"]=="" || $data2["password"]=="" || $data2["time"]==""){
-	$array["code"]="-1";
-	$array["msg"]="必填参数不可为空!";
-}else{
-if(!is_numeric($data2["time"])){
-	$array["code"]="-1";
-	$array["msg"]="购买时间只能填写数字!";
-}else{
-if(floor($data2["time"])!=$data2["time"]){
-	$array["code"]="-1";
-	$array["msg"]="购买时间只能填写整数!";
-}else{
-if($data2["time"]<1){
-	$array["code"]="-1";
-	$array["msg"]="购买时间不能小于1!";
-}else{
-if($data["money"]=="0" && $data2["time"]!="1"){
-	$array["code"]="-1";
-	$array["msg"]="免费产品的购买时间只能填写1!";
-}else{
-if($data["cycle"]=="unrestricted" && $data2["time"]!="1"){
-	$array["code"]="-1";
-	$array["msg"]="一次性产品的购买时间只能填写1!";
-}else{
-$db=Db::name('user')->where('id',session("userid"))->find();
-$money=$data["money"]*$data2["time"];
-if($db["money"]>=$money || $data["firstmo"]=="1"){
-if($data["serverid"]==""){
-	$array["code"]="-1";
-	$array["msg"]="该产品没有配置服务器!";
-}else{
-$data3=Db::name('server')->where("id",$data["serverid"])->find();
-if($data3["serverplugins"]==""){
-	$array["code"]="-1";
-	$array["msg"]="该产品的服务器没有配置服务器插件!";
-}else{
-include PATH."plugins/host/".$data3["serverplugins"]."/".$data3["serverplugins"].".php";
-if($data["cycle"]=="month"){
-$times="2592000"*$data2["time"];
-}
-if($data["cycle"]=="season"){
-$times="7879680"*$data2["time"];
-}
-if($data["cycle"]=="year"){
-$times="31536000"*$data2["time"];
-}
-if($data["cycle"]=="day"){
-$times="86400"*$data2["time"];
-}
-if($data["cycle"]=="unrestricted"){
-$times="3153600000"*$data2["time"];
-}
-$function=$data3["serverplugins"]."_"."CreateAccount";
-if(function_exists($function)){
-$data4=@$function($data3,$data2,$data,$times);
-}
-if ($data4["code"]=="1"){
-if($data["firstmo"]!="1"){
-$money1=round($db["money"]-$money,2);
-//更新余额
-Db::name('user')->where('id',session("userid"))->update(['money' =>$money1]);
-}else{
-$money="0";
-}
-//更新库存
-Db::name('cart')->where('id',$data["id"])->update(['inventory' =>$data["inventory"]-1]);
-
-//消费记录
-$data6=Db::name('transaction')->insertGetId([
-"userid"=>session("userid"),
-"content"=>"购买产品,ID:".$data4["id"].",时长:".$data2["time"].",消费:".$money,
-"time"=>time(),
-]);
-
-//aff收益
-if($db["upperid"]){
-if($money!="0"){
-$upper=round($money*$this->web["affdiscount"],2);
-$upperuser=Db::name('user')->where('id',$db["upperid"])->find();
-$uppermoney=Db::name('user')->where('id',$db["upperid"])->update([
-'affmoney' =>round($upperuser["affmoney"]+$upper,2),
-]);
-$data5=Db::name('affsymoney')->insertGetId([
-"information"=>"下级ID:".session("userid")."购买产品",
-"money"=>$upper,
-"userid"=>$db["upperid"],
-"time"=>time(),
-]);
-}
-}
-
-
-if($this->web["email"]=="1"){
- $db=Db::name('user')->where("id",session("userid"))->find();
- if($db["mail"]){
-$mailbox=$this->email($db["mail"],"购买产品通知","你账号:".$db["user"]."在时间:".date("Y-m-d H:i:s")."在本站购买产品成功,id:".$data4["id"]."请登录产品管理查看!<br/><br/>");
-}
-}
-}
-return $data4;
-}
-}
-}else{
-	$array["code"]="-1";
-	$array["msg"]="账户余额不足!";
-}
-
-
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}else{
-	$array["code"]="-1";
-	$array["msg"]="请先登录!";	
-}
-return $array;
-}	
-}else{
-		$this->redirect('/cart');
-}
-		} else {
+		if(!$id){
 			$this->redirect('/cart');
 		}
+		$data=Db::name('cart')->where("id",$id)->find();
+		if(!$data){
+			$this->redirect('/cart');
+		}
+		if(Request::instance()->isPost()) {
+			$array=["code"=>"-1","msg"=>"购买失败"];
+			if(!session("userid")){
+				$array["code"]="-1";
+				$array["msg"]="请先登录!";
+				return $array;
+			}
+			$data1=Db::name('order')->where([
+				"cartid"=>$id,
+				"userid"=>session("userid"),
+			])->find();
+			if($data["buy"]=="1"){
+				$array["code"]="-1";
+				$array["msg"]="该产品已设置禁止购买!";
+				return $array;
+			}
+			if($data["inventory"] < 1){
+				$array["code"]="-1";
+				$array["msg"]="该产品已售完!";
+				return $array;
+			}
+			if($data["limits"]=="1" && $data1){
+				$array["code"]="-1";
+				$array["msg"]="该产品只允许订购一次!";
+				return $array;
+			}
+			$data2["user"]=input("user");
+			$data2["password"]=input("password");
+			$data2["time"]=input("time");
+			if($data2["user"]=="" || $data2["password"]=="" || $data2["time"]==""){
+				$array["code"]="-1";
+				$array["msg"]="必填参数不可为空!";
+				return $array;
+			}
+			if(!is_numeric($data2["time"])){
+				$array["code"]="-1";
+				$array["msg"]="购买时间只能填写数字!";
+				return $array;
+			}
+			if(floor($data2["time"])!=$data2["time"]){
+				$array["code"]="-1";
+				$array["msg"]="购买时间只能填写整数!";
+				return $array;
+			}
+			if($data2["time"]<1){
+				$array["code"]="-1";
+				$array["msg"]="购买时间不能小于1!";
+				return $array;
+			}
+			if($data["money"]=="0" && $data2["time"]!="1"){
+				$array["code"]="-1";
+				$array["msg"]="免费产品的购买时间只能填写1!";
+				return $array;
+			}
+			if($data["cycle"]=="unrestricted" && $data2["time"]!="1"){
+				$array["code"]="-1";
+				$array["msg"]="一次性产品的购买时间只能填写1!";
+				return $array;
+			}
+			$db=Db::name('user')->where('id',session("userid"))->find();
+			if(!$db){
+				$array["code"]="-1";
+				$array["msg"]="请先登录!";
+				return $array;
+			}
+			$money=$data["money"]*$data2["time"];
+			if(!($db["money"]>=$money || $data["firstmo"]=="1")){
+				$array["code"]="-1";
+				$array["msg"]="账户余额不足!";
+				return $array;
+			}
+			if($data["serverid"]==""){
+				$array["code"]="-1";
+				$array["msg"]="该产品没有配置服务器!";
+				return $array;
+			}
+			$data3=Db::name('server')->where("id",$data["serverid"])->find();
+			if(!$data3){
+				$array["code"]="-1";
+				$array["msg"]="产品关联的服务器不存在!";
+				return $array;
+			}
+			if($data3["serverplugins"]==""){
+				$array["code"]="-1";
+				$array["msg"]="该产品的服务器没有配置服务器插件!";
+				return $array;
+			}
+			$pluginFile=PATH."plugins/host/".$data3["serverplugins"]."/".$data3["serverplugins"].".php";
+			if(!file_exists($pluginFile)){
+				$array["code"]="-1";
+				$array["msg"]="服务器插件文件不存在!";
+				return $array;
+			}
+			include $pluginFile;
+			$times=0;
+			if($data["cycle"]=="month"){
+				$times=2592000*$data2["time"];
+			}elseif($data["cycle"]=="season"){
+				$times=7879680*$data2["time"];
+			}elseif($data["cycle"]=="year"){
+				$times=31536000*$data2["time"];
+			}elseif($data["cycle"]=="day"){
+				$times=86400*$data2["time"];
+			}elseif($data["cycle"]=="unrestricted"){
+				$times=3153600000*$data2["time"];
+			}
+			$function=$data3["serverplugins"]."_CreateAccount";
+			if(!function_exists($function)){
+				$array["code"]="-1";
+				$array["msg"]="服务器插件未实现开通接口!";
+				return $array;
+			}
+			$data4=@$function($data3,$data2,$data,$times);
+			if(!is_array($data4) || !isset($data4["code"])){
+				$array["code"]="-1";
+				$array["msg"]="开通失败，插件无有效返回!";
+				return $array;
+			}
+			if($data4["code"]=="1"){
+				if($data["firstmo"]!="1"){
+					$money1=round($db["money"]-$money,2);
+					Db::name('user')->where('id',session("userid"))->update(['money' =>$money1]);
+				}else{
+					$money="0";
+				}
+				Db::name('cart')->where('id',$data["id"])->update(['inventory' =>$data["inventory"]-1]);
+				Db::name('transaction')->insertGetId([
+					"userid"=>session("userid"),
+					"content"=>"购买产品,ID:".$data4["id"].",时长:".$data2["time"].",消费:".$money,
+					"time"=>time(),
+				]);
+				if($db["upperid"] && $money!="0"){
+					$upper=round($money*$this->web["affdiscount"],2);
+					$upperuser=Db::name('user')->where('id',$db["upperid"])->find();
+					if($upperuser){
+						Db::name('user')->where('id',$db["upperid"])->update([
+							'affmoney' =>round($upperuser["affmoney"]+$upper,2),
+						]);
+						Db::name('affsymoney')->insertGetId([
+							"information"=>"下级ID:".session("userid")."购买产品",
+							"money"=>$upper,
+							"userid"=>$db["upperid"],
+							"time"=>time(),
+						]);
+					}
+				}
+				if($this->web["email"]=="1"){
+					$db=Db::name('user')->where("id",session("userid"))->find();
+					if($db && $db["mail"]){
+						$this->email($db["mail"],"购买产品通知","你账号:".$db["user"]."在时间:".date("Y-m-d H:i:s")."在本站购买产品成功,id:".$data4["id"]."请登录产品管理查看!<br/><br/>");
+					}
+				}
+			}
+			return $data4;
+		}
 		return $this->fetch('/'.$this->web["template"].'/index/product',[
-		"cart"=>$data,
+			"product"=>$data,
 		]);
 	}
 

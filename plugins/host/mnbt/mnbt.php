@@ -135,7 +135,7 @@ $type="1";
 
     $result = @mnbt_CURL($datass);
     $result = @json_decode($result, true);
-    if ($result['code'] == '200') {
+    if (is_array($result) && isset($result['code']) && $result['code'] == '200') {
         //主机创建成功处理
         $data6 = Db::name('order')->insertGetId([
             "user" => $data2["user"],
@@ -161,7 +161,8 @@ $type="1";
         $array["id"] = $data6;
     } else {
         $array["code"] = "-1";
-        $array["msg"] = "创建失败" . $result["msg"];
+        $err = is_array($result) && isset($result["msg"]) ? $result["msg"] : "接口无响应或返回异常";
+        $array["msg"] = "创建失败" . $err;
     }
     return $array;
 }
