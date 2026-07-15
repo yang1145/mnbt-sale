@@ -13,148 +13,551 @@
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/static/css/animate.min.css">
 <link rel="stylesheet" type="text/css" href="/static/css/style.min.css">
+<style>
+:root {
+  --admin-sidebar-bg: #0b1a33;
+  --admin-sidebar-bg2: #122445;
+  --admin-accent: #2684ff;
+  --admin-accent-soft: rgba(38, 132, 255, 0.16);
+  --admin-text: #c7d2e5;
+  --admin-text-muted: #8b9bb8;
+  --admin-text-active: #ffffff;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f4f6f9;
+}
+.lyear-layout-sidebar {
+  background: linear-gradient(180deg, var(--admin-sidebar-bg) 0%, var(--admin-sidebar-bg2) 100%) !important;
+  box-shadow: 4px 0 24px rgba(9, 30, 66, 0.18);
+  border-right: 1px solid rgba(255,255,255,0.04);
+}
+.lyear-layout-sidebar-info {
+  background: transparent !important;
+}
+.sidebar-header {
+  height: 64px !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px !important;
+}
+.sidebar-header a {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  text-decoration: none !important;
+}
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.sidebar-brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0052cc 0%, #2684ff 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 6px 14px rgba(38, 132, 255, 0.35);
+  flex-shrink: 0;
+}
+.sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.sidebar-brand-text strong {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.sidebar-brand-text small {
+  color: var(--admin-text-muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+.sidebar-header a img {
+  display: none;
+}
+.nav-drawer {
+  padding: 12px 10px 20px !important;
+}
+.nav-group-label {
+  padding: 14px 14px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7c99;
+  list-style: none;
+  user-select: none;
+}
+/* 覆盖主题 absolute 图标布局，改用 flex 对齐 */
+.nav-drawer > li > a {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  color: var(--admin-text) !important;
+  border-radius: 10px !important;
+  border: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  margin: 2px 0 !important;
+  padding: 10px 14px !important;
+  min-height: 42px !important;
+  height: auto !important;
+  transition: background .18s ease, color .18s ease !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.nav-drawer > li > a > i {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  margin: 0 12px 0 0 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  color: var(--admin-text-muted) !important;
+  transition: color .18s ease;
+  flex-shrink: 0;
+}
+.nav-drawer > li > a > span {
+  flex: 1;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+.nav-drawer > li > a:hover {
+  background: rgba(255,255,255,0.06) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.nav-drawer > li > a:hover > i {
+  color: #fff !important;
+}
+/* 选中态：仅背景高亮，无左右蓝边 */
+.nav-drawer > li.active > a,
+.nav-drawer > .active > a,
+.nav-drawer > li.open > a,
+.nav-drawer > li.active > a:hover,
+.nav-drawer > .active > a:hover,
+.nav-drawer > li.open > a:hover,
+.nav-drawer > li.active > a:focus,
+.nav-drawer > .active > a:focus {
+  background: var(--admin-accent-soft) !important;
+  color: var(--admin-text-active) !important;
+  border: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+.nav-drawer > li.active > a > i,
+.nav-drawer > .active > a > i,
+.nav-drawer > li.open > a > i {
+  color: #7eb6ff !important;
+}
+.nav-drawer .nav-subnav {
+  background: transparent !important;
+  padding: 2px 0 6px 0 !important;
+}
+.nav-drawer .nav-subnav > li > a {
+  display: flex !important;
+  align-items: center !important;
+  color: var(--admin-text-muted) !important;
+  border-radius: 8px !important;
+  border: none !important;
+  margin: 1px 0 1px 12px !important;
+  padding: 8px 12px 8px 34px !important;
+  font-size: 13px !important;
+  position: relative;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.nav-drawer .nav-subnav > li > a::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #5a6d8c;
+  transform: translateY(-50%);
+}
+.nav-drawer .nav-subnav > li > a:hover,
+.nav-drawer .nav-subnav > li.active > a {
+  color: #fff !important;
+  background: rgba(255,255,255,0.06) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.nav-drawer .nav-subnav > li.active > a::before,
+.nav-drawer .nav-subnav > li > a:hover::before {
+  background: var(--admin-accent);
+}
+.nav-drawer .nav-item-has-subnav > a:after {
+  position: absolute !important;
+  top: 50% !important;
+  right: 14px !important;
+  transform: translateY(-50%);
+  margin: 0 !important;
+  color: var(--admin-text-muted) !important;
+  opacity: .8;
+}
+.sidebar-footer {
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  padding: 14px 12px !important;
+  background: transparent !important;
+}
+.sidebar-footer .copyright {
+  margin: 0 !important;
+  text-align: center;
+  font-size: 11px !important;
+  color: var(--admin-text-muted) !important;
+  line-height: 1.5;
+}
+.sidebar-footer .copyright a {
+  color: #9db4d8 !important;
+  text-decoration: none;
+}
+.sidebar-footer .copyright a:hover {
+  color: #fff !important;
+}
+.lyear-layout-header {
+  background: rgba(255,255,255,0.92) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e8ecf1 !important;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.04) !important;
+}
+.lyear-layout-header .navbar {
+  min-height: 64px;
+}
+.lyear-aside-toggler {
+  border-radius: 8px;
+  padding: 8px;
+  transition: background .15s ease;
+}
+.lyear-aside-toggler:hover {
+  background: #f0f3f7;
+}
+.lyear-layout-header .navbar-right .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px 6px 6px !important;
+  border-radius: 999px;
+  border: 1px solid #ebecf0;
+  background: #fff;
+  transition: all .15s ease;
+  text-decoration: none !important;
+  color: #172b4d !important;
+}
+.lyear-layout-header .navbar-right .dropdown-toggle:hover {
+  border-color: #b3d4ff;
+  box-shadow: 0 2px 8px rgba(0, 82, 204, 0.08);
+}
+.lyear-layout-header .navbar-right .avatar-md {
+  width: 34px !important;
+  height: 34px !important;
+  border: 2px solid #deebff;
+}
+.lyear-layout-header .dropdown-menu {
+  border: 1px solid #ebecf0;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(23, 43, 77, 0.12);
+  padding: 6px;
+  min-width: 180px;
+}
+.lyear-layout-header .dropdown-item {
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: #42526e;
+}
+.lyear-layout-header .dropdown-item i {
+  margin-right: 8px;
+  color: #6b778c;
+}
+.lyear-layout-header .dropdown-item:hover {
+  background: #f4f5f7;
+  color: #0052cc;
+}
+.lyear-layout-header .dropdown-item:hover i {
+  color: #0052cc;
+}
+.lyear-layout-content {
+  background: #f4f6f9;
+}
+/* ===== 侧栏收起态（汉堡键） ===== */
+@media (min-width: 1024px) {
+  .lyear-layout-sidebar-close .sidebar-header {
+    padding: 0 8px !important;
+  }
+  .lyear-layout-sidebar-close .sidebar-header a,
+  .lyear-layout-sidebar-close .sidebar-brand {
+    justify-content: center !important;
+    gap: 0 !important;
+  }
+  .lyear-layout-sidebar-close .sidebar-brand-text {
+    display: none !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    opacity: 0;
+  }
+  .lyear-layout-sidebar-close .sidebar-brand-icon {
+    margin: 0 !important;
+    flex-shrink: 0;
+  }
+  .lyear-layout-sidebar-close .nav-group-label {
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    border: 0 !important;
+  }
+  .lyear-layout-sidebar-close .nav-drawer {
+    padding: 10px 6px !important;
+  }
+  /* 收起：只显示居中图标（覆盖主题 padding-left:53px） */
+  .lyear-layout-sidebar-close .nav-drawer > li > a {
+    justify-content: center !important;
+    padding: 10px 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    min-height: 42px !important;
+    height: 42px !important;
+  }
+  .lyear-layout-sidebar-close .nav-drawer > li > a > i {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    margin: 0 !important;
+  }
+  .lyear-layout-sidebar-close .nav-drawer > li > a > span {
+    display: none !important;
+    width: 0 !important;
+    overflow: hidden !important;
+  }
+  .lyear-layout-sidebar-close .nav-drawer > li > a:after {
+    display: none !important;
+    content: none !important;
+  }
+  .lyear-layout-sidebar-close .nav-subnav {
+    display: none !important;
+  }
+
+  /* 悬停展开：与正常展开态完全一致 */
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .sidebar-header {
+    padding: 0 16px !important;
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .sidebar-header a,
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .sidebar-brand {
+    justify-content: flex-start !important;
+    gap: 10px !important;
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .sidebar-brand-text {
+    display: flex !important;
+    width: auto !important;
+    overflow: visible !important;
+    opacity: 1;
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .nav-group-label {
+    height: auto !important;
+    padding: 14px 14px 6px !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .nav-drawer {
+    padding: 12px 10px 20px !important;
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .nav-drawer > li > a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 10px 14px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    height: auto !important;
+    min-height: 42px !important;
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .nav-drawer > li > a > i {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    margin: 0 12px 0 0 !important;
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .nav-drawer > li > a > span {
+    display: inline !important;
+    width: auto !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .nav-drawer .nav-item-has-subnav > a:after {
+    display: block !important;
+    content: '\F0142' !important;
+    position: absolute !important;
+    top: 50% !important;
+    right: 14px !important;
+    transform: translateY(-50%);
+  }
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .nav-item-has-subnav.open > .nav-subnav,
+  .lyear-layout-sidebar-close .lyear-layout-sidebar:hover .nav-item-has-subnav.active > .nav-subnav {
+    display: block !important;
+  }
+}
+</style>
 </head>
 <body>
-<!--
-<div id="lyear-preloader" class="loading">
-  <div class="ctn-preloader">
-    <div class="round_spinner">
-      <div class="spinner"></div>
-      <img src="/static/assets/vendor/layer/theme/default/loading-2.gif" alt="">
-    </div>
-  </div>
-</div>
--->
 <div class="lyear-layout-web">
   <div class="lyear-layout-container">
     <!--左侧导航-->
     <aside class="lyear-layout-sidebar">
 
-      <!-- logo -->
       <div id="logo" class="sidebar-header">
-        <a href="/"><img src="/static/images/logo-sidebar.png"/></a>
+        <a href="/admin/index">
+          <div class="sidebar-brand">
+            <div class="sidebar-brand-icon"><i class="mdi mdi-server-network"></i></div>
+            <div class="sidebar-brand-text">
+              <strong>MNBT-SALE</strong>
+              <small>主机销售后台</small>
+            </div>
+          </div>
+        </a>
       </div>
       <div class="lyear-layout-sidebar-info lyear-scroll">
 
         <nav class="sidebar-main">
-
           <ul class="nav-drawer">
 
-            <li class="nav-item">
+            <li class="nav-group-label">概览</li>
+            <li class="nav-item" data-menu="index">
               <a href="/admin/index">
-                <i class="mdi mdi-home-circle-outline"></i>
+                <i class="mdi mdi-view-dashboard-outline"></i>
                 <span>控制台</span>
               </a>
             </li>
 
-
-            <li class="nav-item">
+            <li class="nav-group-label">业务</li>
+            <li class="nav-item" data-menu="user">
               <a href="/admin/user">
-                <i class="mdi mdi-account"></i>
+                <i class="mdi mdi-account-group-outline"></i>
                 <span>用户管理</span>
               </a>
             </li>
 
-            <li class="nav-item nav-item-has-subnav">
+            <li class="nav-item nav-item-has-subnav" data-menu="product,classification,server">
               <a href="javascript:void(0)">
-                <i class="mdi mdi-cart-outline"></i>
+                <i class="mdi mdi-cube-outline"></i>
                 <span>产品设置</span>
               </a>
               <ul class="nav nav-subnav">
-                <li> <a href="/admin/classification">分类</a> </li>
-                <li> <a href="/admin/product">产品</a> </li>
-                <li> <a href="/admin/server">服务器</a> </li>
+                <li data-menu="classification"><a href="/admin/classification">分类</a></li>
+                <li data-menu="product"><a href="/admin/product">产品</a></li>
+                <li data-menu="server"><a href="/admin/server">服务器</a></li>
               </ul>
             </li>
 
-
-
-            <li class="nav-item">
+            <li class="nav-item" data-menu="order">
               <a href="/admin/order">
-                <i class="mdi mdi-order-bool-ascending"></i>
+                <i class="mdi mdi-clipboard-text-outline"></i>
                 <span>订单管理</span>
               </a>
             </li>
 
-
-
-            <li class="nav-item nav-item-has-subnav">
+            <li class="nav-item nav-item-has-subnav" data-menu="transferrecord,pay,transaction">
               <a href="javascript:void(0)">
-                <i class="mdi mdi-account"></i>
+                <i class="mdi mdi-history"></i>
                 <span>客户记录</span>
               </a>
               <ul class="nav nav-subnav">
-                <li> <a href="/admin/transferrecord">产品过户记录</a> </li>
-                <li> <a href="/admin/pay">充值记录</a> </li>
-                <li> <a href="/admin/transaction">消费记录</a> </li>
+                <li data-menu="transferrecord"><a href="/admin/transferrecord">产品过户记录</a></li>
+                <li data-menu="pay"><a href="/admin/pay">充值记录</a></li>
+                <li data-menu="transaction"><a href="/admin/transaction">消费记录</a></li>
               </ul>
             </li>
-            
-            
-            <li class="nav-item">
+
+            <li class="nav-item" data-menu="ticket">
               <a href="/admin/ticket">
-                <i class="mdi mdi-message-minus-outline"></i>
+                <i class="mdi mdi-headset"></i>
                 <span>工单管理</span>
               </a>
             </li>
 
-
-            <li class="nav-item">
+            <li class="nav-group-label">运营</li>
+            <li class="nav-item" data-menu="announcement">
               <a href="/admin/announcement">
-                <i class="mdi mdi-message-text-outline"></i>
+                <i class="mdi mdi-bullhorn-outline"></i>
                 <span>网站公告</span>
               </a>
             </li>
 
-
-            <li class="nav-item nav-item-has-subnav">
+            <li class="nav-item nav-item-has-subnav" data-menu="aff,affsy">
               <a href="javascript:void(0)">
-                <i class="mdi mdi-ticket"></i>
-                <span>aff</span>
+                <i class="mdi mdi-ticket-percent-outline"></i>
+                <span>推广 AFF</span>
               </a>
               <ul class="nav nav-subnav">
-                <li> <a href="/admin/aff">aff提现记录</a> </li>
-                <li> <a href="/admin/affsy">aff收益记录</a> </li>
+                <li data-menu="aff"><a href="/admin/aff">提现记录</a></li>
+                <li data-menu="affsy"><a href="/admin/affsy">收益记录</a></li>
               </ul>
             </li>
-            
-            
-            
-            <li class="nav-item">
+
+            <li class="nav-item" data-menu="pays">
               <a href="/admin/pays">
-                <i class="mdi mdi-currency-usd"></i>
-                <span>支付</span>
+                <i class="mdi mdi-credit-card-outline"></i>
+                <span>支付配置</span>
               </a>
             </li>
 
+            <li class="nav-group-label">系统</li>
 {if $templateset=="1"}
-            <li class="nav-item">
+            <li class="nav-item" data-menu="templateset">
               <a href="/admin/templateset">
-                <i class="mdi mdi-cog"></i>
-                <span>前台模板设置</span>
+                <i class="mdi mdi-palette-outline"></i>
+                <span>前台模板</span>
               </a>
             </li>
 {/if}
-
-
-
-            <li class="nav-item">
+            <li class="nav-item" data-menu="set">
               <a href="/admin/set">
-                <i class="mdi mdi-cog"></i>
+                <i class="mdi mdi-cog-outline"></i>
                 <span>网站设置</span>
               </a>
             </li>
-
-
-
-
 
           </ul>
         </nav>
 
         <div class="sidebar-footer">
           <p class="copyright">
-            <span>Copyright &copy; 2026</span>
+            <span>Copyright &copy; 2026</span><br>
             <a target="_blank" href="https://github.com/yang1145/mnbt-sale">MNBT-SALE</a>
           </p>
         </div>
@@ -165,9 +568,7 @@
 
     <!--头部信息-->
     <header class="lyear-layout-header">
-
       <nav class="navbar">
-
         <div class="navbar-left">
           <div class="lyear-aside-toggler">
             <span class="lyear-toggler-bar"></span>
@@ -177,18 +578,15 @@
         </div>
 
         <ul class="navbar-right d-flex align-items-center">
-
-
-          <!--个人头像内容-->
           <li class="dropdown">
             <a href="javascript:void(0)" data-bs-toggle="dropdown" class="dropdown-toggle">
               <img class="avatar-md rounded-circle" src="http://q1.qlogo.cn/g?b=qq&nk={$user.qq}&s=100" alt="{$user.name}" />
-              <span style="margin-left: 10px;">{$user.name}</span>
+              <span>{$user.name}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
                 <a class="dropdown-item" href="/admin/info">
-                  <i class="mdi mdi-account"></i>
+                  <i class="mdi mdi-account-circle-outline"></i>
                   <span>个人信息</span>
                 </a>
               </li>
@@ -207,10 +605,36 @@
               </li>
             </ul>
           </li>
-          <!--End 个人头像内容-->
         </ul>
-
       </nav>
-
     </header>
     <!--End 头部信息-->
+<script>
+(function () {
+  function markActive() {
+    var path = (location.pathname || '').replace(/\/+$/, '') || '/';
+    var parts = path.split('/').filter(Boolean);
+    // /admin/xxx/...
+    var key = parts[0] === 'admin' ? (parts[1] || 'index') : '';
+    if (!key) key = 'index';
+    // pay vs pays 精确匹配
+    var items = document.querySelectorAll('.nav-drawer [data-menu]');
+    items.forEach(function (el) {
+      var keys = (el.getAttribute('data-menu') || '').split(',');
+      var hit = keys.indexOf(key) !== -1;
+      if (hit) {
+        el.classList.add('active');
+        var parent = el.closest('.nav-item-has-subnav');
+        if (parent) {
+          parent.classList.add('active', 'open');
+        }
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', markActive);
+  } else {
+    markActive();
+  }
+})();
+</script>

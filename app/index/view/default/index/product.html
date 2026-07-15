@@ -317,7 +317,11 @@
 
             fetch('', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
                 body: 'user=' + encodeURIComponent(user) + '&password=' + encodeURIComponent(password) + '&time=' + encodeURIComponent(time)
             })
             .then(function(res) {
@@ -325,7 +329,12 @@
                     try {
                         return JSON.parse(text);
                     } catch (err) {
-                        throw new Error(res.status === 500 ? '服务器内部错误(500)' : ('响应异常: ' + res.status));
+                        var hint = text ? String(text).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() : '';
+                        if (hint.length > 160) hint = hint.slice(0, 160) + '...';
+                        if (res.status === 500) {
+                            throw new Error(hint ? ('服务器错误: ' + hint) : '服务器内部错误(500)');
+                        }
+                        throw new Error(hint ? ('响应异常: ' + hint) : ('响应异常: ' + res.status));
                     }
                 });
             })

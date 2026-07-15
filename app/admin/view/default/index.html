@@ -1,122 +1,438 @@
 {include file="default/header" title="控制台"/}
-<!--页面主要内容-->
-<main class="lyear-layout-content">
+<style>
+.dash-page {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.dash-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 20px 22px;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at top right, rgba(0, 82, 204, 0.1), transparent 55%),
+    linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%);
+  border: 1px solid rgba(223, 225, 230, 0.9);
+  box-shadow: 0 4px 16px rgba(23, 43, 77, 0.04);
+}
+.dash-hero h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #172b4d;
+  letter-spacing: -0.02em;
+}
+.dash-hero p {
+  margin: 0;
+  font-size: 13px;
+  color: #6b778c;
+}
+.dash-hero-time {
+  font-size: 12px;
+  color: #8993a4;
+  background: #f4f5f7;
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  border: 0;
+  border-radius: 16px;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(23, 43, 77, 0.12);
+  transition: transform .2s ease, box-shadow .2s ease;
+  margin-bottom: 20px;
+  min-height: 118px;
+}
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(23, 43, 77, 0.16);
+}
+.stat-card .card-body {
+  padding: 20px 22px;
+  position: relative;
+  z-index: 1;
+}
+.stat-card .stat-label {
+  font-size: 13px;
+  opacity: .9;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.stat-card .stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.stat-card .stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.22);
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.stat-card::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  bottom: -24px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  z-index: 0;
+}
+.stat-card-blue {
+  background: linear-gradient(135deg, #0052cc 0%, #2684ff 100%);
+}
+.stat-card-green {
+  background: linear-gradient(135deg, #006644 0%, #36b37e 100%);
+}
+.stat-card-red {
+  background: linear-gradient(135deg, #bf2600 0%, #ff5630 100%);
+}
+.stat-card-purple {
+  background: linear-gradient(135deg, #403294 0%, #8777d9 100%);
+}
+.panel-card {
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(23, 43, 77, 0.05);
+  border: 1px solid rgba(223, 225, 230, 0.9);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.panel-card .card-header {
+  background: #fff;
+  border-bottom: 1px solid #ebecf0;
+  padding: 16px 20px;
+}
+.panel-card .card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #172b4d;
+}
+.panel-card .card-body {
+  padding: 20px;
+}
+.welcome-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0052cc 0%, #0747a6 55%, #2684ff 100%);
+  color: #fff;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px rgba(0, 82, 204, 0.22);
+}
+.welcome-banner-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.welcome-banner h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.welcome-banner p {
+  margin: 0;
+  font-size: 13px;
+  opacity: .88;
+}
+.guide-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 768px) {
+  .guide-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.guide-item {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f7f9fc;
+  border: 1px solid #ebecf0;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.guide-item:hover {
+  border-color: #b3d4ff;
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.06);
+}
+.guide-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0052cc, #2684ff);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.guide-item h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #172b4d;
+}
+.guide-item p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #6b778c;
+}
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (min-width: 992px) {
+  .quick-links {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.quick-link {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #ebecf0;
+  text-decoration: none !important;
+  color: #172b4d;
+  transition: all .18s ease;
+}
+.quick-link:hover {
+  border-color: #4c9aff;
+  box-shadow: 0 6px 16px rgba(0, 82, 204, 0.08);
+  transform: translateY(-2px);
+  color: #0052cc;
+}
+.quick-link i {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: #deebff;
+  color: #0052cc;
+}
+.quick-link span {
+  font-size: 13px;
+  font-weight: 600;
+}
+.tip-note {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff7e6;
+  border: 1px solid #ffe0a3;
+  color: #974f0c;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.tip-note i {
+  margin-right: 4px;
+}
+</style>
 
+<main class="lyear-layout-content dash-page">
   <div class="container-fluid">
 
-    <div class="row">
-
-
-
-      <div class="col-md-6 col-xl-6">
-        <div class="card bg-primary text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <span class="avatar-md rounded-circle bg-white bg-opacity-25 avatar-box">
-                <i class="mdi mdi-currency-cny fs-4"></i>
-              </span>
-              <span class="fs-4">{$paymoney}</span>
-            </div>
-            <div class="text-end">总收入</div>
-          </div>
-        </div>
+    <div class="dash-hero">
+      <div>
+        <h2>控制台</h2>
+        <p>欢迎回来，这里是销售系统运营概览</p>
       </div>
-
-      <div class="col-md-6 col-xl-6">
-        <div class="card bg-success text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <span class="avatar-md rounded-circle bg-white bg-opacity-25 avatar-box">
-                <i class="mdi mdi-currency-cny fs-4"></i>
-              </span>
-              <span class="fs-4">{$paymoney1}</span>
-            </div>
-            <div class="text-end">今日收入</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-xl-6">
-        <div class="card bg-danger text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <span class="avatar-md rounded-circle bg-white bg-opacity-25 avatar-box">
-                <i class="mdi mdi-account fs-4"></i>
-              </span>
-              <span class="fs-4">{$usercount}</span>
-            </div>
-            <div class="text-end">用户总数</div>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="col-md-6 col-xl-6">
-        <div class="card bg-purple text-white">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <span class="avatar-md rounded-circle bg-white bg-opacity-25 avatar-box">
-                <i class="mdi mdi-comment-outline fs-4"></i>
-              </span>
-              <span class="fs-4">{$ticketcount}</span>
-            </div>
-            <div class="text-end">待处理工单</div>
-          </div>
-        </div>
-      </div>
-
+      <div class="dash-hero-time" id="dash-clock">--</div>
     </div>
 
     <div class="row">
-
-      <div class="col-lg-12">
-        <div class="card">
-          <header class="card-header">
-            <div class="card-title">介绍/教程</div>
-          </header>
-          <div class="card-body">
-
-
-
-            <div class="lyear-timeline-item-content">
-              <div class="card bg-success">
-                <div class="card-body text-white">
-                  <h2>欢迎使用虚拟主机销售系统</h2>
-                </div>
-              </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card stat-card-blue">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <div class="stat-label">总收入</div>
+              <div class="stat-value">¥ {$paymoney}</div>
             </div>
-
-            <div class="lyear-timeline-item-content">
-              <div class="card bg-success">
-                <div class="card-body text-white">
-                  <h2>梦奈宝塔对接教程</h2>
-                 <p>主机填--梦奈宝塔的地址</p>
-                 <p>安全码填--梦奈宝塔系统api</p>
-
-                 <p>账号填--梦奈宝塔 宝塔编号(梦奈宝塔里面的服务器的宝塔编号)</p>
-                 <p>密码填--调用密钥 (梦奈宝塔里面的服务器的调用秘钥)</p>
-                 <p>如果地址不是80端口就填一下端口--如果地址是https就开启ssl</p>
-                </div>
-              </div>
-            </div>
-
-
-
-
-            </ul>
-
+            <div class="stat-icon"><i class="mdi mdi-currency-cny"></i></div>
           </div>
         </div>
       </div>
-      
+      <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card stat-card-green">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <div class="stat-label">今日收入</div>
+              <div class="stat-value">¥ {$paymoney1}</div>
+            </div>
+            <div class="stat-icon"><i class="mdi mdi-chart-line"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card stat-card-red">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <div class="stat-label">用户总数</div>
+              <div class="stat-value">{$usercount}</div>
+            </div>
+            <div class="stat-icon"><i class="mdi mdi-account-group"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="card stat-card stat-card-purple">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <div class="stat-label">待处理工单</div>
+              <div class="stat-value">{$ticketcount}</div>
+            </div>
+            <div class="stat-icon"><i class="mdi mdi-headset"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card panel-card">
+          <header class="card-header">
+            <div class="card-title">对接指南 · 梦奈宝塔</div>
+          </header>
+          <div class="card-body">
+            <div class="welcome-banner">
+              <div class="welcome-banner-icon"><i class="mdi mdi-rocket-launch-outline"></i></div>
+              <div>
+                <h3>欢迎使用虚拟主机销售系统</h3>
+                <p>按下列字段配置服务器即可完成梦奈宝塔对接</p>
+              </div>
+            </div>
+            <div class="guide-grid">
+              <div class="guide-item">
+                <div class="guide-num">1</div>
+                <div>
+                  <h4>主机</h4>
+                  <p>填写梦奈宝塔的访问地址（域名或 IP）</p>
+                </div>
+              </div>
+              <div class="guide-item">
+                <div class="guide-num">2</div>
+                <div>
+                  <h4>安全码</h4>
+                  <p>填写梦奈宝塔系统 API 安全码</p>
+                </div>
+              </div>
+              <div class="guide-item">
+                <div class="guide-num">3</div>
+                <div>
+                  <h4>账号</h4>
+                  <p>填写宝塔编号（梦奈宝塔中对应服务器的编号）</p>
+                </div>
+              </div>
+              <div class="guide-item">
+                <div class="guide-num">4</div>
+                <div>
+                  <h4>密码</h4>
+                  <p>填写调用密钥（该服务器的调用秘钥）</p>
+                </div>
+              </div>
+            </div>
+            <div class="tip-note">
+              <i class="mdi mdi-information-outline"></i>
+              非 80 端口请填写端口；若地址为 HTTPS，请开启 SSL。
+            </div>
+          </div>
+        </div>
+      </div>
 
-
+      <div class="col-lg-4">
+        <div class="card panel-card">
+          <header class="card-header">
+            <div class="card-title">快捷入口</div>
+          </header>
+          <div class="card-body">
+            <div class="quick-links">
+              <a class="quick-link" href="/admin/product">
+                <i class="mdi mdi-package-variant-closed"></i>
+                <span>产品管理</span>
+              </a>
+              <a class="quick-link" href="/admin/server">
+                <i class="mdi mdi-server"></i>
+                <span>服务器</span>
+              </a>
+              <a class="quick-link" href="/admin/order">
+                <i class="mdi mdi-clipboard-text-outline"></i>
+                <span>订单管理</span>
+              </a>
+              <a class="quick-link" href="/admin/ticket">
+                <i class="mdi mdi-message-text-outline"></i>
+                <span>工单中心</span>
+              </a>
+              <a class="quick-link" href="/admin/user">
+                <i class="mdi mdi-account-multiple"></i>
+                <span>用户管理</span>
+              </a>
+              <a class="quick-link" href="/admin/pay">
+                <i class="mdi mdi-credit-card-outline"></i>
+                <span>支付记录</span>
+              </a>
+              <a class="quick-link" href="/admin/set">
+                <i class="mdi mdi-cog-outline"></i>
+                <span>系统设置</span>
+              </a>
+              <a class="quick-link" href="/admin/announcement">
+                <i class="mdi mdi-bullhorn-outline"></i>
+                <span>公告管理</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
-
 </main>
-<!--End 页面主要内容-->
+<script>
+(function () {
+  function pad(n) { return n < 10 ? '0' + n : n; }
+  function tick() {
+    var d = new Date();
+    var el = document.getElementById('dash-clock');
+    if (!el) return;
+    el.textContent = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
+      + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
 {include file="default/footer" /}

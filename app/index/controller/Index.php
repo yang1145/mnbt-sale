@@ -654,99 +654,68 @@ $array["msg"]="未开启邮箱通知!";
 			$this->redirect('/cart');
 		}
 		if(Request::instance()->isPost()) {
+			try {
 			$array=["code"=>"-1","msg"=>"购买失败"];
 			if(!session("userid")){
-				$array["code"]="-1";
-				$array["msg"]="请先登录!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"请先登录!"]);
 			}
 			$data1=Db::name('order')->where([
 				"cartid"=>$id,
 				"userid"=>session("userid"),
 			])->find();
 			if($data["buy"]=="1"){
-				$array["code"]="-1";
-				$array["msg"]="该产品已设置禁止购买!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"该产品已设置禁止购买!"]);
 			}
 			if($data["inventory"] < 1){
-				$array["code"]="-1";
-				$array["msg"]="该产品已售完!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"该产品已售完!"]);
 			}
 			if($data["limits"]=="1" && $data1){
-				$array["code"]="-1";
-				$array["msg"]="该产品只允许订购一次!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"该产品只允许订购一次!"]);
 			}
 			$data2["user"]=input("user");
 			$data2["password"]=input("password");
 			$data2["time"]=input("time");
 			if($data2["user"]=="" || $data2["password"]=="" || $data2["time"]==""){
-				$array["code"]="-1";
-				$array["msg"]="必填参数不可为空!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"必填参数不可为空!"]);
 			}
 			if(!is_numeric($data2["time"])){
-				$array["code"]="-1";
-				$array["msg"]="购买时间只能填写数字!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"购买时间只能填写数字!"]);
 			}
 			if(floor($data2["time"])!=$data2["time"]){
-				$array["code"]="-1";
-				$array["msg"]="购买时间只能填写整数!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"购买时间只能填写整数!"]);
 			}
 			if($data2["time"]<1){
-				$array["code"]="-1";
-				$array["msg"]="购买时间不能小于1!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"购买时间不能小于1!"]);
 			}
 			if($data["money"]=="0" && $data2["time"]!="1"){
-				$array["code"]="-1";
-				$array["msg"]="免费产品的购买时间只能填写1!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"免费产品的购买时间只能填写1!"]);
 			}
 			if($data["cycle"]=="unrestricted" && $data2["time"]!="1"){
-				$array["code"]="-1";
-				$array["msg"]="一次性产品的购买时间只能填写1!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"一次性产品的购买时间只能填写1!"]);
 			}
 			$db=Db::name('user')->where('id',session("userid"))->find();
 			if(!$db){
-				$array["code"]="-1";
-				$array["msg"]="请先登录!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"请先登录!"]);
 			}
 			$money=$data["money"]*$data2["time"];
 			if(!($db["money"]>=$money || $data["firstmo"]=="1")){
-				$array["code"]="-1";
-				$array["msg"]="账户余额不足!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"账户余额不足!"]);
 			}
 			if($data["serverid"]==""){
-				$array["code"]="-1";
-				$array["msg"]="该产品没有配置服务器!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"该产品没有配置服务器!"]);
 			}
 			$data3=Db::name('server')->where("id",$data["serverid"])->find();
 			if(!$data3){
-				$array["code"]="-1";
-				$array["msg"]="产品关联的服务器不存在!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"产品关联的服务器不存在!"]);
 			}
 			if($data3["serverplugins"]==""){
-				$array["code"]="-1";
-				$array["msg"]="该产品的服务器没有配置服务器插件!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"该产品的服务器没有配置服务器插件!"]);
 			}
 			$pluginFile=PATH."plugins/host/".$data3["serverplugins"]."/".$data3["serverplugins"].".php";
 			if(!file_exists($pluginFile)){
-				$array["code"]="-1";
-				$array["msg"]="服务器插件文件不存在!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"服务器插件文件不存在!"]);
 			}
-			include $pluginFile;
+			include_once $pluginFile;
 			$times=0;
 			if($data["cycle"]=="month"){
 				$times=2592000*$data2["time"];
@@ -761,17 +730,13 @@ $array["msg"]="未开启邮箱通知!";
 			}
 			$function=$data3["serverplugins"]."_CreateAccount";
 			if(!function_exists($function)){
-				$array["code"]="-1";
-				$array["msg"]="服务器插件未实现开通接口!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"服务器插件未实现开通接口!"]);
 			}
-			$data4=@$function($data3,$data2,$data,$times);
+			$data4=$function($data3,$data2,$data,$times);
 			if(!is_array($data4) || !isset($data4["code"])){
-				$array["code"]="-1";
-				$array["msg"]="开通失败，插件无有效返回!";
-				return $array;
+				return json(["code"=>"-1","msg"=>"开通失败，插件无有效返回!"]);
 			}
-			if($data4["code"]=="1"){
+			if($data4["code"]=="1" || $data4["code"]===1){
 				if($data["firstmo"]!="1"){
 					$money1=round($db["money"]-$money,2);
 					Db::name('user')->where('id',session("userid"))->update(['money' =>$money1]);
@@ -784,7 +749,7 @@ $array["msg"]="未开启邮箱通知!";
 					"content"=>"购买产品,ID:".$data4["id"].",时长:".$data2["time"].",消费:".$money,
 					"time"=>time(),
 				]);
-				if($db["upperid"] && $money!="0"){
+				if(!empty($db["upperid"]) && $money!="0" && isset($this->web["affdiscount"])){
 					$upper=round($money*$this->web["affdiscount"],2);
 					$upperuser=Db::name('user')->where('id',$db["upperid"])->find();
 					if($upperuser){
@@ -799,14 +764,23 @@ $array["msg"]="未开启邮箱通知!";
 						]);
 					}
 				}
-				if($this->web["email"]=="1"){
+				if(isset($this->web["email"]) && $this->web["email"]=="1"){
 					$db=Db::name('user')->where("id",session("userid"))->find();
-					if($db && $db["mail"]){
-						$this->email($db["mail"],"购买产品通知","你账号:".$db["user"]."在时间:".date("Y-m-d H:i:s")."在本站购买产品成功,id:".$data4["id"]."请登录产品管理查看!<br/><br/>");
+					if($db && !empty($db["mail"])){
+						try {
+							$this->email($db["mail"],"购买产品通知","你账号:".$db["user"]."在时间:".date("Y-m-d H:i:s")."在本站购买产品成功,id:".$data4["id"]."请登录产品管理查看!<br/><br/>");
+						} catch (\Exception $mailEx) {
+						}
 					}
 				}
 			}
-			return $data4;
+			return json($data4);
+			} catch (\Exception $e) {
+				return json([
+					"code"=>"-1",
+					"msg"=>"开通异常: ".$e->getMessage(),
+				]);
+			}
 		}
 		return $this->fetch('/'.$this->web["template"].'/index/product',[
 			"product"=>$data,
@@ -987,10 +961,10 @@ if($web["emailsecure"]){
 	$array["code"]="1";
 	$array["msg"]="邮箱发送成功!";
 return $array;
-} catch (phpmailerException $e) {
+} catch (\Exception $e) {
 	$array["code"]="-1";
-	$array["msg"]="邮箱发送失败:".$e->errorMessage();
-return $atray;
+	$array["msg"]="邮箱发送失败:".$e->getMessage();
+	return $array;
 }
 }
 

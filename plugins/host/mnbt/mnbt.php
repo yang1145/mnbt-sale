@@ -35,12 +35,8 @@ return $data;
 //控制面板
 function mnbt_ClientArea($b, $a, $data)
 {
-    if ($b["ssl"] == "1") {
-        $ssl = "https://";
-    } else {
-        $ssl = "http://";
-    }
-    $url = $ssl . $b["host"] . ":" . $b["port"] . "/user/idcdl.php?gn=logine";
+    $endpoint = mnbt_parseHost($b);
+    $url = $endpoint["base"] . "/user/idcdl.php?gn=logine";
     $text = "
 <form action='" . $url . "' method='post'" . ">
 <input type='hidden'name='username'value='" . $data["user"] . "'/>
@@ -103,40 +99,99 @@ $mnvs=$data3["data1"];
     return $data;
 }
 
+// 规范化主机地址：去掉 http(s)://、路径、末尾斜杠，并解析端口/SSL
+function mnbt_parseHost($data3)
+{
+    $host = isset($data3["host"]) ? trim($data3["host"]) : "";
+    $port = isset($data3["port"]) ? trim((string)$data3["port"]) : "";
+    $ssl = isset($data3["ssl"]) ? (string)$data3["ssl"] : "0";
+
+    $host = preg_replace('#^\s*https?://#i', '', $host);
+    $host = preg_replace('#/.*$#', '', $host);
+    $host = rtrim($host, "/");
+
+    // host:port 形式
+    if (preg_match('/^\[(.+)\]:(\d+)$/', $host, $m)) {
+        // IPv6 [addr]:port
+        $host = $m[1];
+        if ($port === "" || $port === "0") {
+            $port = $m[2];
+        }
+    } elseif (preg_match('/^([^:]+):(\d+)$/', $host, $m)) {
+        $host = $m[1];
+        if ($port === "" || $port === "0") {
+            $port = $m[2];
+        }
+    }
+
+    // 原始 host 含 https 时自动开 SSL
+    if (isset($data3["host"]) && stripos($data3["host"], "https://") === 0) {
+        $ssl = "1";
+    }
+
+    if ($port === "" || $port === "0") {
+        $port = ($ssl === "1") ? "443" : "80";
+    }
+
+    $scheme = ($ssl === "1") ? "https://" : "http://";
+    $base = $scheme . $host . ":" . $port;
+
+    return [
+        "host" => $host,
+        "port" => $port,
+        "ssl" => $ssl,
+        "base" => $base,
+        "api" => $base . "/api/api.php",
+    ];
+}
+
 //开通主机
 function mnbt_CreateAccount($data3, $data2, $data4, $times)
 {
-    if ($data3["ssl"] == "1") {
-        $ssl = "https://";
-    } else {
-        $ssl = "http://";
+    try {
+    if (empty($data3["host"])) {
+        return ["code" => "-1", "msg" => "创建失败：服务器主机地址未配置"];
     }
-    $api = $ssl . $data3["host"] . ":" . $data3["port"] . "/api/api.php";
-if($data4["data1"]=="虚拟主机"){
-$type="2";
-}else{
-$type="1";
-}
+    if (!function_exists('curl_init')) {
+        return ["code" => "-1", "msg" => "创建失败：服务器未安装 PHP curl 扩展"];
+    }
+    $endpoint = mnbt_parseHost($data3);
+    if ($endpoint["host"] === "" || $endpoint["host"] === "http" || $endpoint["host"] === "https") {
+        return ["code" => "-1", "msg" => "创建失败：主机地址填写错误，请只填域名或IP，不要带 http://"];
+    }
+    if (isset($data4["data1"]) && $data4["data1"] == "虚拟主机") {
+        $type = "2";
+    } else {
+        $type = "1";
+    }
     $datass = [
-        'url' => $api . '?gn=kt',
+        'url' => $endpoint["api"] . '?gn=kt',
         'data' => [
             'username' => $data2["user"],
             'password' => $data2["password"],
-            'webdx' => $data4["data2"],
-            'sqldx' => $data4["data3"],
-            'sizemax' => $data4["data4"],
+            'webdx' => isset($data4["data2"]) ? $data4["data2"] : '',
+            'sqldx' => isset($data4["data3"]) ? $data4["data3"] : '',
+            'sizemax' => isset($data4["data4"]) ? $data4["data4"] : '',
             'type' => $type,
-            'ymbds' => $data4["data5"],
+            'ymbds' => isset($data4["data5"]) ? $data4["data5"] : '',
             'dqtime' => "0",
         ]
     ];
 
     $datass = mnbt_notnulldata($datass, $data3);
 
-    $result = @mnbt_CURL($datass);
-    $result = @json_decode($result, true);
-    if (is_array($result) && isset($result['code']) && $result['code'] == '200') {
-        //主机创建成功处理
+    $raw = mnbt_CURL($datass);
+    if ($raw === false || $raw === null || $raw === '') {
+        return ["code" => "-1", "msg" => "创建失败：无法连接梦奈宝塔接口(" . $endpoint["api"] . ")，请检查主机/端口/SSL"];
+    }
+    if ($raw === 'URL ERROR') {
+        return ["code" => "-1", "msg" => "创建失败：接口地址无效"];
+    }
+    if (is_string($raw) && strpos($raw, 'CURL_ERROR:') === 0) {
+        return ["code" => "-1", "msg" => "创建失败：" . $raw . "（目标: " . $endpoint["api"] . "）"];
+    }
+    $result = json_decode($raw, true);
+    if (is_array($result) && isset($result['code']) && (string)$result['code'] === '200') {
         $data6 = Db::name('order')->insertGetId([
             "user" => $data2["user"],
             "password" => $data2["password"],
@@ -161,24 +216,26 @@ $type="1";
         $array["id"] = $data6;
     } else {
         $array["code"] = "-1";
-        $err = is_array($result) && isset($result["msg"]) ? $result["msg"] : "接口无响应或返回异常";
-        $array["msg"] = "创建失败" . $err;
+        if (is_array($result) && isset($result["msg"])) {
+            $err = $result["msg"];
+        } else {
+            $snippet = is_string($raw) ? mb_substr(strip_tags($raw), 0, 120) : "接口无响应或返回异常";
+            $err = $snippet !== '' ? $snippet : "接口无响应或返回异常";
+        }
+        $array["msg"] = "创建失败：" . $err;
     }
     return $array;
+    } catch (\Exception $e) {
+        return ["code" => "-1", "msg" => "创建异常：" . $e->getMessage()];
+    }
 }
 
 //暂停
 function mnbt_SuspendAccount($data3, $order)
 {
-    if ($data3["ssl"] == "1") {
-        $ssl = "https://";
-    } else {
-        $ssl = "http://";
-    }
-    $api = $ssl . $data3["host"] . ":" . $data3["port"] . "/api/api.php";
-
+    $endpoint = mnbt_parseHost($data3);
     $datass = [
-        'url' => $api . '?gn=zt',
+        'url' => $endpoint["api"] . '?gn=zt',
         'data' => [
             'username' => $order["user"]
         ]
@@ -188,22 +245,17 @@ function mnbt_SuspendAccount($data3, $order)
 
     $result = @mnbt_CURL($datass);
     $result = @json_decode($result, true);
-    if ($result['code'] == '200') return ['code' => 1, 'msg' => "暂停成功"];
-    else return ['code' => -1, 'msg' => "暂停失败：{$result['msg']}"];
+    if (is_array($result) && isset($result['code']) && $result['code'] == '200') return ['code' => 1, 'msg' => "暂停成功"];
+    $msg = is_array($result) && isset($result['msg']) ? $result['msg'] : '接口异常';
+    return ['code' => -1, 'msg' => "暂停失败：{$msg}"];
 }
 
 //解除暂停
 function mnbt_UnsuspendAccount($data3, $data4)
 {
-    if ($data3["ssl"] == "1") {
-        $ssl = "https://";
-    } else {
-        $ssl = "http://";
-    }
-    $api = $ssl . $data3["host"] . ":" . $data3["port"] . "/api/api.php";
-
+    $endpoint = mnbt_parseHost($data3);
     $datass = [
-        'url' => $api . '?gn=jc',
+        'url' => $endpoint["api"] . '?gn=jc',
         'data' => [
             'username' => $data4["user"]
         ]
@@ -213,22 +265,17 @@ function mnbt_UnsuspendAccount($data3, $data4)
 
     $result = @mnbt_CURL($datass);
     $result = @json_decode($result, true);
-    if ($result['code'] == '200') return ['code' => 1, 'msg' => "解除暂停成功"];
-    else return ['code' => -1, 'msg' => "解除暂停失败：{$result['msg']}"];
+    if (is_array($result) && isset($result['code']) && $result['code'] == '200') return ['code' => 1, 'msg' => "解除暂停成功"];
+    $msg = is_array($result) && isset($result['msg']) ? $result['msg'] : '接口异常';
+    return ['code' => -1, 'msg' => "解除暂停失败：{$msg}"];
 }
 
 //终止
 function mnbt_TerminateAccount($data3, $order)
 {
-    if ($data3["ssl"] == "1") {
-        $ssl = "https://";
-    } else {
-        $ssl = "http://";
-    }
-    $api = $ssl . $data3["host"] . ":" . $data3["port"] . "/api/api.php";
-
+    $endpoint = mnbt_parseHost($data3);
     $datass = [
-        'url' => $api . '?gn=tz',
+        'url' => $endpoint["api"] . '?gn=tz',
         'data' => [
             'username' => $order["user"]
         ]
@@ -238,22 +285,17 @@ function mnbt_TerminateAccount($data3, $order)
 
     $result = @mnbt_CURL($datass);
     $result = @json_decode($result, true);
-    if ($result['code'] == '200') return ['code' => 1, 'msg' => "终止完成，主机删除成功！"];
-    else return ['code' => -1, 'msg' => "终止完成，主机删除失败：{$result['msg']}"];
+    if (is_array($result) && isset($result['code']) && $result['code'] == '200') return ['code' => 1, 'msg' => "终止完成，主机删除成功！"];
+    $msg = is_array($result) && isset($result['msg']) ? $result['msg'] : '接口异常';
+    return ['code' => -1, 'msg' => "终止完成，主机删除失败：{$msg}"];
 }
 
 //重置密码
 function mnbt_ChangePassword($data3, $data4, $password)
 {
-    if ($data3["ssl"] == "1") {
-        $ssl = "https://";
-    } else {
-        $ssl = "http://";
-    }
-    $api = $ssl . $data3["host"] . ":" . $data3["port"] . "/api/api.php";
-
+    $endpoint = mnbt_parseHost($data3);
     $datass = [
-        'url' => $api . '?gn=czmm',
+        'url' => $endpoint["api"] . '?gn=czmm',
         'data' => [
             'username' => $data4["user"],
             'password' => $password
@@ -264,8 +306,9 @@ function mnbt_ChangePassword($data3, $data4, $password)
 
     $result = @mnbt_CURL($datass);
     $result = @json_decode($result, true);
-    if ($result['code'] == '200') return ['code' => 1, 'msg' => "重置密码成功"];
-    else return ['code' => -1, 'msg' => "重置密码失败：{$result['msg']}"];
+    if (is_array($result) && isset($result['code']) && $result['code'] == '200') return ['code' => 1, 'msg' => "重置密码成功"];
+    $msg = is_array($result) && isset($result['msg']) ? $result['msg'] : '接口异常';
+    return ['code' => -1, 'msg' => "重置密码失败：{$msg}"];
 }
 
 //续费
@@ -277,8 +320,11 @@ return $array;
 
 function mnbt_CURL($data = array(), $timeout = 30)
 {
-    if (!$data['url']) {
+    if (empty($data['url'])) {
         return 'URL ERROR';
+    }
+    if (!function_exists('curl_init')) {
+        return 'CURL_ERROR: PHP curl 扩展未安装';
     }
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $data['url']);
@@ -290,11 +336,17 @@ function mnbt_CURL($data = array(), $timeout = 30)
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data['data']));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(isset($data['data']) ? $data['data'] : []));
     curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
-    $data = curl_exec($ch);
-    return $data;
+    $body = curl_exec($ch);
+    if ($body === false) {
+        $err = curl_error($ch);
+        curl_close($ch);
+        return 'CURL_ERROR: ' . ($err ? $err : '请求失败');
+    }
+    curl_close($ch);
+    return $body;
 }

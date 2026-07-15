@@ -160,15 +160,104 @@
 
 
   {include file="default/footer" /}
+<style>
+.server-add-tip {
+  background: #deebff;
+  border: 1px solid #b3d4ff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 12.5px;
+  color: #0747a6;
+  line-height: 1.55;
+}
+.server-add-tip strong { display: block; margin-bottom: 4px; }
+.server-field-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #6b778c;
+  line-height: 1.45;
+}
+.server-field-hint em { color: #de350b; font-style: normal; }
+.layer-server-add .layui-layer-content {
+  max-height: 72vh !important;
+  overflow-y: auto !important;
+}
+</style>
 <script>
 function add(){
 layer.open({
         type: 1,
-        closeBtn: false,
+        area: ['560px', 'auto'],
+        maxHeight: Math.min(window.innerHeight * 0.88, 720),
+        closeBtn: 1,
         shift: 7,
         shadeClose: true,
-        title:"添加服务器",
-        content: '<div style="width:300px;height:400px" class="card-body"><form action="" method="post" id="myform" class="edit-form"><input type="hidden" name="act" value="add"><div class="mb-3"><label for="web_site_title" class="form-label">名称</label><input class="form-control" type="text" name="name" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">主机</label><input class="form-control" type="text" name="host" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">IP</label><input class="form-control" type="text" name="ip" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">安全码</label><textarea style="height:200px" class="form-control" type="text" name="security"></textarea></div><div class="mb-3"><label for="web_site_title" class="form-label">端口</label><input class="form-control" type="text" name="port" value="" placeholder=""></div><div class="mb-3"><label for="type" class="form-label">是否开启SSL</label><div class="form-controls"><select name="ssl" class="form-select" id="type"><option value="0">关闭</option><option value="1">开启</option></select></div></div><div class="mb-3"><label for="web_site_title" class="form-label">账号</label><input class="form-control" type="text" name="user" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">密码</label><input class="form-control" type="password" name="password" value="" placeholder=""></div><div class="mb-3"><label for="type" class="form-label">服务器插件</label><div class="form-controls"><select name="serverplugins" class="form-select" id="type"><option value="">无</option>{volist name="plugins" id="p"}<option value="{$p}">{$p}</option>{/volist}</select></div></div><button type="button" onclick="add1()" class="btn btn-primary me-1">添加</button><br/><br/></div></div></div></form></div>',
+        skin: 'layer-server-add',
+        title: "添加服务器",
+        content: ''
+          + '<div class="card-body" style="width:520px;max-width:100%;padding:18px 20px 12px;box-sizing:border-box;">'
+          + '<form action="" method="post" id="myform" class="edit-form">'
+          + '<input type="hidden" name="act" value="add">'
+          + '<div class="server-add-tip">'
+          + '<strong>梦奈宝塔对接说明</strong>'
+          + '主机只填域名或IP，不要带 http:// 或 https://。<br>'
+          + '安全码 = 系统 API；账号 = 宝塔编号；密码 = 调用密钥。<br>'
+          + '非 80/443 请填端口；https 访问请开启 SSL。插件请选 <b>mnbt</b>。'
+          + '</div>'
+          + '<div class="mb-3">'
+          + '<label class="form-label">名称</label>'
+          + '<input class="form-control" type="text" name="name" value="" placeholder="例如：梦奈主节点">'
+          + '<span class="server-field-hint">后台显示用的名称，随意填写</span>'
+          + '</div>'
+          + '<div class="mb-3">'
+          + '<label class="form-label">主机 <em style="color:#de350b">*</em></label>'
+          + '<input class="form-control" type="text" name="host" value="" placeholder="bt.example.com 或 1.2.3.4">'
+          + '<span class="server-field-hint"><em>不要</em>填写 http:// 或路径，只填域名/IP。销售站需能访问该地址</span>'
+          + '</div>'
+          + '<div class="mb-3">'
+          + '<label class="form-label">IP</label>'
+          + '<input class="form-control" type="text" name="ip" value="" placeholder="可选，公网 IP">'
+          + '<span class="server-field-hint">可选备注，一般不影响开通接口</span>'
+          + '</div>'
+          + '<div class="mb-3">'
+          + '<label class="form-label">安全码（系统 API）</label>'
+          + '<textarea class="form-control" name="security" style="height:88px" placeholder="梦奈宝塔系统 API 安全码"></textarea>'
+          + '<span class="server-field-hint">对应梦奈宝塔「系统 API / 安全码」</span>'
+          + '</div>'
+          + '<div class="row">'
+          + '<div class="col-md-6 mb-3">'
+          + '<label class="form-label">端口</label>'
+          + '<input class="form-control" type="text" name="port" value="80" placeholder="80 或 443 或其他">'
+          + '<span class="server-field-hint">面板实际端口，默认 80</span>'
+          + '</div>'
+          + '<div class="col-md-6 mb-3">'
+          + '<label class="form-label">是否开启 SSL</label>'
+          + '<select name="ssl" class="form-select"><option value="0" selected>关闭（http）</option><option value="1">开启（https）</option></select>'
+          + '<span class="server-field-hint">地址是 https 就选开启</span>'
+          + '</div>'
+          + '</div>'
+          + '<div class="mb-3">'
+          + '<label class="form-label">账号（宝塔编号）</label>'
+          + '<input class="form-control" type="text" name="user" value="" placeholder="梦奈里该服务器的宝塔编号">'
+          + '<span class="server-field-hint">梦奈宝塔 → 服务器列表里的<strong>宝塔编号</strong></span>'
+          + '</div>'
+          + '<div class="mb-3">'
+          + '<label class="form-label">密码（调用密钥）</label>'
+          + '<input class="form-control" type="text" name="password" value="" placeholder="该服务器的调用密钥">'
+          + '<span class="server-field-hint">梦奈宝塔 → 对应服务器的<strong>调用密钥</strong></span>'
+          + '</div>'
+          + '<div class="mb-3">'
+          + '<label class="form-label">服务器插件</label>'
+          + '<select name="serverplugins" class="form-select"><option value="">无</option>{volist name="plugins" id="p"}<option value="{$p}">{$p}</option>{/volist}</select>'
+          + '<span class="server-field-hint">对接梦奈请选择 <b>mnbt</b>；EasyPanel 选 easypanel</span>'
+          + '</div>'
+          + '<div class="d-flex gap-2" style="padding-bottom:8px">'
+          + '<button type="button" onclick="add1()" class="btn btn-primary">添加</button>'
+          + '<button type="button" onclick="layer.closeAll()" class="btn btn-secondary">取消</button>'
+          + '</div>'
+          + '</form></div>',
   });
 
 }
