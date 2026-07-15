@@ -163,15 +163,47 @@
 
 
   {include file="default/footer" /}
+<style>
+.admin-form-tip{background:#deebff;border:1px solid #b3d4ff;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12.5px;color:#0747a6;line-height:1.55}
+.admin-form-tip strong{display:block;margin-bottom:4px}
+.admin-field-hint{display:block;margin-top:4px;font-size:12px;color:#6b778c;line-height:1.45}
+.layer-admin-form .layui-layer-content{max-height:78vh!important;overflow-y:auto!important}
+</style>
 <script>
 function add(){
 layer.open({
         type: 1,
-        closeBtn: false,
+        area: ['520px', 'auto'],
+        maxHeight: Math.min(window.innerHeight * 0.88, 640),
+        closeBtn: 1,
         shift: 7,
         shadeClose: true,
-        title:"添加产品分类",
-        content: '<div style="width:300px;" class="card-body"><div class="mb-3"><label for="web_site_title" class="form-label">标题</label><input class="form-control" type="text" name="name" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">介绍</label><textarea style="height:160px" class="form-control" type="text" name="introduce"></textarea></div><div class="mb-3"><label for="web_site_title" class="form-label">排序</label><input class="form-control" type="text" name="sort" value="0" placeholder="数值越大越靠前"></div><div class="mb-3"><label for="type" class="form-label">是否隐藏</label><div class="form-controls"><select name="hide" class="form-select" id="type"><option value="0">否</option><option value="1">是</option></select></div></div><button type="button" onclick="add1()" class="btn btn-primary me-1">添加</button></div>'   });
+        skin: 'layer-admin-form',
+        title: "添加产品分类",
+        content: ''
+          + '<div class="card-body" style="width:480px;max-width:100%;padding:18px 20px 12px;box-sizing:border-box">'
+          + '<div class="admin-form-tip"><strong>分类说明</strong>'
+          + '分类用于前台产品分组展示。创建产品时需要选择分类。<br>'
+          + '排序数值越大越靠前；隐藏后前台不显示该分类。</div>'
+          + '<div class="mb-3"><label class="form-label">标题 <span style="color:#de350b">*</span></label>'
+          + '<input class="form-control" type="text" name="name" value="" placeholder="例如：虚拟主机 / 云服务器">'
+          + '<span class="admin-field-hint">分类名称，前台导航/列表显示</span></div>'
+          + '<div class="mb-3"><label class="form-label">介绍</label>'
+          + '<textarea style="height:120px" class="form-control" name="introduce" placeholder="可选，分类说明文案"></textarea>'
+          + '<span class="admin-field-hint">可选描述</span></div>'
+          + '<div class="row">'
+          + '<div class="col-md-6 mb-3"><label class="form-label">排序</label>'
+          + '<input class="form-control" type="text" name="sort" value="0" placeholder="数值越大越靠前">'
+          + '<span class="admin-field-hint">越大越靠前</span></div>'
+          + '<div class="col-md-6 mb-3"><label class="form-label">是否隐藏</label>'
+          + '<select name="hide" class="form-select"><option value="0" selected>否</option><option value="1">是</option></select>'
+          + '<span class="admin-field-hint">隐藏后前台不可见</span></div>'
+          + '</div>'
+          + '<div class="d-flex gap-2" style="padding-bottom:8px">'
+          + '<button type="button" onclick="add1()" class="btn btn-primary">添加分类</button>'
+          + '<button type="button" onclick="layer.closeAll()" class="btn btn-secondary">取消</button>'
+          + '</div></div>',
+  });
 
 }
 

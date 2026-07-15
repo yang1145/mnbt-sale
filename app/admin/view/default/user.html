@@ -1,7 +1,11 @@
- {include file="default/header" title="用户管理"/}
+{include file="default/header" title="用户管理"/}
     <!--页面主要内容-->
 
          <style>
+.admin-form-tip{background:#deebff;border:1px solid #b3d4ff;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12.5px;color:#0747a6;line-height:1.55}
+.admin-form-tip strong{display:block;margin-bottom:4px}
+.admin-field-hint{display:block;margin-top:4px;font-size:12px;color:#6b778c;line-height:1.45}
+.layer-admin-form .layui-layer-content{max-height:78vh!important;overflow-y:auto!important}
 .pagination {
 	display:inline-block;
 	padding-left:0;
@@ -257,11 +261,40 @@ layer.alert(data.msg,{icon:1},function(){
 function adduser(){
 layer.open({
         type: 1,
-        closeBtn: false,
+        area: ['520px', 'auto'],
+        maxHeight: Math.min(window.innerHeight * 0.88, 640),
+        closeBtn: 1,
         shift: 7,
         shadeClose: true,
-        title:"添加用户",
-        content: '<div style="width:300px;height:400px;" class="card-body"><div class="mb-3"><label for="web_site_title" class="form-label">名称</label><input class="form-control" type="text" name="name" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">账号</label><input class="form-control" type="text" name="user" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">QQ</label><input class="form-control" type="text" name="qq" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">邮箱</label><input class="form-control" type="text" name="mail" value="" placeholder=""></div><div class="mb-3"><label for="web_site_title" class="form-label">密码</label><input class="form-control" type="text" name="password" placeholder="" value="" placeholder=""></div><button type="button" onclick="adduser1()" class="btn btn-primary me-1">添加</button><br/><br/></div>'   });
+        skin: 'layer-admin-form',
+        title: "添加用户",
+        content: ''
+          + '<div class="card-body" style="width:480px;max-width:100%;padding:18px 20px 12px;box-sizing:border-box">'
+          + '<div class="admin-form-tip"><strong>添加前台用户</strong>'
+          + '名称、账号、QQ、密码为必填；邮箱选填，填写时需合法且未占用。<br>'
+          + '账号用于登录，创建后可在用户详情里改余额/状态。</div>'
+          + '<div class="mb-3"><label class="form-label">名称 <span style="color:#de350b">*</span></label>'
+          + '<input class="form-control" type="text" name="name" value="" placeholder="显示昵称">'
+          + '<span class="admin-field-hint">用户昵称 / 显示名</span></div>'
+          + '<div class="mb-3"><label class="form-label">账号 <span style="color:#de350b">*</span></label>'
+          + '<input class="form-control" type="text" name="user" value="" placeholder="登录账号，需唯一">'
+          + '<span class="admin-field-hint">登录用，不可与已有账号重复</span></div>'
+          + '<div class="row">'
+          + '<div class="col-md-6 mb-3"><label class="form-label">QQ <span style="color:#de350b">*</span></label>'
+          + '<input class="form-control" type="text" name="qq" value="" placeholder="QQ 号">'
+          + '<span class="admin-field-hint">用于头像等展示</span></div>'
+          + '<div class="col-md-6 mb-3"><label class="form-label">邮箱</label>'
+          + '<input class="form-control" type="text" name="mail" value="" placeholder="可选，需合法邮箱">'
+          + '<span class="admin-field-hint">选填；填写则不可重复</span></div>'
+          + '</div>'
+          + '<div class="mb-3"><label class="form-label">密码 <span style="color:#de350b">*</span></label>'
+          + '<input class="form-control" type="text" name="password" value="" placeholder="初始登录密码">'
+          + '<span class="admin-field-hint">初始密码，用户登录后可自行修改</span></div>'
+          + '<div class="d-flex gap-2" style="padding-bottom:8px">'
+          + '<button type="button" onclick="adduser1()" class="btn btn-primary">添加用户</button>'
+          + '<button type="button" onclick="layer.closeAll()" class="btn btn-secondary">取消</button>'
+          + '</div></div>'
+  });
 
 }
 
