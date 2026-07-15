@@ -508,11 +508,11 @@ return $array;
 
 	public function index() {
 $data=Db::name('order')->where("userid",session("userid"))->order('id desc')->limit(5)->select();
-for($i=0;$i<count($data);$i++)  
-   {
+for($i=0;$i<count($data);$i++)
+{
 $b=Db::name('cart')->where('id',$data[$i]["cartid"])->find();
-$data[$i]["cartid"]=$b["name"];
-} 
+$data[$i]["cartid"]=$b ? $b["name"] : ("产品#".$data[$i]["cartid"]);
+}
 $data1=Db::name('announcement')->order('id desc')->limit(5)->select();
 $countorder=Db::name('order')->where("userid",session("userid"))->count();
 $counthost=Db::name('order')->where(["userid"=>session("userid"),"state"=>["<>","3"]])->count();

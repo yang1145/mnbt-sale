@@ -311,14 +311,18 @@
                                         {if $order}
                                         {foreach $order as $o}
                                         <tr>
-                                            <td>{$o.name}</td>
-                                            <td>{$o.buytime|date='Y-m-d H:i:s',###}</td>
-                                            <td>{$o.endtime|date='Y-m-d H:i:s',###}</td>
+                                            <td>{$o.cartid|default='-'}</td>
+                                            <td>{$o.atime|date='Y-m-d H:i:s',###}</td>
+                                            <td>{$o.ztime|date='Y-m-d H:i:s',###}</td>
                                             <td>
-                                                {if $o.status == 1}
+                                                {if $o.state == '1'}
                                                 <span class="badge badge-success">正常</span>
+                                                {elseif $o.state == '2'}
+                                                <span class="badge badge-warning">暂停</span>
+                                                {elseif $o.state == '3'}
+                                                <span class="badge badge-danger">终止</span>
                                                 {else}
-                                                <span class="badge badge-danger">已过期</span>
+                                                <span class="badge badge-secondary">未知</span>
                                                 {/if}
                                             </td>
                                             <td>
