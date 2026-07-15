@@ -4,7 +4,6 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
-  <img src="https://img.shields.io/badge/web_server-IIS-0078D4?logo=iis" alt="IIS">
   <img src="https://img.shields.io/badge/web_server-Apache-D22128?logo=apache" alt="Apache">
   <img src="https://img.shields.io/badge/web_server-Nginx-009639?logo=nginx" alt="Nginx">
   <img src="https://img.shields.io/badge/web_server-LiteSpeed-00AEEF" alt="LiteSpeed">
@@ -43,12 +42,16 @@
 
 - [宝塔面板安装教程](btpanel_install/宝塔面板安装教程.md) — 使用宝塔面板部署本系统
 - [梦奈宝塔对接教程](docs/梦奈宝塔对接教程.md) — 后台对接梦奈宝塔、自动开通主机
+- [EasyPanel 对接教程](docs/EasyPanel对接教程.md) — 后台对接 EasyPanel（康乐面板）
 
 ## 部署步骤
 
 如果你使用宝塔面板进行部署，可以参考更直观的 [宝塔面板安装教程](btpanel_install/宝塔面板安装教程.md)。
 
-完成安装后，如需对接梦奈宝塔实现自动开通，请阅读 [梦奈宝塔对接教程](docs/梦奈宝塔对接教程.md)。
+完成安装后，如需对接主机面板实现自动开通，请阅读：
+
+- [梦奈宝塔对接教程](docs/梦奈宝塔对接教程.md)
+- [EasyPanel 对接教程](docs/EasyPanel对接教程.md)
 
 ### 1. 设置运行目录
 
