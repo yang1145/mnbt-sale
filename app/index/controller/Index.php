@@ -808,125 +808,122 @@ $data=Db::name('announcement')->order('id desc')->paginate(10);
 }
 
 public function cron(){
-$data=Db::name("order")->select();
 $time=time();
-for($i=0;$i<count($data);$i++)  
-   {
-if($data[$i]["ztime"] < $time){
-$order=$data[$i];
-$data2=Db::name('cart')->where("id",$data[$i]["cartid"])->find();
-$data3=Db::name('server')->where("id",$data2["serverid"])->find();
-include_once PATH."plugins/host/".$data3["serverplugins"]."/".$data3["serverplugins"].".php";
-$cronzz=$this->web["cronzz"]*86400;
-if($data[$i]["ztime"]+$cronzz>$time){
-//过期三天内暂停
-if($order["state"]!="2"){
-$data5=Db::name("order")->where("id",$order["id"])->update([
-"state"=>"2",
-]);
-if($this->web["email"]=="1"){
-$db=Db::name('user')->where("id",$order["userid"])->find();
-if($db["mail"]){
-$mailbox=$this->email($db["mail"],"产品暂停通知","时间:".date("Y-m-d H:i:s")."<br>产品id:".$data[$i]["id"]."<br>产品已到期,自动暂停!请登录产品控制台续费!<br/><br/>");
-}
-}
-$function=$data3["serverplugins"]."_"."SuspendAccount";
-if(function_exists($function)){
-$data4=@$function($data3,$order,$data2);
-}
-}
-}else{
-//过期三天后处理
-$cronzz=$this->web["cronzz"]*86400;
-$cronsc=$this->web["cronsc"]*86400;
-if($data[$i]["ztime"]+$cronzz+$cronsc>$time){
-//过期六天内终止
-if($order["state"]!="3"){
-$data5=Db::name("order")->where("id",$order["id"])->update([
-"state"=>"3",
-]);
-//加上库存
-$data6=Db::name("cart")->where("id",$order["cartid"])->update([
-"inventory"=>$data2["inventory"]+1,
-]);
-if($this->web["email"]=="1"){
-$db=Db::name('user')->where("id",$order["userid"])->find();
-if($db["mail"]){
-$mailbox=$this->email($db["mail"],"产品终止通知","时间:".date("Y-m-d H:i:s")."<br>产品id:".$data[$i]["id"]."<br>产品到期,已终止!!<br/><br/>");
-}
-}
-$function=$data3["serverplugins"]."_"."TerminateAccount";
-if(function_exists($function)){
-$data4=@$function($data3,$order,$data2);
-}
-}
-}else{
-//过期六天后处理
-if($order["state"]!="3"){
-//加上库存
-$data6=Db::name("cart")->where("id",$order["cartid"])->update([
-"inventory"=>$data2["inventory"]+1,
-]);
-if($this->web["email"]=="1"){
-$db=Db::name('user')->where("id",$order["userid"])->find();
-if($db["mail"]){
-$mailbox=$this->email($db["mail"],"产品终止通知","时间:".date("Y-m-d H:i:s")."<br>产品id:".$data[$i]["id"]."<br>产品到期,已终止!<br/><br/>");
-}
-}
-$function=$data3["serverplugins"]."_"."TerminateAccount";
-if(function_exists($function)){
-$data4=@$function($data3,$order,$data2);
-}
-}
-$data5=Db::name("order")->where("id",$order["id"])->delete();
+$sendEmail=($this->web["email"]=="1");
+$userEmails=[];
+
+// === 1. 订单过期处理 ===
+// 优化: 只查询已过期订单 (ztime < time), 避免加载全部订单再 PHP 过滤
+$orders=Db::name("order")->where("ztime","<",$time)->select();
+if(!empty($orders)){
+	// 优化: 批量预加载 cart/server/user 数据, 避免循环内 N+1 查询
+	$cartIds=array_unique(array_filter(array_column($orders,'cartid')));
+	$carts=[];
+	if(!empty($cartIds)){
+		$cartRows=Db::name('cart')->where('id','in',$cartIds)->select();
+		foreach($cartRows as $row){ $carts[$row['id']]=$row; }
+	}
+	$serverIds=[];
+	foreach($carts as $c){ if(!empty($c['serverid'])){ $serverIds[]=$c['serverid']; } }
+	$serverIds=array_unique($serverIds);
+	$servers=[];
+	if(!empty($serverIds)){
+		$serverRows=Db::name('server')->where('id','in',$serverIds)->select();
+		foreach($serverRows as $row){ $servers[$row['id']]=$row; }
+	}
+	if($sendEmail){
+		$userIds=array_unique(array_filter(array_column($orders,'userid')));
+		if(!empty($userIds)){
+			$userEmails=Db::name('user')->where('id','in',$userIds)->column('mail','id');
+		}
+	}
+
+	$cronzz=$this->web["cronzz"]*86400;
+	$cronsc=$this->web["cronsc"]*86400;
+
+	for($i=0;$i<count($orders);$i++){
+		$order=$orders[$i];
+		$data2=isset($carts[$order["cartid"]])?$carts[$order["cartid"]]:null;
+		if(!$data2){ continue; }
+		$data3=isset($servers[$data2["serverid"]])?$servers[$data2["serverid"]]:null;
+		if(!$data3){ continue; }
+		include_once PATH."plugins/host/".$data3["serverplugins"]."/".$data3["serverplugins"].".php";
+
+		if($order["ztime"]+$cronzz>$time){
+			//过期三天内暂停
+			if($order["state"]!="2"){
+				Db::name("order")->where("id",$order["id"])->update(["state"=>"2"]);
+				if($sendEmail && !empty($userEmails[$order["userid"]])){
+					$this->email($userEmails[$order["userid"]],"产品暂停通知","时间:".date("Y-m-d H:i:s")."<br>产品id:".$order["id"]."<br>产品已到期,自动暂停!请登录产品控制台续费!<br/><br/>");
+				}
+				$function=$data3["serverplugins"]."_"."SuspendAccount";
+				if(function_exists($function)){
+					@$function($data3,$order,$data2);
+				}
+			}
+		}elseif($order["ztime"]+$cronzz+$cronsc>$time){
+			//过期六天内终止
+			if($order["state"]!="3"){
+				Db::name("order")->where("id",$order["id"])->update(["state"=>"3"]);
+				Db::name("cart")->where("id",$order["cartid"])->update(["inventory"=>$data2["inventory"]+1]);
+				if($sendEmail && !empty($userEmails[$order["userid"]])){
+					$this->email($userEmails[$order["userid"]],"产品终止通知","时间:".date("Y-m-d H:i:s")."<br>产品id:".$order["id"]."<br>产品到期,已终止!!<br/><br/>");
+				}
+				$function=$data3["serverplugins"]."_"."TerminateAccount";
+				if(function_exists($function)){
+					@$function($data3,$order,$data2);
+				}
+			}
+		}else{
+			//过期六天后处理
+			if($order["state"]!="3"){
+				Db::name("cart")->where("id",$order["cartid"])->update(["inventory"=>$data2["inventory"]+1]);
+				if($sendEmail && !empty($userEmails[$order["userid"]])){
+					$this->email($userEmails[$order["userid"]],"产品终止通知","时间:".date("Y-m-d H:i:s")."<br>产品id:".$order["id"]."<br>产品到期,已终止!<br/><br/>");
+				}
+				$function=$data3["serverplugins"]."_"."TerminateAccount";
+				if(function_exists($function)){
+					@$function($data3,$order,$data2);
+				}
+			}
+			Db::name("order")->where("id",$order["id"])->delete();
+		}
+	}
 }
 
-}
-
-}
-
-}
-
-
-//删除5分钟未支付的订单
-$data1=Db::name("pay")->select();
-for($i=0;$i<count($data1);$i++)  
-   {
-if($data1[$i]["state"]=="2"){
+// === 2. 删除超时未支付的订单 ===
+// 优化: 单条 DELETE 完成, 避免 select + 循环 delete 的 N+1 模式
 $paycron=$this->web["paycron"]*60;
-if($data1[$i]["time"]+$paycron<time()){
-Db::name('pay')->where('id',$data1[$i]["id"])->delete();
-}
-}
+if($paycron>0){
+	Db::name("pay")->where("state","2")->where("time","<",time()-$paycron)->delete();
 }
 
-
-
-//工单超过3天未回复自动关闭
-$data6=Db::name("ticket")->select();
-for($i=0;$i<count($data6);$i++)  
-   {
-if($data6[$i]["state"]!="4"){
-$json=json_decode($data6[$i]["content"],true);
-$content=end($json);
-$tickcron=$this->web["tickcron"]*86400;
-if($content["time"]+$tickcron<time()){
-$data7=Db::name("ticket")->where("id",$data6[$i]["id"])->update([
-"state"=>"4",
-]);
-if($this->web["email"]=="1"){
-$db=Db::name('user')->where("id",$data6[$i]["userid"])->find();
-if($db["mail"]){
-$mailbox=$this->email($db["mail"],"工单关闭通知","时间:".date("Y-m-d H:i:s")."<br>工单id:".$data6[$i]["id"]."<br>超时未回复,自动关闭!<br/><br/>");
+// === 3. 工单超时未回复自动关闭 ===
+// 优化: 只查询未关闭工单 (state != 4), 批量预加载用户邮箱
+$tickets=Db::name("ticket")->where("state","<>","4")->select();
+if(!empty($tickets)){
+	$tickcron=$this->web["tickcron"]*86400;
+	if($sendEmail){
+		$ticketUserIds=array_unique(array_filter(array_column($tickets,'userid')));
+		$missingIds=array_diff($ticketUserIds, array_keys($userEmails));
+		if(!empty($missingIds)){
+			$extra=Db::name('user')->where('id','in',$missingIds)->column('mail','id');
+			$userEmails=array_merge($userEmails, $extra);
+		}
+	}
+	for($i=0;$i<count($tickets);$i++){
+		$json=json_decode($tickets[$i]["content"],true);
+		// PHP 8 兼容: end() 不再接受 null, 需检查 json_decode 返回值
+		if(!is_array($json) || empty($json)){ continue; }
+		$content=end($json);
+		if(isset($content["time"]) && $content["time"]+$tickcron<time()){
+			Db::name("ticket")->where("id",$tickets[$i]["id"])->update(["state"=>"4"]);
+			if($sendEmail && !empty($userEmails[$tickets[$i]["userid"]])){
+				$this->email($userEmails[$tickets[$i]["userid"]],"工单关闭通知","时间:".date("Y-m-d H:i:s")."<br>工单id:".$tickets[$i]["id"]."<br>超时未回复,自动关闭!<br/><br/>");
+			}
+		}
+	}
 }
-}
-}
-}
-}
-
-
-
-
 
 return "任务执行完毕!";
 }

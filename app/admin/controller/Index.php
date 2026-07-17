@@ -652,11 +652,16 @@ return $array;
 $data2=Db::name("order")->where([
 "userid"=>$id,
 ])->order('id desc')->select();
-for($i=0;$i<count($data2);$i++)  
-   {
-$cart=Db::name('cart')->where('id',$data2[$i]["cartid"])->find();
-$data2[$i]["cartid"]=$cart["name"];
-} 
+// 优化：批量查询 cart 表，避免 N+1 查询
+$cartIds=array_unique(array_filter(array_column($data2,'cartid')));
+$cartMap=[];
+if(!empty($cartIds)){
+	$cartMap=Db::name('cart')->where('id','in',$cartIds)->column('name','id');
+}
+for($i=0;$i<count($data2);$i++){
+	$cid=$data2[$i]['cartid'];
+	$data2[$i]['cartid']=isset($cartMap[$cid])?$cartMap[$cid]:('产品#'.$cid);
+}
 
 
 	
