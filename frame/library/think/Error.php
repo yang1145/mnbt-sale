@@ -67,6 +67,15 @@ class Error
     {
         $exception = new ErrorException($errno, $errstr, $errfile, $errline);
 
+        // PHP 8.0+ 兼容：E_DEPRECATED / E_NOTICE / E_USER_DEPRECATED 等非致命错误
+        // 仅上报日志，不转为异常抛出。PHP 8.0 下大量原静默的弃用警告若被转为异常
+        // 会导致框架在路由/配置/反射等阶段崩溃（典型现象：页面一直加载无响应）。
+        $nonFatal = $errno & (E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_USER_NOTICE);
+        if ($nonFatal) {
+            self::getExceptionHandler()->report($exception);
+            return;
+        }
+
         // 符合异常处理的则将错误信息托管至 think\exception\ErrorException
         if (error_reporting() & $errno) {
             throw $exception;
