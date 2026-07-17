@@ -15,13 +15,23 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
         
+        html {
+            /* 修复 iOS Safari 中 100vh 包含地址栏导致页面顶部被推出视口的问题 */
+            height: -webkit-fill-available;
+        }
+
         body {
             background-color: #f4f5f7;
             color: #172b4d;
             line-height: 1.6;
             display: flex;
             flex-direction: column;
+            /* 用 -webkit-fill-available 替代 100vh，避免 iOS 地址栏导致的视口高度计算误差 */
             min-height: 100vh;
+            min-height: -webkit-fill-available;
+            /* 允许垂直滚动，确保用户能滑回页面顶部 */
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         body > section,
