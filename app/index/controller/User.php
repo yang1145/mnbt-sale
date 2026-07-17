@@ -278,11 +278,17 @@ return $array;
 }
 
 $order=Db::name("order")->where("userid",session("userid"))->order('id desc')->select();
-for($i=0;$i<count($order);$i++)  
-   {
-$cart=Db::name('cart')->where('id',$order[$i]["cartid"])->find();
-$order[$i]["cartid"]=$cart["name"];
+// 优化：批量查询 cart 表，避免 N+1 查询
+$cartIds = array_unique(array_filter(array_column($order, 'cartid')));
+$cartMap = [];
+if (!empty($cartIds)) {
+    $cartMap = Db::name('cart')->where('id', 'in', $cartIds)->column('name', 'id');
 }
+foreach ($order as &$orderItem) {
+    $cid = $orderItem['cartid'];
+    $orderItem['cartid'] = isset($cartMap[$cid]) ? $cartMap[$cid] : ('产品#' . $cid);
+}
+unset($orderItem);
 return $this->fetch('/'.$this->web["template"].'/user/transfer',[
 "order"=>$order,
 ]);
@@ -508,11 +514,17 @@ return $array;
 
 	public function index() {
 $data=Db::name('order')->where("userid",session("userid"))->order('id desc')->limit(5)->select();
-for($i=0;$i<count($data);$i++)
-{
-$b=Db::name('cart')->where('id',$data[$i]["cartid"])->find();
-$data[$i]["cartid"]=$b ? $b["name"] : ("产品#".$data[$i]["cartid"]);
+// 优化：批量查询 cart 表，避免 N+1 查询
+$cartIds = array_unique(array_filter(array_column($data, 'cartid')));
+$cartMap = [];
+if (!empty($cartIds)) {
+    $cartMap = Db::name('cart')->where('id', 'in', $cartIds)->column('name', 'id');
 }
+foreach ($data as &$dataItem) {
+    $cid = $dataItem['cartid'];
+    $dataItem['cartid'] = isset($cartMap[$cid]) ? $cartMap[$cid] : ('产品#' . $cid);
+}
+unset($dataItem);
 $data1=Db::name('announcement')->order('id desc')->limit(5)->select();
 $countorder=Db::name('order')->where("userid",session("userid"))->count();
 $counthost=Db::name('order')->where(["userid"=>session("userid"),"state"=>["<>","3"]])->count();
@@ -1108,12 +1120,17 @@ $ClientArea="";
 }
 }else{
 		$data=Db::name('order')->where("userid",session("userid"))->order('id desc')->select();
-	
-		for($i=0;$i<count($data);$i++)  
-   {
-$b=Db::name('cart')->where('id',$data[$i]["cartid"])->find();
-$data[$i]["cartid"]=$b["name"];
-}
+	// 优化：批量查询 cart 表，避免 N+1 查询
+	$cartIds = array_unique(array_filter(array_column($data, 'cartid')));
+	$cartMap = [];
+	if (!empty($cartIds)) {
+	    $cartMap = Db::name('cart')->where('id', 'in', $cartIds)->column('name', 'id');
+	}
+	foreach ($data as &$dataItem) {
+	    $cid = $dataItem['cartid'];
+	    $dataItem['cartid'] = isset($cartMap[$cid]) ? $cartMap[$cid] : ('产品#' . $cid);
+	}
+	unset($dataItem);
 /**
 		foreach ($data as &$item) {
 		$b=Db::name('cart')->where('id',$item["cartid"])->find();
