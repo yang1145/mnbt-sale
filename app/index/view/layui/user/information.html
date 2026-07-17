@@ -1,0 +1,40 @@
+{include file="layui/user/header" title="修改资料" /}
+    <style>
+        .form-card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; max-width: 500px; margin: 0 auto; }
+        .form-card .card-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; color: #333; }
+        .form-card .card-body { padding: 20px; }
+    </style>
+    <div class="form-card">
+        <div class="card-header">修改资料</div>
+        <div class="card-body">
+            <form>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">昵称</label>
+                    <div class="layui-input-block"><input type="text" name="name" value="{$user.name}" placeholder="请输入名称" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">QQ</label>
+                    <div class="layui-input-block"><input type="text" name="qq" value="{$user.qq}" placeholder="请输入QQ" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址</label>
+                    <div class="layui-input-block"><input type="text" name="address" value="{$user.address}" placeholder="请输入地址" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left:0;">
+                        <button type="submit" class="layui-btn layui-btn-fluid">修改</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{include file="layui/user/footer" /}
+<script>
+        $("form").on('submit', function(){
+            var load = layer.msg('修改中...',{icon:16,time:false});
+            $.ajax({ type:'POST', url:'', data:{ name:$("input[name='name']").val(), qq:$("input[name='qq']").val(), address:$("input[name='address']").val() }, dataType:'json',
+                success:function(res){ layer.close(load); layer.alert(res.msg, {icon: res.code==1?1:2}); }
+            });
+            return false;
+        });
+</script>

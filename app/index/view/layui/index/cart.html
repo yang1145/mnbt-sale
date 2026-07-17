@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>{$webname} - 购买产品</title>
+    {include file="layui/index/header" /}
+    <style>
+        .main-content { padding: 40px 0 60px; min-height: calc(100vh - 60px - 300px); background: #f5f7fa; }
+        .page-header { text-align: center; margin-bottom: 32px; }
+        .page-header h1 { font-size: 24px; color: #333; margin-bottom: 8px; }
+        .page-header p { font-size: 14px; color: #999; }
+        .category-tabs { text-align: center; margin-bottom: 36px; }
+        .category-tabs .layui-btn-group .layui-btn { border-radius: 0; }
+        .category-tabs .layui-btn-group .layui-btn:first-child { border-radius: 4px 0 0 4px; }
+        .category-tabs .layui-btn-group .layui-btn:last-child { border-radius: 0 4px 4px 0; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
+        .product-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+        .product-card-header { background: #f9fafb; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e8e8e8; }
+        .product-card-name { font-size: 16px; font-weight: 600; color: #333; }
+        .product-stock { font-size: 12px; padding: 4px 10px; background: #e6f7ff; color: #1E9FFF; border-radius: 3px; }
+        .product-stock.sold-out { background: #fff0f0; color: #FF5722; }
+        .product-card-body { padding: 24px 20px; text-align: center; flex: 1; }
+        .product-price { font-size: 28px; font-weight: 700; color: #1E9FFF; margin-bottom: 4px; }
+        .product-cycle { font-size: 13px; color: #999; }
+        .product-free { display: inline-block; background: #e8f5e9; color: #4CAF50; padding: 3px 10px; font-size: 12px; border-radius: 3px; margin-top: 10px; }
+        .product-content { color: #666; margin: 14px 0; font-size: 13px; line-height: 1.6; }
+        .product-card-footer { padding: 16px 20px 20px; border-top: 1px solid #f0f0f0; }
+        .product-card-footer .layui-btn { width: 100%; border-radius: 6px; }
+        .empty-state { text-align: center; padding: 60px 20px; grid-column: 1 / -1; }
+        .empty-state i { font-size: 48px; color: #ccc; margin-bottom: 12px; display: block; }
+        .empty-state p { color: #999; }
+        @media (max-width: 768px) {
+            .category-tabs .layui-btn-group { display: flex; flex-wrap: wrap; justify-content: center; }
+            .category-tabs .layui-btn-group .layui-btn { border-radius: 4px !important; margin: 4px; }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <section class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>{if $class}{$class.name}{else}产品列表{/if}</h1>
+                <p>{if $class}{$class.introduce}{/if}</p>
+            </div>
+            <div class="category-tabs">
+                <div class="layui-btn-group">
+                    {if $product}
+                    {foreach $product as $p}
+                    <a href="/cart/{$p.id}" class="layui-btn layui-btn-sm{if $productid==$p.id} layui-btn-normal{else} layui-btn-primary{/if}">{$p.name}</a>
+                    {/foreach}
+                    {/if}
+                </div>
+            </div>
+            <div class="products-grid">
+                {if $cart}
+                {foreach $cart as $c}
+                <div class="product-card">
+                    <div class="product-card-header">
+                        <div class="product-card-name">{$c.name}</div>
+                        <div class="product-stock{if $c.inventory<'1'} sold-out{/if}">
+                            {if $c.inventory<'1'}已售完{else}库存:{$c.inventory}{/if}
+                        </div>
+                    </div>
+                    <div class="product-card-body">
+                        <div class="product-price">{if $c.money=='0'}免费{else}&yen;{$c.money}{/if}</div>
+                        <div class="product-cycle">{if $c.cycle=='day'}日付{elseif $c.cycle=='month'}月付{elseif $c.cycle=='season'}季付{elseif $c.cycle=='year'}年付{elseif $c.cycle=='unrestricted'}一次性{/if}</div>
+                        {if $c.firstmo=='1'}
+                        <div class="product-free">首{if $c.cycle=='day'}日{elseif $c.cycle=='month'}月{elseif $c.cycle=='season'}季{elseif $c.cycle=='year'}年{/if}免费</div>
+                        {/if}
+                        <div class="product-content">{$c.content}</div>
+                    </div>
+                    <div class="product-card-footer">
+                        {if $c.inventory<'1'}
+                        <button class="layui-btn layui-btn-disabled" disabled>已售完</button>
+                        {else}
+                        <a href="/product/{$c.id}" class="layui-btn">立即购买</a>
+                        {/if}
+                    </div>
+                </div>
+                {/foreach}
+                {else}
+                <div class="empty-state">
+                    <i class="layui-icon layui-icon-component"></i>
+                    <p>该分类下没有产品！请尝试选择其他分类。</p>
+                </div>
+                {/if}
+            </div>
+        </div>
+    </section>
+
+    {include file="layui/index/footer" /}

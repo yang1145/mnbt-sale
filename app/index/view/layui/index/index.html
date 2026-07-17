@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>{$webname} - 专业虚拟主机服务</title>
+    {include file="layui/index/header" /}
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #1E9FFF 0%, #009688 100%);
+            padding: 80px 0 70px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: -50%; right: -20%;
+            width: 600px; height: 600px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+        .hero::after {
+            content: '';
+            position: absolute; bottom: -30%; left: -10%;
+            width: 400px; height: 400px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+        .hero-content { text-align: center; position: relative; z-index: 1; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; background: rgba(255,255,255,0.18); border-radius: 20px; font-size: 13px; margin-bottom: 24px; }
+        .hero h1 { font-size: 38px; font-weight: 700; margin-bottom: 16px; line-height: 1.3; }
+        .hero > .container > .hero-content > p { font-size: 16px; opacity: 0.9; max-width: 600px; margin: 0 auto 32px; line-height: 1.8; }
+        .hero-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+        .stat-bar { background: #fff; padding: 0; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-top: -30px; position: relative; z-index: 2; border-radius: 8px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+        .stat-item { text-align: center; padding: 28px 16px; border-right: 1px solid #f0f0f0; }
+        .stat-item:last-child { border-right: none; }
+        .stat-value { font-size: 32px; font-weight: 700; color: #1E9FFF; line-height: 1.2; }
+        .stat-label { font-size: 13px; color: #999; margin-top: 6px; }
+
+        .products { padding: 70px 0; background: #fff; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h2 { font-size: 26px; color: #333; font-weight: 600; margin-bottom: 10px; }
+        .section-header p { font-size: 14px; color: #999; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .product-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 10px; overflow: hidden; transition: transform 0.25s, box-shadow 0.25s; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
+        .product-card-top { padding: 28px 24px 20px; text-align: center; border-bottom: 1px solid #f5f5f5; }
+        .product-name { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 4px; }
+        .product-tag { display: inline-block; font-size: 12px; padding: 2px 10px; border-radius: 3px; margin-top: 6px; }
+        .product-tag.hot { background: #fff4f4; color: #FF5722; }
+        .product-tag.free { background: #e8f5e9; color: #4CAF50; }
+        .product-price { font-size: 36px; font-weight: 700; color: #1E9FFF; margin: 16px 0 4px; }
+        .product-price small { font-size: 14px; font-weight: 400; color: #999; }
+        .product-desc { font-size: 13px; color: #999; padding: 0 24px; margin: 0; min-height: 40px; }
+        .product-specs { list-style: none; padding: 16px 24px; }
+        .product-specs li { display: flex; justify-content: space-between; padding: 9px 0; font-size: 13px; color: #666; border-bottom: 1px dashed #f0f0f0; }
+        .product-specs li:last-child { border-bottom: none; }
+        .product-specs li span { color: #333; font-weight: 500; }
+        .product-card-bottom { padding: 16px 24px 24px; }
+        .product-card-bottom .layui-btn { width: 100%; border-radius: 6px; height: 42px; line-height: 42px; font-size: 15px; }
+
+        .features { padding: 70px 0; background: #f5f7fa; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+        .feature-item { background: #fff; border-radius: 10px; padding: 32px 24px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+        .feature-item:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+        .feature-icon { width: 56px; height: 56px; display: inline-flex; align-items: center; justify-content: center; background: #e6f7ff; border-radius: 14px; margin-bottom: 18px; }
+        .feature-icon i { font-size: 26px; color: #1E9FFF; }
+        .feature-item h3 { font-size: 16px; color: #333; margin-bottom: 8px; font-weight: 600; }
+        .feature-item p { font-size: 13px; color: #999; line-height: 1.7; }
+
+        .datacenters { padding: 70px 0; background: #fff; }
+        .dc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        .dc-item { background: #f9fafb; border: 1px solid #e8e8e8; border-radius: 10px; padding: 24px; text-align: center; transition: transform 0.2s; }
+        .dc-item:hover { transform: translateY(-3px); }
+        .dc-item h4 { font-size: 15px; color: #333; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .dc-item h4 i { color: #1E9FFF; }
+        .dc-item p { font-size: 12px; color: #999; margin-bottom: 10px; }
+        .dc-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #5FB878; }
+        .dc-status::before { content: ''; width: 6px; height: 6px; background: #5FB878; border-radius: 50%; }
+
+        .announcements { padding: 70px 0; background: #f5f7fa; }
+        .announcement-list { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 10px; border: 1px solid #e8e8e8; overflow: hidden; }
+        .announcement-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid #f0f0f0; transition: background 0.2s; }
+        .announcement-item:last-child { border-bottom: none; }
+        .announcement-item:hover { background: #fafafa; }
+        .announcement-title { font-size: 14px; color: #333; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 16px; }
+        .announcement-meta { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+        .announcement-date { font-size: 12px; color: #999; }
+        .announcement-link { font-size: 13px; color: #1E9FFF; text-decoration: none; font-weight: 500; }
+        .announcement-link:hover { text-decoration: underline; }
+        .announcement-empty { text-align: center; padding: 40px; color: #999; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 26px; }
+            .hero { padding: 50px 0 45px; }
+            .stat-grid { grid-template-columns: repeat(3, 1fr); }
+            .stat-value { font-size: 22px; }
+            .stat-item { padding: 18px 10px; }
+            .stat-bar { margin-top: -20px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .announcement-item { flex-wrap: wrap; gap: 8px; }
+            .announcement-title { width: 100%; margin-right: 0; white-space: normal; }
+        }
+    </style>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="layui-icon layui-icon-light"></i> 即开即用，分钟级部署
+                </div>
+                <h1>稳定、安全、易用的虚拟主机服务平台</h1>
+                <p>基于自主控制面板，提供 PHP 多版本、MySQL 数据库、在线文件管理与 SSL 部署能力。无论是个人博客、企业官网还是小型应用，都能获得高性能、低延迟的托管体验。</p>
+                <div class="hero-actions">
+                    <a href="/cart" class="layui-btn layui-btn-lg" style="background:#fff;color:#1E9FFF;border:none;border-radius:6px;">浏览产品套餐</a>
+                    <a href="/register" class="layui-btn layui-btn-lg layui-btn-primary" style="border-color:rgba(255,255,255,0.6);color:#fff;border-radius:6px;">免费注册</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="stat-bar">
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-value">{$countuser}</div>
+                    <div class="stat-label">注册用户</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{$countorder}</div>
+                    <div class="stat-label">运行主机</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{$countserver}</div>
+                    <div class="stat-label">服务器节点</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>热门产品套餐</h2>
+                <p>灵活配置，按需选择，满足不同阶段的业务需求</p>
+            </div>
+            <div class="products-grid">
+                {if $cart}
+                {foreach $cart as $c}
+                <div class="product-card">
+                    <div class="product-card-top">
+                        <div class="product-name">{$c.name}</div>
+                        {if $c.money=='0'}
+                        <span class="product-tag free">免费</span>
+                        {elseif isset($c.hot) && $c.hot=='1'}
+                        <span class="product-tag hot">热销</span>
+                        {/if}
+                        <div class="product-price">
+                            {if $c.money=='0'}免费{else}&yen;{$c.money}{/if}
+                            <small>/{if $c.cycle=='day'}日{elseif $c.cycle=='month'}月{elseif $c.cycle=='season'}季{elseif $c.cycle=='year'}年{elseif $c.cycle=='unrestricted'}一次性{/if}</small>
+                        </div>
+                    </div>
+                    <p class="product-desc">{$c.content}</p>
+                    <ul class="product-specs">
+                        <li>当前库存 <span>{$c.inventory}</span></li>
+                        {if $c.firstmo=='1'}
+                        <li>限时优惠 <span style="color:#5FB878;">首{if $c.cycle=='day'}日{elseif $c.cycle=='month'}月{elseif $c.cycle=='season'}季{elseif $c.cycle=='year'}年{/if}免费</span></li>
+                        {/if}
+                    </ul>
+                    <div class="product-card-bottom">
+                        {if $c.inventory<'1'}
+                        <button class="layui-btn layui-btn-disabled" disabled>已售完</button>
+                        {else}
+                        <a href="/product/{$c.id}" class="layui-btn">立即购买</a>
+                        {/if}
+                    </div>
+                </div>
+                {/foreach}
+                {else}
+                <div class="product-card" style="grid-column:1/-1;text-align:center;padding:60px 20px;">
+                    <i class="layui-icon layui-icon-component" style="font-size:40px;color:#ccc;margin-bottom:12px;display:block;"></i>
+                    <p style="color:#999;">暂无产品展示，请先在后台添加产品套餐</p>
+                    <a href="/cart" class="layui-btn" style="margin-top:16px;">查看全部产品</a>
+                </div>
+                {/if}
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>全方位技术支持</h2>
+                <p>专业服务团队为您保驾护航</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="layui-icon layui-icon-service"></i></div>
+                    <h3>在线客服</h3>
+                    <p>工作日即时响应，快速定位并解答产品使用中的各类问题</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="layui-icon layui-icon-read"></i></div>
+                    <h3>帮助文档</h3>
+                    <p>覆盖建站、域名解析、控制面板等场景的详细图文操作指南</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="layui-icon layui-icon-notice"></i></div>
+                    <h3>工单系统</h3>
+                    <p>技术问题随时提交工单，专业工程师会在 24 小时内跟进处理</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="layui-icon layui-icon-refresh"></i></div>
+                    <h3>自动备份</h3>
+                    <p>数据每日自动备份，支持一键恢复，保障网站数据安全可靠</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="datacenters">
+        <div class="container">
+            <div class="section-header">
+                <h2>全球数据中心</h2>
+                <p>多地域节点部署，就近访问，低延迟高可用</p>
+            </div>
+            <div class="dc-grid">
+                <div class="dc-item">
+                    <h4><i class="layui-icon layui-icon-location"></i> 美国洛杉矶</h4>
+                    <p>US West / California</p>
+                    <span class="dc-status">运行正常</span>
+                </div>
+                <div class="dc-item">
+                    <h4><i class="layui-icon layui-icon-location"></i> 美国圣何塞</h4>
+                    <p>US West / Silicon Valley</p>
+                    <span class="dc-status">运行正常</span>
+                </div>
+                <div class="dc-item">
+                    <h4><i class="layui-icon layui-icon-location"></i> 新加坡</h4>
+                    <p>Singapore / Asia Pacific</p>
+                    <span class="dc-status">运行正常</span>
+                </div>
+                <div class="dc-item">
+                    <h4><i class="layui-icon layui-icon-location"></i> 日本东京</h4>
+                    <p>Japan / Tokyo</p>
+                    <span class="dc-status">运行正常</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="announcements">
+        <div class="container">
+            <div class="section-header">
+                <h2>网站公告</h2>
+                <p>及时了解平台最新动态与维护通知</p>
+            </div>
+            <div class="announcement-list">
+                {if $announcement}
+                {foreach $announcement as $a}
+                <div class="announcement-item">
+                    <span class="announcement-title">{$a.name}</span>
+                    <div class="announcement-meta">
+                        <span class="announcement-date">{$a.time|date="m-d",###}</span>
+                        <a href="/announcement/{$a.id}" class="announcement-link">查看详情</a>
+                    </div>
+                </div>
+                {/foreach}
+                {else}
+                <div class="announcement-empty">
+                    <i class="layui-icon layui-icon-about"></i> 暂无公告
+                </div>
+                {/if}
+            </div>
+        </div>
+    </section>
+
+    {include file="layui/index/footer" /}

@@ -1,0 +1,104 @@
+{include file="layui/user/header" title="用户中心" /}
+    <style>
+        .welcome-card { background: linear-gradient(135deg, #1E9FFF, #009688); color: #fff; border-radius: 10px; padding: 28px; margin-bottom: 20px; }
+        .welcome-card .user-row { display: flex; align-items: center; gap: 16px; }
+        .welcome-card .user-row img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.4); }
+        .welcome-card .user-row h2 { font-size: 20px; margin-bottom: 4px; }
+        .welcome-card .user-row p { opacity: 0.85; font-size: 13px; }
+        .welcome-card .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+        .welcome-card .actions .layui-btn { border-radius: 6px; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+        .stat-card { background: #fff; border-radius: 8px; padding: 20px; display: flex; align-items: center; gap: 14px; border: 1px solid #e8e8e8; }
+        .stat-card .stat-icon { width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .stat-card .stat-icon.blue { background: #e6f7ff; color: #1E9FFF; }
+        .stat-card .stat-icon.green { background: #e8f5e9; color: #5FB878; }
+        .stat-card .stat-icon.orange { background: #fff3e0; color: #FF9800; }
+        .stat-card .stat-info h4 { font-size: 13px; color: #999; margin-bottom: 4px; }
+        .stat-card .stat-info .num { font-size: 22px; font-weight: 700; color: #333; }
+
+        .data-card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; margin-bottom: 20px; }
+        .data-card .card-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .data-card .card-header h3 { font-size: 16px; color: #333; }
+        .data-card .card-body { padding: 0; }
+
+        .custom-table { width: 100%; border-collapse: collapse; }
+        .custom-table th { background: #f9fafb; padding: 12px 16px; text-align: left; font-size: 13px; color: #999; font-weight: 500; border-bottom: 1px solid #e8e8e8; }
+        .custom-table td { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        .custom-table tbody tr:hover { background: #fafafa; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+        .badge-success { background: #e8f5e9; color: #4CAF50; }
+        .badge-warning { background: #fff8e1; color: #FF9800; }
+        .badge-danger { background: #ffebee; color: #F44336; }
+        .empty-state { text-align: center; padding: 40px; color: #999; }
+        .empty-state i { font-size: 36px; margin-bottom: 10px; display: block; color: #ccc; }
+
+        @media (max-width: 768px) {
+            .stat-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <div class="welcome-card">
+        <div class="user-row">
+            <img src="http://q1.qlogo.cn/g?b=qq&nk={$user.qq}&s=100" alt="avatar">
+            <div style="flex:1;">
+                <h2>欢迎回来, {$user.name}!</h2>
+                <p>祝您今天愉快，如有问题请随时联系客服。 | 账户余额: <strong>&yen;{$user.money}</strong></p>
+            </div>
+        </div>
+        <div class="actions">
+            <a href="/cart" class="layui-btn layui-btn-sm">订购产品</a>
+            <a href="/user/pay" class="layui-btn layui-btn-sm layui-btn-primary" style="border-color:rgba(255,255,255,0.5);color:#fff;">余额充值</a>
+            <a href="/user/information" class="layui-btn layui-btn-sm layui-btn-primary" style="border-color:rgba(255,255,255,0.5);color:#fff;">修改资料</a>
+            <a href="/user/order" class="layui-btn layui-btn-sm layui-btn-primary" style="border-color:rgba(255,255,255,0.5);color:#fff;">我的订单</a>
+            <a href="/user/supportticket" class="layui-btn layui-btn-sm layui-btn-primary" style="border-color:rgba(255,255,255,0.5);color:#fff;">技术支持</a>
+        </div>
+    </div>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-icon blue"><i class="layui-icon layui-icon-cart-simple"></i></div>
+            <div class="stat-info"><h4>订单总数</h4><div class="num">{$countorder}</div></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="layui-icon layui-icon-component"></i></div>
+            <div class="stat-info"><h4>主机数量</h4><div class="num">{$counthost}</div></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon orange"><i class="layui-icon layui-icon-dialogue"></i></div>
+            <div class="stat-info"><h4>工单数量</h4><div class="num">{$countticket}</div></div>
+        </div>
+    </div>
+
+    <div class="data-card">
+        <div class="card-header">
+            <h3>管理产品（最近5条）</h3>
+            <a href="/user/order" class="layui-btn layui-btn-xs">查看全部</a>
+        </div>
+        <div class="card-body">
+            <table class="custom-table">
+                <thead><tr><th>产品名称</th><th>购买时间</th><th>到期时间</th><th>状态</th><th>操作</th></tr></thead>
+                <tbody>
+                    {if $order}
+                    {foreach $order as $o}
+                    <tr>
+                        <td>{$o.cartid|default='-'}</td>
+                        <td>{$o.atime|date='Y-m-d H:i:s',###}</td>
+                        <td>{$o.ztime|date='Y-m-d H:i:s',###}</td>
+                        <td>
+                            {if $o.state == '1'}<span class="badge badge-success">正常</span>
+                            {elseif $o.state == '2'}<span class="badge badge-warning">暂停</span>
+                            {elseif $o.state == '3'}<span class="badge badge-danger">终止</span>
+                            {else}<span class="badge">未知</span>{/if}
+                        </td>
+                        <td><a href="/user/order/{$o.id}" class="layui-btn layui-btn-xs">管理</a></td>
+                    </tr>
+                    {/foreach}
+                    {else}
+                    <tr><td colspan="5"><div class="empty-state"><i class="layui-icon layui-icon-component"></i><p>暂无产品，快去订购一个吧</p></div></td></tr>
+                    {/if}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{include file="layui/user/footer" /}

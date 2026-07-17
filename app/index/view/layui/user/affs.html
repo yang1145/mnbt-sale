@@ -1,0 +1,108 @@
+{include file="layui/user/header" title="推广中心" /}
+    <style>
+        .aff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 18px; margin-bottom: 18px; }
+        .info-card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; }
+        .info-card .card-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; color: #333; }
+        .info-card .card-body { padding: 18px 20px; }
+        .custom-table { width: 100%; border-collapse: collapse; background: #fff; }
+        .custom-table th { background: #f9fafb; padding: 10px 14px; text-align: left; font-size: 13px; color: #999; font-weight: 500; border-bottom: 1px solid #e8e8e8; }
+        .custom-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        .pagination-box { text-align: center; margin: 16px 0; }
+        .tab-btns { display: flex; gap: 0; margin-bottom: 16px; }
+        .tab-btn { flex: 1; padding: 10px; text-align: center; cursor: pointer; border: 1px solid #e8e8e8; font-size: 14px; background: #f9fafb; color: #666; transition: all 0.2s; }
+        .tab-btn:first-child { border-radius: 6px 0 0 6px; }
+        .tab-btn:last-child { border-radius: 0 6px 6px 0; }
+        .tab-btn.active { background: #1E9FFF; color: #fff; border-color: #1E9FFF; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+    <div class="aff-grid">
+        <div class="info-card">
+            <div class="card-header">账户余额</div>
+            <div class="card-body">
+                <h3 style="margin-bottom:10px;">可提现金额：<span style="color:#FF5722;">{$user.affmoney}</span></h3>
+                <p style="font-size:13px;color:#999;">最小提现金额:<span style="color:#FF5722;">{$affwithdrawal}</span></p>
+                <br>
+                <div style="display:flex;gap:10px;">
+                    <button onclick="txye()" class="layui-btn" style="flex:1;">提现到余额</button>
+                    <button onclick="txzfb()" class="layui-btn" style="flex:1;">提现到支付宝</button>
+                </div>
+            </div>
+        </div>
+        <div class="info-card">
+            <div class="card-header">推广链接</div>
+            <div class="card-body">
+                <p style="font-size:13px;margin-bottom:10px;">推广提成:<span style="color:#FF5722;">{$affdiscount}%</span></p>
+                <div style="display:flex;gap:0;">
+                    <input id="referralLink" type="text" value="{$affurl}" readonly class="layui-input" style="border-radius:4px 0 0 4px;">
+                    <button id="copyBtn" class="layui-btn" style="border-radius:0 4px 4px 0;">复制</button>
+                </div>
+                <p style="font-size:12px;color:#999;margin-top:10px;">用户通过你的链接注册的账户购买产品或续费产品，你就可以<span style="color:#FF5722;">永久</span>获取收益！</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-card" style="margin-bottom:18px;">
+        <div class="card-header">记录</div>
+        <div class="card-body">
+            <div class="tab-btns">
+                <div class="tab-btn active" onclick="switchAffTab('syjl')">收益记录</div>
+                <div class="tab-btn" onclick="switchAffTab('txjl')">提现记录</div>
+                <div class="tab-btn" onclick="switchAffTab('zcyh')">注册用户</div>
+            </div>
+            <div id="syjl" class="tab-content active">
+                <table class="custom-table">
+                    <thead><tr><th>ID</th><th>信息</th><th>金额</th><th>时间</th></tr></thead>
+                    <tbody>
+                        {foreach $affsymoney as $sy}<tr><td>{$sy.id}</td><td>{$sy.information}</td><td>{$sy.money}</td><td>{$sy.time|date="Y-m-d H:i:s",###}</td></tr>{/foreach}
+                    </tbody>
+                </table>
+                <div class="pagination-box">{$affsymoney->render()}</div>
+            </div>
+            <div id="txjl" class="tab-content">
+                <table class="custom-table">
+                    <thead><tr><th>ID</th><th>信息</th><th>金额</th><th>时间</th><th>状态</th></tr></thead>
+                    <tbody>
+                        {foreach $afftxjl as $tx}<tr><td>{$tx.id}</td><td>{$tx.information}</td><td>{$tx.money}</td><td>{$tx.time|date="Y-m-d H:i:s",###}</td><td>{if $tx.state=="1"}<span style="color:#5FB878;">已打款</span>{else}<span style="color:#FF9800;">等待打款</span>{/if}</td></tr>{/foreach}
+                    </tbody>
+                </table>
+                <div class="pagination-box">{$afftxjl->render()}</div>
+            </div>
+            <div id="zcyh" class="tab-content">
+                <table class="custom-table">
+                    <thead><tr><th>ID</th><th>昵称</th><th>注册时间</th></tr></thead>
+                    <tbody>
+                        {foreach $affus as $u}<tr><td>{$u.id}</td><td>{$u.name}</td><td>{$u.time|date="Y-m-d H:i:s",###}</td></tr>{/foreach}
+                    </tbody>
+                </table>
+                <div class="pagination-box">{$affus->render()}</div>
+            </div>
+        </div>
+    </div>
+{include file="layui/user/footer" /}
+<script>
+    document.getElementById('copyBtn').addEventListener('click', function(){
+        var inp = document.getElementById('referralLink'); inp.select(); document.execCommand("Copy"); layer.msg("复制成功！",{icon:1});
+    });
+    function switchAffTab(id){
+        document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', false); }); event.target.classList.add('active');
+        document.querySelectorAll('#syjl,#txjl,#zcyh').forEach(function(c){ c.classList.toggle('active', c.id===id); });
+    }
+    function txye(){ layer.confirm('确定要全部提现到账户余额吗！',{icon:3}, function(){ $.ajax({ type:'POST', url:'', data:{ act:'txye' }, dataType:'json', success:function(d){ if(d.code==1){ layer.msg(d.msg,{icon:1}, function(){ location.href=''; }); } else { layer.alert(d.msg,{icon:2}); } } }); }); }
+    function txzfb(){
+        layer.open({ type:1, closeBtn:false, shift:7, shadeClose:true, title:"提现到支付宝",
+            content: '<form style="padding:20px;">' +
+                '<div style="margin-bottom:12px;"><label>支付宝姓名</label><input type="text" id="zfbxm" class="layui-input"></div>' +
+                '<div style="margin-bottom:12px;"><label>支付宝账号</label><input type="text" id="zfbzh" class="layui-input"></div>' +
+                '<button type="button" onclick="txzfb1()" class="layui-btn layui-btn-fluid">提交</button></form>'
+        });
+    }
+    function txzfb1(){
+        var load = layer.msg('提交中...',{icon:16,time:false});
+        $.ajax({ type:'POST', url:'', data:{ act:'txzfb', zfbzh:$("#zfbzh").val(), zfbxm:$("#zfbxm").val() }, dataType:'json',
+            success:function(data){ layer.close(load);
+                if(data.code==1){ layer.msg(data.msg,{icon:1}, function(){ location.href=''; }); } else { layer.msg(data.msg,{icon:2}); }
+            }
+        });
+    }
+</script>

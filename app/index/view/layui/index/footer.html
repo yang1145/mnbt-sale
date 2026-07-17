@@ -1,0 +1,70 @@
+    <footer class="layui-footer-custom">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <i class="layui-icon layui-icon-website"></i>
+                        <span>{$webname}</span>
+                    </a>
+                    <p>专注于提供稳定、安全、易用的虚拟主机服务。通过自主控制面板与多地域数据中心，帮助用户快速部署网站与应用，让托管更简单。</p>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <i class="layui-icon layui-icon-email"></i>
+                            <span>support@example.com</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i class="layui-icon layui-icon-time"></i>
+                            <span>工作日 09:00 - 21:00 在线支持</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>产品服务</h4>
+                    <ul>
+                        <li><a href="/cart">虚拟主机</a></li>
+                        <li><a href="/cart">产品套餐</a></li>
+                        <li><a href="/cart">价格说明</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>帮助支持</h4>
+                    <ul>
+                        <li><a href="#">使用文档</a></li>
+                        <li><a href="/user/submitticket">提交工单</a></li>
+                        <li><a href="/announcements">网站公告</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>关于我们</h4>
+                    <ul>
+                        <li><a href="/login">用户登录</a></li>
+                        <li><a href="/register">注册账号</a></li>
+                        <li><a href="#">联系我们</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; {:date('Y')} {$webname} {if isset($templateset['网站备案号']) && $templateset['网站备案号']}<a href="//beian.miit.gov.cn/">{$templateset['网站备案号']}</a>{/if}</span>
+                <div class="footer-bottom-links">
+                    <a href="#">服务条款</a>
+                    <a href="#">隐私政策</a>
+                    <a href="/announcements">公告中心</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/assets/js/oneui.core.min.js"></script>
+    <script src="/static/assets/js/oneui.app.min.js"></script>
+    <script src="/static/assets/vendor/layer/layer.js"></script>
+
+    <script>
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('nav-active');
+        });
+        {if isset($templateset['公告开关']) && $templateset['公告开关']=="开"}
+        layer.alert('{if isset($templateset["网站公告"])}{$templateset["网站公告"]}{/if}', {title: "网站公告"});
+        {/if}
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{include file="layui/user/header" title="绑定邮箱" /}
+    <style>
+        .form-card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; max-width: 500px; margin: 0 auto; }
+        .form-card .card-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; color: #333; }
+        .form-card .card-body { padding: 20px; }
+        .captcha-row { display: flex; gap: 10px; align-items: flex-start; }
+        .captcha-row img { height: 42px; cursor: pointer; border: 1px solid #e8e8e8; border-radius: 4px; }
+        .code-row { display: flex; gap: 10px; }
+        .code-row input { flex: 1; }
+    </style>
+    <div class="form-card">
+        <div class="card-header">绑定邮箱</div>
+        <div class="card-body">
+            <form>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新邮箱</label>
+                    <div class="layui-input-block"><input type="text" name="mail" placeholder="请输入邮箱" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">验证码</label>
+                    <div class="layui-input-block">
+                        <div class="captcha-row">
+                            <div style="flex:1;"><input type="text" name="captcha" placeholder="验证码" class="layui-input"></div>
+                            <img id="randimg" src="{:captcha_src()}" onclick="this.src='{:captcha_src()}?'+Math.random();"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱验证码</label>
+                    <div class="layui-input-block">
+                        <div class="code-row">
+                            <input type="text" name="code" placeholder="请输入邮箱验证码" class="layui-input">
+                            <button type="button" class="layui-btn" onclick="getCode()">获取验证码</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left:0;">
+                        <button type="submit" class="layui-btn layui-btn-fluid">绑定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{include file="layui/user/footer" /}
+<script>
+    function getCode(){
+        var mail = $("input[name='mail']").val();
+        var captcha = $("input[name='captcha']").val();
+        if(!mail || !captcha){ layer.alert('请填写邮箱和验证码',{icon:2}); return; }
+        $.ajax({ type:'POST', url:'', data:{ act:"validate", mail:mail, captcha:captcha }, dataType:'json',
+            success:function(data){
+                if(data.code == 1){ layer.alert(data.msg,{icon:1}); }
+                else { document.getElementById("randimg").src='{:captcha_src()}?'+Math.random(); layer.alert(data.msg,{icon:2}); }
+            }
+        });
+    }
+        $("form").on('submit', function(){
+            var load = layer.msg('提交中...',{icon:16,time:false});
+            $.ajax({ type:'POST', url:'', data:{ act:"modify", code:$("input[name='code']").val(), mail:$("input[name='mail']").val() }, dataType:'json',
+                success:function(res){ layer.close(load);
+                    if(res.code==1){ layer.msg(res.msg,{icon:1}, function(){ location.href = ''; }); }
+                    else { layer.alert(res.msg,{icon:2}); }
+                }
+            });
+            return false;
+        });
+</script>

@@ -1,0 +1,35 @@
+{include file="layui/user/header" title="产品管理" /}
+    <style>
+        .custom-table { width: 100%; border-collapse: collapse; background: #fff; }
+        .custom-table th { background: #f9fafb; padding: 12px 16px; text-align: left; font-size: 13px; color: #999; font-weight: 500; border-bottom: 1px solid #e8e8e8; }
+        .custom-table td { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        .custom-table tbody tr:hover { background: #fafafa; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+        .badge-success { background: #e8f5e9; color: #4CAF50; }
+        .badge-warning { background: #fff8e1; color: #FF9800; }
+        .badge-danger { background: #ffebee; color: #F44336; }
+    </style>
+    <div class="data-card" style="background:#fff;border-radius:8px;border:1px solid #e8e8e8;">
+        <div class="card-header" style="padding:16px 20px;border-bottom:1px solid #f0f0f0;"><h3 style="font-size:16px;color:#333;margin:0;">产品管理</h3></div>
+        <div style="overflow-x:auto;">
+            <table class="custom-table">
+                <thead><tr><th>ID</th><th>名称</th><th>账号</th><th>开通时间</th><th>到期时间</th><th>状态</th><th>操作</th></tr></thead>
+                <tbody>
+                    {foreach $order as $o}
+                    <tr>
+                        <td>{$o.id}</td><td>{$o.cartid}</td><td>{$o.user}</td>
+                        <td>{$o.atime|date="Y-m-d",###}</td>
+                        <td style="color:#1E9FFF;">{$o.ztime|date="Y-m-d",###}</td>
+                        <td>
+                            {if $o.state=="1"}<span class="badge badge-success">正常</span>
+                            {elseif $o.state=="2"}<span class="badge badge-warning">暂停</span>
+                            {elseif $o.state=="3"}<span class="badge badge-danger">终止</span>{/if}
+                        </td>
+                        <td><a href="/user/order/{$o.id}" class="layui-btn layui-btn-xs">查看</a></td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{include file="layui/user/footer" /}

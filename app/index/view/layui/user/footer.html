@@ -1,0 +1,38 @@
+            </div>
+            <div class="user-footer">
+                <span>&copy; {:date('Y')} {$webname} {if isset($templateset['网站备案号']) && $templateset['网站备案号']}<a href="//beian.miit.gov.cn/">{$templateset['网站备案号']}</a>{/if}</span>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/assets/js/oneui.core.min.js"></script>
+    <script src="/static/assets/js/oneui.app.min.js"></script>
+    <script src="/static/assets/vendor/layer/layer.js"></script>
+
+    <script>
+        document.getElementById('mobileMenuBtn').addEventListener('click', function(){
+            document.getElementById('userSidebar').classList.toggle('mobile-open');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        });
+        document.getElementById('sidebarOverlay').addEventListener('click', function(){
+            document.getElementById('userSidebar').classList.remove('mobile-open');
+            document.getElementById('sidebarOverlay').classList.remove('show');
+        });
+        document.querySelectorAll('.submenu-toggle').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                var sub = this.nextElementSibling;
+                if(sub && sub.classList.contains('nav-submenu')){
+                    sub.classList.toggle('open');
+                    var arrow = this.querySelector('.arrow');
+                    if(arrow) arrow.classList.toggle('open');
+                }
+            });
+        });
+    </script>
+    <style>
+        .layui-layer-btn .layui-layer-btn0 { border-color: #1E9FFF !important; background-color: #1E9FFF !important; color: #fff !important; }
+        .layui-layer-btn a { height: 30px; line-height: 30px; margin: 5px 5px 0; padding: 0 15px; border: 1px solid #dedede; background-color: #fff; color: #333; font-weight: 400; cursor: pointer; text-decoration: none; border-radius: 4px; font-size: 14px; }
+        td, th { white-space: nowrap; }
+    </style>
+</body>
+</html>

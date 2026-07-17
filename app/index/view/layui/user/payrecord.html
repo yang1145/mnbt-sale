@@ -1,0 +1,26 @@
+{include file="layui/user/header" title="充值记录" /}
+    <style>
+        .custom-table { width: 100%; border-collapse: collapse; background: #fff; }
+        .custom-table th { background: #f9fafb; padding: 10px 14px; text-align: left; font-size: 13px; color: #999; border-bottom: 1px solid #e8e8e8; }
+        .custom-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        .pagination-box { text-align: center; margin-top: 16px; }
+    </style>
+    <div class="info-card" style="background:#fff;border-radius:8px;border:1px solid #e8e8e8;">
+        <div class="card-header" style="padding:14px 20px;border-bottom:1px solid #f0f0f0;font-size:15px;font-weight:600;color:#333;">充值记录</div>
+        <div style="overflow-x:auto;">
+            <table class="custom-table">
+                <thead><tr><th>ID</th><th>名称</th><th>订单号</th><th>支付通道</th><th>金额</th><th>时间</th><th>状态</th></tr></thead>
+                <tbody>
+                    {foreach $payrecord as $p}
+                    <tr>
+                        <td>{$p.id}</td><td>{$p.name}</td><td>{$p.ordernumber}</td><td>{$p.pay}</td><td>{$p.money}</td>
+                        <td>{$p.time|date="Y-m-d H:i:s",###}</td>
+                        <td>{if $p.state=="1"}<span style="color:#4CAF50;">已支付</span>{else}<span style="color:#F44336;">未支付</span>{/if}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-box">{$payrecord->render()}</div>
+    </div>
+{include file="layui/user/footer" /}

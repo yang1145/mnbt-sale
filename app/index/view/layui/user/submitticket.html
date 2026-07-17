@@ -1,0 +1,39 @@
+{include file="layui/user/header" title="提交工单" /}
+    <style>
+        .form-card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; }
+        .form-card .card-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; color: #333; }
+        .form-card .card-body { padding: 20px; }
+    </style>
+    <div class="form-card">
+        <div class="card-header">提交工单</div>
+        <div class="card-body">
+            <form>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题</label>
+                    <div class="layui-input-block"><input type="text" name="title" placeholder="请输入工单标题" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内容</label>
+                    <div class="layui-input-block"><textarea name="content" placeholder="请输入问题描述" class="layui-textarea" rows="8"></textarea></div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left:0;">
+                        <button type="submit" class="layui-btn layui-btn-fluid">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{include file="layui/user/footer" /}
+<script>
+        $("form").on('submit', function(){
+            var load = layer.msg('提交中...',{icon:16,time:false});
+            $.ajax({ type:'POST', url:'', data:{ title:$("input[name='title']").val(), content:$("textarea[name='content']").val() }, dataType:'json',
+                success:function(res){ layer.close(load);
+                    if(res.code == 1){ layer.msg(res.msg,{icon:1}, function(){ location.href = '/user/supportticket/'+res.id; }); }
+                    else { layer.alert(res.msg,{icon:2}); }
+                }
+            });
+            return false;
+        });
+</script>

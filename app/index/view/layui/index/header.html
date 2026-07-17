@@ -1,0 +1,83 @@
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{$description}">
+    <meta name="keywords" content="{$keywords}">
+    <link rel="shortcut icon" type="image/x-icon" href="{$favicon}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui@2.9.8/dist/css/layui.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .layui-header-custom {
+            position: sticky; top: 0; z-index: 999;
+            background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+            height: 60px; line-height: 60px;
+        }
+        .layui-header-custom .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .logo { display: flex; align-items: center; font-size: 20px; font-weight: 700; color: #1E9FFF; text-decoration: none; }
+        .logo i { margin-right: 8px; font-size: 24px; }
+        .nav-links { display: flex; gap: 8px; }
+        .nav-links a { color: #555; text-decoration: none; font-size: 14px; padding: 0 14px; transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: #1E9FFF; }
+        .auth-btns { display: flex; gap: 8px; align-items: center; }
+        .mobile-toggle { display: none; background: none; border: none; font-size: 24px; color: #333; cursor: pointer; padding: 0 8px; line-height: 60px; }
+
+        .layui-footer-custom { background: #2c3e50; color: #b0bec5; padding: 48px 0 0; margin-top: auto; }
+        .footer-grid { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 40px; padding-bottom: 36px; }
+        .footer-brand .logo { color: #fff; margin-bottom: 12px; display: inline-flex; }
+        .footer-brand .logo i { color: #5FB878; }
+        .footer-brand p { font-size: 13px; line-height: 1.8; margin-bottom: 16px; max-width: 320px; }
+        .footer-contact { display: flex; flex-direction: column; gap: 8px; }
+        .footer-contact-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .footer-contact-item i { color: #5FB878; width: 16px; text-align: center; }
+        .footer-col h4 { font-size: 14px; color: #fff; margin-bottom: 16px; font-weight: 600; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col a { color: #b0bec5; text-decoration: none; font-size: 13px; transition: color 0.2s, padding-left 0.2s; }
+        .footer-col a:hover { color: #fff; padding-left: 4px; }
+        .footer-bottom { padding: 18px 0; border-top: 1px solid #3e5065; font-size: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .footer-bottom a { color: #b0bec5; text-decoration: none; transition: color 0.2s; }
+        .footer-bottom a:hover { color: #fff; }
+        .footer-bottom-links { display: flex; gap: 16px; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 60px; left: 0; width: 100%; background: #fff; flex-direction: column; padding: 12px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+            .nav-links.nav-active { display: flex; }
+            .nav-links a { padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+            .mobile-toggle { display: block; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+            .footer-brand { grid-column: 1 / -1; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-header-custom">
+        <div class="container">
+            <a href="/" class="logo">
+                <i class="layui-icon layui-icon-website"></i>
+                <span>{$webname}</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="/" {if isset($active) && $active=='index'}class="active"{/if}>首页</a>
+                <a href="/cart" {if isset($active) && $active=='cart'}class="active"{/if}>产品</a>
+                <a href="/announcements" {if isset($active) && $active=='announcements'}class="active"{/if}>公告</a>
+                <a href="#" {if isset($active) && $active=='help'}class="active"{/if}>帮助</a>
+            </div>
+            <div class="auth-btns">
+                {if $userstate=="1"}
+                <a href="/user/index" class="layui-btn layui-btn-sm layui-btn-primary">用户中心</a>
+                {else}
+                <a href="/login" class="layui-btn layui-btn-sm layui-btn-primary">登录</a>
+                <a href="/register" class="layui-btn layui-btn-sm">注册</a>
+                {/if}
+            </div>
+            <button class="mobile-toggle" id="menuToggle">
+                <i class="layui-icon layui-icon-spread-left"></i>
+            </button>
+        </div>
+    </div>

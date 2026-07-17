@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>{$webname} - 产品详情</title>
+    {include file="layui/index/header" /}
+    <style>
+        .main-content { padding: 40px 0 60px; min-height: calc(100vh - 60px - 300px); background: #f5f7fa; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid #e8e8e8; }
+        .page-header h1 { font-size: 20px; color: #333; }
+        .detail-card { background: #fff; border-radius: 10px; padding: 28px; margin-bottom: 24px; border: 1px solid #e8e8e8; }
+        .detail-card h3 { font-size: 18px; color: #1E9FFF; margin-bottom: 14px; }
+        .detail-card .desc { color: #666; line-height: 1.8; font-size: 14px; }
+        .config-card { background: #fff; border-radius: 10px; padding: 28px; border: 1px solid #e8e8e8; }
+        .config-card h3 { font-size: 16px; color: #333; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #f0f0f0; }
+        .total-box { background: #f9fafb; border: 1px solid #e8e8e8; border-radius: 6px; padding: 14px 16px; font-size: 16px; font-weight: 700; color: #1E9FFF; }
+        @media (max-width: 768px) {
+            .page-header { flex-direction: column; gap: 12px; text-align: center; }
+            .layui-row .layui-col-md3, .layui-row .layui-col-md9 { width: 100%; }
+            .layui-row .layui-col-md3 + .layui-col-md9 { margin-top: 10px; }
+        }
+    </style>
+
+    <section class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>{$product.name}</h1>
+                <a href="/cart" class="layui-btn layui-btn-sm layui-btn-primary">
+                    <i class="layui-icon layui-icon-prev"></i> 返回列表
+                </a>
+            </div>
+
+            <div class="detail-card">
+                <h3>产品介绍</h3>
+                <div class="desc">{$product.content}</div>
+            </div>
+
+            <div class="config-card">
+                <h3>购买配置</h3>
+                <form id="buyForm">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">购买时间</label>
+                        <div class="layui-input-inline" style="width:120px;">
+                            <input type="number" name="time" value="1" min="1" class="layui-input" id="timeInput">
+                        </div>
+                        <div class="layui-form-mid layui-word-aux" id="priceUnit">
+                            {if $product.money=="0"}免费{else}{$product.money}元{/if}/
+                            {if $product.cycle=='day'}日{elseif $product.cycle=='month'}月{elseif $product.cycle=='season'}季{elseif $product.cycle=='year'}年{elseif $product.cycle=='unrestricted'}一次性{/if}
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">主机账号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="user" value="{:userrandom()}" readonly class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">主机密码</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="password" value="{:random()}" readonly class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">应付金额</label>
+                        <div class="layui-input-block">
+                            <div class="total-box" id="totalPrice">
+                                {if $product.money=="0"}免费{else}&yen;{$product.money}{/if}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" style="margin-left:0;">
+                            {if $product.inventory<'1'}
+                            <button type="button" class="layui-btn layui-btn-disabled layui-btn-fluid" disabled>已售完</button>
+                            {else}
+                            <button type="submit" class="layui-btn layui-btn-fluid">立即开通</button>
+                            {/if}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    {include file="layui/index/footer" /}
+    <script>
+        var price = parseFloat('{$product.money}') || 0;
+        var cycleText = '{if $product.cycle=="day"}日{elseif $product.cycle=="month"}月{elseif $product.cycle=="season"}季{elseif $product.cycle=="year"}年{elseif $product.cycle=="unrestricted"}一次性{/if}';
+        var timeInput = document.getElementById('timeInput');
+        var totalPriceEl = document.getElementById('totalPrice');
+
+        function updateTotal() {
+            var qty = parseInt(timeInput.value) || 0;
+            if (qty < 1) { totalPriceEl.textContent = '时长错误'; return; }
+            if (price === 0) { totalPriceEl.textContent = '免费'; return; }
+            totalPriceEl.textContent = '\u00A5' + (price * qty) + ' / ' + qty + cycleText;
+        }
+        timeInput.addEventListener('input', updateTotal);
+        updateTotal();
+
+        $(function(){
+            $('#buyForm').on('submit', function(){
+                var btn = $("button[type='submit']");
+                btn.attr('disabled', true).text('处理中...');
+                var data = { user: $("input[name='user']").val(), password: $("input[name='password']").val(), time: $("input[name='time']").val() };
+                $.ajax({ type:'POST', url:'', data:data, dataType:'json',
+                    success:function(res){
+                        if(res.code == 1){ layer.msg(res.msg, {icon:1}, function(){ location.href = '/user/order/' + res.id; }); }
+                        else { btn.attr('disabled', false).text('立即开通'); layer.msg(res.msg, {icon:2}); }
+                    }
+                });
+                return false;
+            });
+        });
+    </script>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{$webname} - [title]</title>
+    <meta name="description" content="{$description}">
+    <meta name="keywords" content="{$keywords}">
+    <link rel="shortcut icon" type="image/x-icon" href="{$favicon}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui@2.9.8/dist/css/layui.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #f5f7fa; }
+
+        .user-layout { display: flex; min-height: 100vh; }
+        .user-sidebar { width: 230px; background: #2c3e50; color: #b0bec5; flex-shrink: 0; overflow-y: auto; position: sticky; top: 0; height: 100vh; }
+        .sidebar-brand { padding: 20px 20px 16px; border-bottom: 1px solid #3e5065; }
+        .sidebar-brand a { color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .sidebar-brand a i { color: #5FB878; font-size: 22px; }
+        .sidebar-nav { padding: 12px 0; }
+        .sidebar-nav .nav-heading { padding: 14px 20px 6px; font-size: 11px; color: #5c7080; text-transform: uppercase; letter-spacing: 1px; }
+        .sidebar-nav .nav-item { list-style: none; }
+        .sidebar-nav .nav-link { display: flex; align-items: center; gap: 10px; padding: 11px 20px; color: #b0bec5; text-decoration: none; font-size: 14px; transition: all 0.15s; cursor: pointer; }
+        .sidebar-nav .nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .sidebar-nav .nav-link i { width: 18px; text-align: center; font-size: 15px; }
+        .sidebar-nav .nav-submenu { list-style: none; padding-left: 32px; display: none; }
+        .sidebar-nav .nav-submenu.open { display: block; }
+        .sidebar-nav .nav-submenu .nav-link { padding: 8px 20px; font-size: 13px; }
+        .sidebar-nav .nav-link .arrow { margin-left: auto; transition: transform 0.2s; font-size: 12px; }
+        .sidebar-nav .nav-link .arrow.open { transform: rotate(90deg); }
+
+        .user-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .user-topbar { background: #fff; border-bottom: 1px solid #e8e8e8; padding: 0 20px; height: 54px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .mobile-menu-btn { display: none; background: none; border: none; font-size: 22px; color: #333; cursor: pointer; margin-right: 12px; }
+        .user-topbar .topbar-right { display: flex; align-items: center; gap: 10px; }
+        .user-topbar .topbar-right img { width: 30px; height: 30px; border-radius: 50%; }
+        .user-topbar .topbar-right .user-name { font-size: 14px; color: #333; }
+        .user-topbar .topbar-right .layui-btn { margin-left: 4px; }
+        .user-content { flex: 1; padding: 24px 20px; }
+
+        .user-footer { padding: 14px 20px; background: #fff; border-top: 1px solid #e8e8e8; font-size: 12px; color: #999; text-align: center; }
+
+        @media (max-width: 768px) {
+            .user-sidebar { position: fixed; left: -240px; top: 0; z-index: 1000; transition: left 0.25s; width: 240px; height: 100vh; }
+            .user-sidebar.mobile-open { left: 0; }
+            .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999; }
+            .sidebar-overlay.show { display: block; }
+            .mobile-menu-btn { display: inline-flex; }
+            .user-content { padding: 16px 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="user-layout">
+        <aside class="user-sidebar" id="userSidebar">
+            <div class="sidebar-brand">
+                <a href="/"><i class="layui-icon layui-icon-website"></i><span>{$webname}</span></a>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/index"><i class="layui-icon layui-icon-home"></i>用户中心</a>
+                </li>
+                <li class="nav-heading">购买</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart"><i class="layui-icon layui-icon-cart-simple"></i>购买产品</a>
+                </li>
+                <li class="nav-heading">基本</li>
+                <li class="nav-item">
+                    <a class="nav-link submenu-toggle" href="javascript:;">
+                        <i class="layui-icon layui-icon-username"></i>账号设置
+                        <span class="arrow"><i class="layui-icon layui-icon-right"></i></span>
+                    </a>
+                    <ul class="nav-submenu">
+                        <li><a class="nav-link" href="/user/information">修改资料</a></li>
+                        <li><a class="nav-link" href="/user/password">修改密码</a></li>
+                        <li><a class="nav-link" href="/user/mail">{if isset($user) && $user.mail}修改邮箱{else}绑定邮箱{/if}</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link submenu-toggle" href="javascript:;">
+                        <i class="layui-icon layui-icon-rmb"></i>账户充值
+                        <span class="arrow"><i class="layui-icon layui-icon-right"></i></span>
+                    </a>
+                    <ul class="nav-submenu">
+                        <li><a class="nav-link" href="/user/pay">账户充值</a></li>
+                        <li><a class="nav-link" href="/user/payrecord">充值记录</a></li>
+                        <li><a class="nav-link" href="/user/transaction">消费记录</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link submenu-toggle" href="javascript:;">
+                        <i class="layui-icon layui-icon-dialogue"></i>工单系统
+                        <span class="arrow"><i class="layui-icon layui-icon-right"></i></span>
+                    </a>
+                    <ul class="nav-submenu">
+                        <li><a class="nav-link" href="/user/submitticket">提交工单</a></li>
+                        <li><a class="nav-link" href="/user/supportticket">工单列表</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/announcements"><i class="layui-icon layui-icon-notice"></i>网站公告</a>
+                </li>
+                <li class="nav-heading">产品</li>
+                <li class="nav-item">
+                    <a class="nav-link submenu-toggle" href="javascript:;">
+                        <i class="layui-icon layui-icon-list"></i>产品管理
+                        <span class="arrow"><i class="layui-icon layui-icon-right"></i></span>
+                    </a>
+                    <ul class="nav-submenu">
+                        <li><a class="nav-link" href="/user/order">我的产品</a></li>
+                        <li><a class="nav-link" href="/user/transfer">产品过户</a></li>
+                        <li><a class="nav-link" href="/user/transferrecord">过户记录</a></li>
+                    </ul>
+                </li>
+                <li class="nav-heading">推广</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/aff"><i class="layui-icon layui-icon-share"></i>推广中心</a>
+                </li>
+                {if isset($templateset['侧边栏']) && $templateset['侧边栏']}
+                <li class="nav-heading">其他</li>
+                {$templateset['侧边栏']}
+                {/if}
+            </ul>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="user-main">
+            <div class="user-topbar">
+                <div style="display:flex;align-items:center;">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="layui-icon layui-icon-spread-left"></i>
+                    </button>
+                    <span style="font-weight:600;color:#333;">[title]</span>
+                </div>
+                <div class="topbar-right">
+                    {if isset($user)}
+                    <img src="http://q1.qlogo.cn/g?b=qq&nk={$user.qq}&s=100" alt="avatar">
+                    <span class="user-name">{$user.name}</span>
+                    <span style="color:#999;font-size:12px;">余额: &yen;{$user.money}</span>
+                    <a href="/user/logout" class="layui-btn layui-btn-xs layui-btn-primary">退出</a>
+                    {/if}
+                </div>
+            </div>
+            <div class="user-content">

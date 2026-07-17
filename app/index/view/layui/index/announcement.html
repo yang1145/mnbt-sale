@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>{$webname} - 公告详情</title>
+    {include file="layui/index/header" /}
+    <style>
+        .main-content { padding: 40px 0 60px; min-height: calc(100vh - 60px - 300px); background: #f5f7fa; }
+        .content-card { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 10px; padding: 30px; border: 1px solid #e8e8e8; }
+        .content-card h1 { font-size: 22px; color: #333; margin-bottom: 10px; }
+        .content-card .meta { font-size: 13px; color: #999; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+        .content-body { font-size: 14px; line-height: 1.8; color: #555; }
+        .content-body p { margin-bottom: 14px; }
+    </style>
+
+    <section class="main-content">
+        <div class="container">
+            <a href="/announcements" class="layui-btn layui-btn-sm layui-btn-primary" style="margin-bottom:18px;">
+                <i class="layui-icon layui-icon-prev"></i> 返回列表
+            </a>
+
+            <div class="content-card">
+                <h1>{$announcement.name}</h1>
+                <div class="meta">发布时间：{$announcement.time|date="Y-m-d H:i",###}</div>
+                <div class="content-body">{$announcement.information}</div>
+            </div>
+        </div>
+    </section>
+
+    {include file="layui/index/footer" /}

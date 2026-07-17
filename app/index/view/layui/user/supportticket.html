@@ -1,0 +1,32 @@
+{include file="layui/user/header" title="工单列表" /}
+    <style>
+        .custom-table { width: 100%; border-collapse: collapse; background: #fff; }
+        .custom-table th { background: #f9fafb; padding: 10px 14px; text-align: left; font-size: 13px; color: #999; font-weight: 500; border-bottom: 1px solid #e8e8e8; }
+        .custom-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        .custom-table tbody tr:hover { background: #fafafa; }
+        .pagination-box { text-align: center; margin-top: 16px; }
+    </style>
+    <div class="info-card" style="background:#fff;border-radius:8px;border:1px solid #e8e8e8;">
+        <div class="card-header" style="padding:14px 20px;border-bottom:1px solid #f0f0f0;font-size:15px;font-weight:600;color:#333;">工单列表</div>
+        <div style="overflow-x:auto;">
+            <table class="custom-table">
+                <thead><tr><th>ID</th><th>标题</th><th>提交时间</th><th>状态</th><th>操作</th></tr></thead>
+                <tbody>
+                    {foreach $ticket as $t}
+                    <tr>
+                        <td>{$t.id}</td><td>{$t.title}</td><td>{$t.time|date="Y-m-d H:i:s",###}</td>
+                        <td>
+                            {if $t.state=="1"}<span style="color:#FF9800;">待回复</span>
+                            {elseif $t.state=="2"}<span style="color:#FF9800;">等待回复</span>
+                            {elseif $t.state=="3"}<span style="color:#4CAF50;">已回复</span>
+                            {elseif $t.state=="4"}<span style="color:#F44336;">已关闭</span>{/if}
+                        </td>
+                        <td><a href="/user/supportticket/{$t.id}" class="layui-btn layui-btn-xs">查看</a></td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-box">{$ticket->render()}</div>
+    </div>
+{include file="layui/user/footer" /}

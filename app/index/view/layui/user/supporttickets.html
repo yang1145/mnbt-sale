@@ -1,0 +1,83 @@
+{include file="layui/user/header" title="查看工单" /}
+    <style>
+        .chat-box { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; margin-bottom: 18px; }
+        .chat-box .card-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; color: #333; }
+        .chat-messages { padding: 20px; max-height: 500px; overflow-y: auto; }
+        .chat-msg { margin-bottom: 16px; }
+        .chat-msg .msg-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .chat-msg .msg-meta img { width: 36px; height: 36px; border-radius: 50%; }
+        .chat-msg .msg-meta .name { font-weight: 500; }
+        .chat-msg .msg-meta .time { font-size: 12px; color: #999; }
+        .chat-msg .msg-body { margin-left: 46px; padding: 10px 14px; background: #f9fafb; border-radius: 8px; line-height: 1.6; }
+    </style>
+    <div class="chat-box">
+        <div class="card-header">查看工单</div>
+        <div class="chat-messages" id="chatMessages">
+            <h3 style="color:#1E9FFF;margin-bottom:16px;">标题:{$ticket.title}</h3>
+            {foreach $ticket.content as $tc}
+            <div class="chat-msg">
+                <div class="msg-meta">
+                    {if $tc.personnel=="1"}
+                    <img src="http://q1.qlogo.cn/g?b=qq&nk={$admin.qq}&s=100" alt="">
+                    <span class="name" style="color:#1E9FFF;">站长:{$admin.name}</span>
+                    {else}
+                    <img src="http://q1.qlogo.cn/g?b=qq&nk={$user.qq}&s=100" alt="">
+                    <span class="name" style="color:#5FB878;">你:{$user.name}</span>
+                    {/if}
+                    <span class="time">{$tc.time|date="Y-m-d H:i:s",###}</span>
+                </div>
+                <div class="msg-body">{$tc.content}</div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="info-card" style="background:#fff;border-radius:8px;border:1px solid #e8e8e8;">
+        <div class="card-header" style="padding:14px 20px;border-bottom:1px solid #f0f0f0;font-size:15px;font-weight:600;color:#333;">操作</div>
+        <div style="padding:20px;">
+            <p style="margin-bottom:12px;">状态:
+                {if $ticket.state=="1"}<span style="color:#FF9800;">待回复</span>
+                {elseif $ticket.state=="2"}<span style="color:#FF9800;">等待回复</span>
+                {elseif $ticket.state=="3"}<span style="color:#4CAF50;">已回复</span>
+                {elseif $ticket.state=="4"}<span style="color:#F44336;">已关闭</span>{/if}
+            </p>
+            <button onclick="endTicket()" class="layui-btn layui-btn-sm layui-btn-danger">关闭此工单</button>
+            <br><br>
+
+            <form>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">回复</label>
+                    <div class="layui-input-block"><textarea name="content" placeholder="请输入回复内容" class="layui-textarea" rows="5"></textarea></div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left:0;">
+                        <button type="submit" class="layui-btn layui-btn-fluid">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{include file="layui/user/footer" /}
+<script>
+    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+    function endTicket(){
+        layer.confirm('确定要关闭此工单吗？',{icon:3}, function(){
+            $.ajax({ type:'POST', url:'', data:{ act:'end' }, dataType:'json',
+                success:function(res){
+                    if(res.code==1){ layer.msg(res.msg,{icon:1}, function(){ location.href=''; }); }
+                    else { layer.alert(res.msg,{icon:2}); }
+                }
+            });
+        });
+    }
+        $("form").on('submit', function(){
+            var load = layer.msg('提交中...',{icon:16,time:false});
+            $.ajax({ type:'POST', url:'', data:{ act:'reply', content:$("textarea[name='content']").val() }, dataType:'json',
+                success:function(res){ layer.close(load);
+                    if(res.code==1){ layer.msg(res.msg,{icon:1}, function(){ location.href=''; }); }
+                    else { layer.alert(res.msg,{icon:2}); }
+                }
+            });
+            return false;
+        });
+</script>

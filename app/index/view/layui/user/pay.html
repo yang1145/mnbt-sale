@@ -1,0 +1,36 @@
+{include file="layui/user/header" title="账户充值" /}
+    <style>
+        .form-card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; max-width: 500px; margin: 0 auto; }
+        .form-card .card-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; color: #333; }
+        .form-card .card-body { padding: 20px; }
+    </style>
+    <div class="form-card">
+        <div class="card-header">在线充值</div>
+        <div class="card-body">
+            <form class="layui-form" method="POST">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">充值金额</label>
+                    <div class="layui-input-block"><input type="number" name="money" placeholder="请输入充值金额" class="layui-input" required></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">支付方式</label>
+                    <div class="layui-input-block">
+                        <select name="payid" class="layui-input">
+                            {volist name="pay" id="p"}<option value="{$p.id}">{$p.name}</option>{/volist}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left:0;">
+                        <span style="color:#FF5722;font-size:12px;">注:{$paycron}分钟未支付会自动删除订单，请注意时间！</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left:0;">
+                        <button type="submit" class="layui-btn layui-btn-fluid">充值</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{include file="layui/user/footer" /}

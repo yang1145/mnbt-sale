@@ -1,0 +1,65 @@
+{include file="layui/user/header" title="产品控制台" /}
+    <style>
+        .info-card { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; margin-bottom: 18px; }
+        .info-card .card-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; color: #333; }
+        .info-card .card-body { padding: 18px 20px; }
+        .info-card .card-body h1 { font-size: 18px; color: #1E9FFF; margin-bottom: 12px; }
+        .info-card .card-body p { font-size: 13px; color: #666; line-height: 1.8; margin-bottom: 6px; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+        .badge-success { background: #e8f5e9; color: #4CAF50; }
+        .badge-warning { background: #fff8e1; color: #FF9800; }
+        .badge-danger { background: #ffebee; color: #F44336; }
+    </style>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(350px, 1fr));gap:18px;">
+        <div class="info-card">
+            <div class="card-header">产品信息</div>
+            <div class="card-body">
+                <h1>{$cart.name}</h1>
+                <div style="background:#f9fafb;border:1px solid #e8e8e8;border-radius:6px;padding:14px;margin-bottom:12px;">{$cart.content}</div>
+                <p>状态:{if $data.state=="1"}<span class="badge badge-success">正常</span>{elseif $data.state=="2"}<span class="badge badge-warning">暂停</span>{elseif $data.state=="3"}<span class="badge badge-danger">终止</span>{/if}</p>
+                <p>续费价格: &yen;{if $cart.money=="0"}免费{else}{$cart.money}{/if}/{if $cart.cycle=="day"}日{elseif $cart.cycle=="month"}月{elseif $cart.cycle=="season"}季{elseif $cart.cycle=="year"}年{elseif $cart.cycle=="unrestricted"}一次性{/if}</p>
+                <p>开通时间: {$data.atime|date="Y-m-d",###}</p>
+                <p>到期时间: <span style="color:#1E9FFF;font-weight:600;">{$data.ztime|date="Y-m-d",###}</span></p>
+            </div>
+        </div>
+        <div class="info-card">
+            <div class="card-header">产品操作</div>
+            <div class="card-body">
+                <button onclick="renew()" class="layui-btn">续费</button>
+                {if $upgrade=="1"}<button onclick="upgrade()" class="layui-btn">升/降级产品</button>{/if}
+                <div style="margin-top:14px;">{$ClientArea}</div>
+            </div>
+        </div>
+    </div>
+{include file="layui/user/footer" /}
+<script>
+    function renew(){
+        layer.prompt({title: '续费/{if $cart.cycle=="day"}日{elseif $cart.cycle=="month"}月{elseif $cart.cycle=="year"}年{elseif $cart.cycle=="unrestricted"}一次性{/if}', formType: 3}, function(time, index){
+            layer.close(index);
+            layer.confirm('确定要续费<b style="color:#ff6b6b">'+time+'</b>{if $cart.cycle=="day"}日{elseif $cart.cycle=="month"}月{elseif $cart.cycle=="year"}年{elseif $cart.cycle=="unrestricted"}一次性{/if}吗？',{icon:3}, function(){ renews(time) });
+        });
+    }
+    function renews(time){
+        var load = layer.load(1, {shade:0.8, time:false});
+        $.ajax({ type:'POST', url:'', data:{ act:'renew', id:{$data.id}, time:time }, dataType:'json',
+            success:function(data){ layer.close(load);
+                if(data.code == 1){ layer.msg(data.msg,{icon:1}, function(){ location.href = ''; }); }
+                else { layer.alert(data.msg,{icon:2}); }
+            }
+        });
+    }
+    function upgrade(){
+        layer.open({ type:1, closeBtn:false, shift:7, shadeClose:true, title:"产品升降级",
+            content: '<form style="padding:20px;"><div style="margin-bottom:14px;"><label>请选择产品</label><select name="newcartid" id="newcartid" class="layui-input"><option value="">不选择</option>{if $upgrades}{volist name="upgrades" id="up"}<option value="{$up.id}">{$up.information}</option>{/volist}{/if}</select></div><button type="button" onclick="upgrades()" class="layui-btn layui-btn-fluid">提交</button></form>'
+        });
+    }
+    function upgrades(){
+        var load = layer.msg('提交中...',{icon:16,time:false});
+        $.ajax({ type:'POST', url:'', data:{ act:'upgrade', newcartid:$("#newcartid").val() }, dataType:'json',
+            success:function(data){ layer.close(load);
+                if(data.code == 1){ layer.msg(data.msg,{icon:1}, function(){ location.href = ''; }); }
+                else { layer.msg(data.msg,{icon:2}); }
+            }
+        });
+    }
+</script>

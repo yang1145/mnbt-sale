@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>{$webname} - 登录</title>
+    {include file="layui/index/header" /}
+    <style>
+        .auth-wrapper { display: flex; justify-content: center; align-items: center; min-height: calc(100vh - 60px); padding: 60px 20px; background: #f5f7fa; }
+        .auth-card { background: #fff; border-radius: 12px; padding: 40px; width: 100%; max-width: 430px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .auth-card h2 { text-align: center; font-size: 22px; color: #333; margin-bottom: 6px; }
+        .auth-card > p { text-align: center; color: #999; font-size: 14px; margin-bottom: 28px; }
+        .captcha-row { display: flex; gap: 10px; align-items: flex-start; }
+        .captcha-row .layui-input-block { margin-left: 0; flex: 1; }
+        .captcha-row img { height: 42px; cursor: pointer; border: 1px solid #e8e8e8; border-radius: 4px; }
+        .auth-footer { text-align: center; margin-top: 18px; color: #999; font-size: 13px; }
+        .auth-footer a { color: #1E9FFF; text-decoration: none; }
+    </style>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h2>用户登录</h2>
+            <p>欢迎回来，请登录您的账户</p>
+
+            <form id="loginForm">
+                <div class="layui-form-item">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix"><i class="layui-icon layui-icon-username"></i></div>
+                        <input type="text" name="userName" placeholder="账号或者邮箱" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix"><i class="layui-icon layui-icon-password"></i></div>
+                        <input type="password" name="userPwd" placeholder="密码" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="captcha-row">
+                        <div style="flex:1;">
+                            <input type="text" name="captcha" placeholder="验证码" class="layui-input">
+                        </div>
+                        <img id="randimg" src="{:captcha_src()}" onclick="this.src='{:captcha_src()}?'+Math.random();"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button type="submit" class="layui-btn layui-btn-fluid">登录</button>
+                </div>
+                <div class="auth-footer">
+                    <p>没有账户？ <a href="/register">立即注册</a> | 忘记密码？<a href="/pwreset">点击这里</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {include file="layui/index/footer" /}
+    <script>
+        $(function(){
+            $('#loginForm').on('submit', function(){
+                var btn = $("button[type='submit']");
+                btn.attr('disabled', true).text('登录中...');
+                var data = { act:"ptdl", user:$("input[name='userName']").val(), password:$("input[name='userPwd']").val(), captcha:$("input[name='captcha']").val() };
+                $.ajax({ type:'POST', url:'', data:data, dataType:'json',
+                    success:function(res){
+                        if(res.code == 1){ layer.msg(res.msg, {icon:1}, function(){ location.href = '/user/index'; }); }
+                        else { document.getElementById("randimg").src='{:captcha_src()}?'+Math.random(); btn.attr('disabled', false).text('登录'); layer.msg(res.msg, {icon:2}); }
+                    }
+                });
+                return false;
+            });
+        });
+    </script>

@@ -1,0 +1,20 @@
+{include file="layui/user/header" title="过户记录" /}
+    <style>
+        .custom-table { width: 100%; border-collapse: collapse; background: #fff; }
+        .custom-table th { background: #f9fafb; padding: 10px 14px; text-align: left; font-size: 13px; color: #999; border-bottom: 1px solid #e8e8e8; }
+        .custom-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        .pagination-box { text-align: center; margin-top: 16px; }
+    </style>
+    <div class="info-card" style="background:#fff;border-radius:8px;border:1px solid #e8e8e8;">
+        <div class="card-header" style="padding:14px 20px;border-bottom:1px solid #f0f0f0;font-size:15px;font-weight:600;color:#333;">过户记录</div>
+        <div style="overflow-x:auto;">
+            <table class="custom-table">
+                <thead><tr><th>ID</th><th>详情</th><th>时间</th></tr></thead>
+                <tbody>
+                    {foreach $data as $d}<tr><td>{$d.id}</td><td>{$d.record}</td><td>{$d.time|date="Y-m-d H:i:s",###}</td></tr>{/foreach}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-box">{$data->render()}</div>
+    </div>
+{include file="layui/user/footer" /}
