@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/web_server-Apache-D22128?logo=apache" alt="Apache">
   <img src="https://img.shields.io/badge/web_server-Nginx-009639?logo=nginx" alt="Nginx">
   <img src="https://img.shields.io/badge/web_server-LiteSpeed-00AEEF" alt="LiteSpeed">
-  <img src="https://img.shields.io/badge/php-7.2-777BB4?logo=php" alt="PHP">
+  <img src="https://img.shields.io/badge/php-7.2--8.0+-777BB4?logo=php" alt="PHP">
   <img src="https://img.shields.io/badge/mysql-5.6+-4479A1?logo=mysql" alt="MySQL">
 </p>
 
@@ -33,7 +33,8 @@
 
 ## 运行环境要求
 
-- PHP 7.2 或更高版本
+- **PHP 7.2 - 8.0+**（推荐 PHP 7.4 / 8.0）
+  - PHP 8.0+ 需要使用本仓库已修复的兼容性代码，官方原版 ThinkPHP 5.0.24 不支持 PHP 8+
 - MySQL 5.7 或更高版本
 - Apache 或 Nginx 服务器
 - PHP 扩展：pdo_mysql、curl、gd、openssl
