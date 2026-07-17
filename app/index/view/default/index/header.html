@@ -16,28 +16,17 @@
         }
         
         html {
-            /* 修复 iOS Safari 中 100vh 包含地址栏导致页面顶部被推出视口的问题 */
-            height: -webkit-fill-available;
+            /* 让 html 作为普通块级根元素滚动，避免 iOS 上 body 滚动 vs html 滚动的行为差异 */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         body {
             background-color: #f4f5f7;
             color: #172b4d;
             line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            /* 用 -webkit-fill-available 替代 100vh，避免 iOS 地址栏导致的视口高度计算误差 */
+            /* 恢复普通文档流布局，避免 fixed header + flex + 100vh 在移动端造成的初始滚动偏移 */
             min-height: 100vh;
-            min-height: -webkit-fill-available;
-            /* 允许垂直滚动，确保用户能滑回页面顶部 */
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        body > section,
-        body > div[class*="wrapper"],
-        body > div[class*="content"] {
-            flex-shrink: 0;
         }
         
         .container {
@@ -48,8 +37,9 @@
         
         header {
             padding: 15px 0;
-            position: fixed;
-            width: 100%;
+            /* 改用 sticky 定位，保留在文档流中，避免 fixed 定位在移动端造成的滚动异常和 hero padding 计算问题 */
+            position: -webkit-sticky;
+            position: sticky;
             top: 0;
             z-index: 1000;
             background: #ffffff;
@@ -164,7 +154,6 @@
             background: #172b4d;
             padding: 60px 0 0;
             color: #b3bac5;
-            margin-top: auto;
         }
 
         .footer-main {

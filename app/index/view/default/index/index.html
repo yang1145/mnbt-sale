@@ -5,7 +5,8 @@
     {include file="default/index/header" /}
     <style>
         .hero {
-            padding: 140px 0 90px;
+            /* header 已改为 sticky 并保留在文档流中，因此 hero 顶部只需要 modest 内边距 */
+            padding: 50px 0 90px;
             background: linear-gradient(135deg, #ffffff 0%, #f4f8ff 100%);
             border-bottom: 1px solid #dfe1e6;
             flex-shrink: 0;
@@ -468,7 +469,7 @@
 
         @media (max-width: 768px) {
             .hero {
-                padding: 110px 0 60px;
+                padding: 35px 0 60px;
             }
 
             .hero-content h1 {

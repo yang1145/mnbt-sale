@@ -66,19 +66,6 @@
             document.getElementById('navLinks').classList.toggle('nav-active');
         });
 
-        // 修复移动端页面初始滚动位置不在顶部的问题
-        // 原因：iOS Safari 的 100vh 包含地址栏，页面加载时可能被自动滚动到非零位置
-        function resetScrollTop() {
-            if (window.scrollY > 0) {
-                window.scrollTo(0, 0);
-            }
-        }
-        // 在 DOM 解析完成和页面完全加载后都重置一次，确保覆盖各种时序
-        document.addEventListener('DOMContentLoaded', resetScrollTop);
-        window.addEventListener('load', resetScrollTop);
-        // 延迟再重置一次，覆盖 layer 弹窗等异步操作可能导致的滚动偏移
-        setTimeout(resetScrollTop, 300);
-
         {if isset($templateset['公告开关']) && $templateset['公告开关']=="开"}
         layer.alert('{if isset($templateset["网站公告"])}{$templateset["网站公告"]}{/if}', {title: "网站公告"});
         {/if}
