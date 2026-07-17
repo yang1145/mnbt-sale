@@ -16,6 +16,9 @@ use traits\controller\Jump;
 
 Loader::import('controller/Jump', TRAIT_PATH, EXT);
 
+// PHP 8.2+ 兼容：业务控制器（如 app\index\controller\Index）会通过 $this->web、
+// $this->user 等方式动态赋值属性，添加该属性可避免 PHP 8.2 弃用警告。
+#[\AllowDynamicProperties]
 class Controller
 {
     use Jump;
