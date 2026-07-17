@@ -9,7 +9,7 @@ class Login extends Controller
 
     public function index()
     {
-		$web=Db::name('web')->where('id',1)->find();
+		$web=web_config();
 
 	if(Request::instance()->isPost()) {
 			$user=input("user");

@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class User extends Controller {
 	public function _initialize() {
-		$this->web=Db::name('web')->where('id',1)->find();
+		$this->web=web_config();
 if($this->web["wh"]=="1"){
 exit($this->web["whxx"]);
 }
@@ -1318,7 +1318,7 @@ return $this->fetch('/'.$this->web["template"].'/user/transaction',[
 //发送邮箱
 		public static function email($email,$name,$body)
 		{
-$web=Db::name('web')->where('id',1)->find();
+$web=web_config();
 try {
 	$mail = new PHPMailer(); 
 	$mail->IsSMTP();

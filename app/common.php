@@ -82,3 +82,19 @@ $len="0";
 }
          return $len;
 }
+
+/**
+ * 获取网站配置 (单次请求内静态缓存, 避免控制器 _initialize 与 email 函数重复查询)
+ * @param string|null $key 配置字段名, 不传则返回全部配置数组
+ * @return mixed|null
+ */
+function web_config($key = null){
+    static $web = null;
+    if($web === null){
+        $web = \think\Db::name('web')->where('id', 1)->find();
+    }
+    if($key === null){
+        return $web;
+    }
+    return isset($web[$key]) ? $web[$key] : null;
+}

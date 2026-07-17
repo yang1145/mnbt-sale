@@ -12,7 +12,7 @@ public function _initialize() {
 			$this->redirect('/admin/login');
 		}
 		$this->user=Db::name('admin')->where('id',session("adminid"))->find();
-		$this->web=Db::name('web')->where('id',1)->find();
+		$this->web=web_config();
 $file=file_exists(PATH."/app/index/view/".$this->web["template"]."/set.php");
 if($file){
 $templateset="1";
@@ -2172,7 +2172,7 @@ return $this->fetch('/'.$this->web["admintemplate"]."/affsy",[
 //发送邮箱
 		public static function email($email,$name,$body)
 		{
-$web=Db::name('web')->where('id',1)->find();
+$web=web_config();
 try {
 	$mail = new PHPMailer(); 
 	$mail->IsSMTP();
