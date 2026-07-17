@@ -1193,7 +1193,8 @@ $data3=Db::name('server')->select();
 
 
 $da5=Db::name('server')->where("id",$data1["serverid"])->find();
-if(file_exists(PATH."plugins/host/".$da5["serverplugins"]."/".$da5["serverplugins"].".php")){
+// PHP 8 兼容：find() 可能返回 null，需先判断再访问数组下标
+if(!empty($da5) && isset($da5["serverplugins"]) && file_exists(PATH."plugins/host/".$da5["serverplugins"]."/".$da5["serverplugins"].".php")){
 include_once PATH."plugins/host/".$da5["serverplugins"]."/".$da5["serverplugins"].".php";
 $function=$da5["serverplugins"]."_"."ConfigOptions";
 if(function_exists($function)){
