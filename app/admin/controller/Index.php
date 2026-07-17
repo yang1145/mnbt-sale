@@ -83,15 +83,13 @@ $array["code"]="-1";
 $array["msg"]="必填参数不可为空!";
 }else{
 $cid=explode(",",input("cid"));
-$a="0";
-$b="0";
-for($i=0;$i<count($cid);$i++){
-$data1=Db::name("sq")->where("id",$cid[$i])->delete();
-if($data1){
-$a=$a+1;
-}else{
-$b=$b+1;
-}
+$cid=array_filter($cid);
+// 优化：批量删除，避免 N+1 查询
+$a="0"; $b="0";
+if(!empty($cid)){
+	$deleted=Db::name("sq")->where("id","in",$cid)->delete();
+	$a=(string)$deleted;
+	$b=(string)(count($cid)-$deleted);
 }
 $c="";
 if($b>0){
@@ -104,16 +102,14 @@ return $array;
 }
 
 if(input("act")=="qbdelete"){
-$data11=Db::name("sq")->select();
-$a="0";
-$b="0";
-for($i=0;$i<count($data11);$i++){
-$data1=Db::name("sq")->where("id",$data11[$i]["id"])->delete();
-if($data1){
-$a=$a+1;
-}else{
-$b=$b+1;
-}
+// 优化：单条 SQL 查询所有 id，单条 DELETE 批量删除
+$ids=Db::name("sq")->column('id');
+$total=count($ids);
+$a="0"; $b="0";
+if($total>0){
+	$deleted=Db::name("sq")->where("id","in",$ids)->delete();
+	$a=(string)$deleted;
+	$b=(string)($total-$deleted);
 }
 $c="";
 if($b>0){
@@ -141,23 +137,13 @@ return $this->fetch('/'.$this->web["admintemplate"]."/sq",[
 $usercount = Db::name('user')->count();
 $ticketcount1 = Db::name('ticket')->where("state","1")->count();
 $ticketcount2 = Db::name('ticket')->where("state","2")->count();
-$pay=Db::name('pay')->where([
-"state"=>"1",
-])->select();
-$paymoney="0";
-for($i=0;$i<count($pay);$i++){
-$paymoney=$pay[$i]["money"]+$paymoney;
-}
-$paymoney1="0";
-$time1=date("Y-m-d",time());
-for($i=0;$i<count($pay);$i++){
-$time2=date("Y-m-d",$pay[$i]["time"]);
-if($time1==$time2){
-$paymoney1=$pay[$i]["money"]+$paymoney1;
-}
-}
+// 优化：改用 SQL SUM 聚合，避免加载全部支付记录到内存循环求和
+$paymoney = Db::name('pay')->where("state", "1")->sum('money');
+$paymoney1 = Db::name('pay')->where("state", "1")->whereTime('time', 'today')->sum('money');
+$paymoney = $paymoney ?: 0;
+$paymoney1 = $paymoney1 ?: 0;
 
-	
+
 return $this->fetch('/'.$this->web["admintemplate"]."/index",[
 "usercount"=>$usercount,
 "ticketcount"=>$ticketcount1+$ticketcount2,
@@ -299,9 +285,11 @@ if(input("userid")){
 $userid=explode(",",input("userid"));
 $a="0";
 $b="0";
+// 优化：一次性查询所有有订单的 userid, 避免 N+1 查询
+$usersWithOrders = Db::name("order")->where("userid", "in", $userid)->column("userid");
+$usersWithOrders = array_unique($usersWithOrders);
 for($i=0;$i<count($userid);$i++){
-$data=Db::name("order")->where("userid",$userid[$i])->find();
-if($data){
+if(in_array($userid[$i], $usersWithOrders)){
 $b=$b+1;
 }else{
 $data1=Db::name("user")->where("id",$userid[$i])->delete();
@@ -327,21 +315,25 @@ return $array;
 
 
 if(input("act")=="qbdelete"){
-$data11=Db::name("user")->select();
-$a="0";
-$b="0";
-for($i=0;$i<count($data11);$i++){
-$data=Db::name("order")->where("userid",$data11[$i]["id"])->find();
-if($data){
-$b=$b+1;
-}else{
-$data1=Db::name("user")->where("id",$data11[$i]["id"])->delete();
-if($data1){
-$a=$a+1;
-}else{
-$b=$b+1;
-}
-}
+// 优化：批量查询所有用户 id 和有订单的 userid，单条 DELETE 批量删除
+$ids=Db::name("user")->column('id');
+$a="0"; $b="0";
+if(!empty($ids)){
+	$usersWithOrders=Db::name("order")->where("userid","in",$ids)->column("userid");
+	$usersWithOrders=array_unique($usersWithOrders);
+	$deleteIds=[];
+	foreach($ids as $uid){
+		if(!in_array($uid,$usersWithOrders)){
+			$deleteIds[]=$uid;
+		}
+	}
+	if(!empty($deleteIds)){
+		$deleted=Db::name("user")->where("id","in",$deleteIds)->delete();
+		$a=(string)$deleted;
+		$b=(string)(count($ids)-$deleted);
+	}else{
+		$b=(string)count($ids);
+	}
 }
 $c="";
 if($b>0){
@@ -1573,8 +1565,9 @@ if($data1["state"]=="3"){
 	$array["code"]="-1";
 	$array["msg"]="产品已终止,禁止修改此状态!";
 }else{
-$da1=Db::name('cart')->where("id",$data1["cartid"])->find();
-$da2=Db::name('server')->where("id",$da1["serverid"])->find();
+// 优化：复用已加载的 $da6(cart) 和 $da5(server), 避免重复查询
+$da1=$da6;
+$da2=$da5;
 include_once PATH."plugins/host/".$da2["serverplugins"]."/".$da2["serverplugins"].".php";
 $function=$da2["serverplugins"]."_"."SuspendAccount";
 if(function_exists($function)){
@@ -1595,8 +1588,9 @@ if($data1["state"]=="3"){
 	$array["code"]="-1";
 	$array["msg"]="产品已终止,禁止修改此状态!";
 }else{
-$da1=Db::name('cart')->where("id",$data1["cartid"])->find();
-$da2=Db::name('server')->where("id",$da1["serverid"])->find();
+// 优化：复用已加载的 $da6(cart) 和 $da5(server), 避免重复查询
+$da1=$da6;
+$da2=$da5;
 include_once PATH."plugins/host/".$da2["serverplugins"]."/".$da2["serverplugins"].".php";
 $function=$da2["serverplugins"]."_"."UnsuspendAccount";
 if(function_exists($function)){
@@ -1613,8 +1607,9 @@ return $array;
 }
 //终止
 if($act=="end"){
-$da1=Db::name('cart')->where("id",$data1["cartid"])->find();
-$da2=Db::name('server')->where("id",$da1["serverid"])->find();
+// 优化：复用已加载的 $da6(cart) 和 $da5(server), 避免重复查询
+$da1=$da6;
+$da2=$da5;
 include_once PATH."plugins/host/".$da2["serverplugins"]."/".$da2["serverplugins"].".php";
 $function=$da2["serverplugins"]."_"."TerminateAccount";
 if(function_exists($function)){
