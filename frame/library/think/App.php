@@ -400,7 +400,11 @@ class App
     private static function getParamValue($param, &$vars, $type)
     {
         $name  = $param->getName();
-        $class = $param->getClass();
+        // PHP 8.0+ 兼容：getClass() 已弃用并在 8.1 移除，改用 getType()
+        $typeHint = $param->getType();
+        $class    = ($typeHint !== null && !$typeHint->isBuiltin())
+            ? new \ReflectionClass($typeHint->getName())
+            : null;
 
         if ($class) {
             $className = $class->getName();
