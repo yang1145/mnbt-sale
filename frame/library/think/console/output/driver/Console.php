@@ -360,8 +360,14 @@ class Console
     protected function hasColorSupport($stream)
     {
         if (DIRECTORY_SEPARATOR === '\\') {
-            return
-            '10.0.10586' === PHP_WINDOWS_VERSION_MAJOR . '.' . PHP_WINDOWS_VERSION_MINOR . '.' . PHP_WINDOWS_VERSION_BUILD
+            // PHP 8.0+ 兼容：PHP_WINDOWS_VERSION_* 常量在部分 PHP 8 构建中可能未定义
+            $isWin10 = false;
+            if (defined('PHP_WINDOWS_VERSION_MAJOR')
+                && defined('PHP_WINDOWS_VERSION_MINOR')
+                && defined('PHP_WINDOWS_VERSION_BUILD')) {
+                $isWin10 = '10.0.10586' === PHP_WINDOWS_VERSION_MAJOR . '.' . PHP_WINDOWS_VERSION_MINOR . '.' . PHP_WINDOWS_VERSION_BUILD;
+            }
+            return $isWin10
             || false !== getenv('ANSICON')
             || 'ON' === getenv('ConEmuANSI')
             || 'xterm' === getenv('TERM');
