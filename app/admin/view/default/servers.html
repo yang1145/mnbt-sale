@@ -49,7 +49,8 @@
                 <li><b>安全码</b>：梦奈宝塔系统 API 安全码</li>
                 <li><b>账号</b>：梦奈里该服务器的「宝塔编号」</li>
                 <li><b>密码</b>：该服务器的「调用密钥」</li>
-                <li>非 80/443 端口请填写端口；https 请开启 SSL；插件选 <b>mnbt</b></li>
+                <li><span style="color:#de350b;font-weight:bold">端口务必填写梦奈服务端口，不是宝塔面板端口！</span></li>
+                <li>https 请开启 SSL；插件选 <b>mnbt</b></li>
               </ul>
             </div>
 
@@ -82,9 +83,9 @@
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label class="form-label">端口</label>
-                    <input class="form-control" type="text" name="port" value="{$server.port}" placeholder="80 / 443 / 其他">
-                    <span class="field-hint">面板实际监听端口</span>
+                    <label class="form-label">MNBT端口 <span style="color:#de350b;font-weight:bold">*</span></label>
+                    <input class="form-control" type="text" name="port" value="{$server.port}" placeholder="MNBT 服务端口">
+                    <span class="field-hint" style="color:#de350b">⚠ 填梦奈服务的端口，不是宝塔面板端口！</span>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label class="form-label">是否开启 SSL</label>

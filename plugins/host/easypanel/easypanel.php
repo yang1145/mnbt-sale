@@ -24,8 +24,8 @@ $text="
 <form action='".$url."' method='post'" .">
 <input type='hidden'name='username'value='".$data["user"]."'/>
 <input type='hidden'name='passwd'value='".$data["password"]."'/>
-  <button type='submit' class='btn btn-primary'>登录控制面板</button>
-  <button onclick='resetpass(".$data["id"].")' type='button' class='btn btn-primary'>重置密码</button>
+  <button type='submit' class='btn btn-primary' style='padding:7px 18px;background:#1E9FFF;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;margin-right:8px;'>登录控制面板</button>
+  <button onclick='resetpass(".$data["id"].")' type='button' class='btn btn-primary' style='padding:7px 18px;background:#ff6b6b;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;'>重置密码</button>
 </form>
 <br/>
 账号:<span style='color:#ff6b6b'>".$data["user"]."</span><br/>密码:<span style='color:#ff6b6b'>".$data["password"]."</span>

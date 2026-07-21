@@ -41,8 +41,8 @@ function mnbt_ClientArea($b, $a, $data)
 <form action='" . $url . "' method='post'" . ">
 <input type='hidden'name='username'value='" . $data["user"] . "'/>
 <input type='hidden'name='password'value='" . $data["password"] . "'/>
-  <button type='submit' class='btn btn-primary'>一键登录控制面板</button>
-  <button onclick='resetpass(" . $data["id"] . ")' type='button' class='btn btn-primary'>重置密码</button>
+  <button type='submit' class='btn btn-primary' style='padding:7px 18px;background:#1E9FFF;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;margin-right:8px;'>一键登录控制面板</button>
+  <button onclick='resetpass(" . $data["id"] . ")' type='button' class='btn btn-primary' style='padding:7px 18px;background:#ff6b6b;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:13px;'>重置密码</button>
 </form>
 <br/>
 账号:<span style='color:#ff6b6b'>" . $data["user"] . "</span><br/>密码:<span style='color:#ff6b6b'>" . $data["password"] . "</span>
@@ -220,7 +220,11 @@ function mnbt_CreateAccount($data3, $data2, $data4, $times)
             $err = $result["msg"];
         } else {
             $snippet = is_string($raw) ? mb_substr(strip_tags($raw), 0, 120) : "接口无响应或返回异常";
-            $err = $snippet !== '' ? $snippet : "接口无响应或返回异常";
+            if (is_string($raw) && preg_match('/404\s*Not\s*Found/i', $raw)) {
+                $err = "接口返回 404 Not Found，请检查服务器地址/端口/SSL 是否正确，以及梦奈宝塔 API 文件(" . $endpoint["api"] . ")是否存在";
+            } else {
+                $err = $snippet !== '' ? $snippet : "接口无响应或返回异常";
+            }
         }
         $array["msg"] = "创建失败：" . $err;
     }
@@ -347,6 +351,10 @@ function mnbt_CURL($data = array(), $timeout = 30)
         curl_close($ch);
         return 'CURL_ERROR: ' . ($err ? $err : '请求失败');
     }
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
+    if ($httpCode >= 400) {
+        return 'CURL_ERROR: 远程服务器返回 HTTP ' . $httpCode . '，请检查接口地址/端口/SSL 设置（请求: ' . $data['url'] . '）';
+    }
     return $body;
 }
